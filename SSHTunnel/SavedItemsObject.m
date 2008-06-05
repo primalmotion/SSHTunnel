@@ -18,7 +18,7 @@
 @synthesize remotePort;
 @synthesize sshTask;
 @synthesize password;
-@synthesize setIsStillRunning;
+@synthesize isStillRunning;
 @synthesize startDate;
 @synthesize updateWheelTimer;
 @synthesize delegate;
@@ -26,7 +26,7 @@
 - (id) init
 {
 	[super init];
-	[self setIsReallyActive:0];
+	[self setIsStillRunning:0];
 	return self;
 }
 
@@ -117,7 +117,7 @@
 	[NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(checkShStatus:) userInfo:NULL repeats:NO];
 	updateWheelTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(incrementIndicator:) userInfo:NULL repeats:YES];
 
-	[self setIsReallyActive:2];
+	[self setIsStillRunning:2];
 	
 	[delegate performSelector:@selector(startWheel)];
 }
@@ -146,7 +146,7 @@
 	remotePort	= [[coder decodeObjectForKey:@"MVremotePort"] retain];
 	password	= [[coder decodeObjectForKey:@"MVpassword"] retain];
 	//delegate	= [[coder decodeObjectForKey:@"MVdelegate"] retain];
-	[self setIsStillRunning:0];	
+	isStillRunning = 0;
 	return self;
 }
 
