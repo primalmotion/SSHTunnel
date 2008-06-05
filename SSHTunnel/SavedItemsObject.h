@@ -22,8 +22,7 @@
 	NSPipe		*stdOut;
 	NSTimer		*updateWheelTimer;
 	id			delegate;
-	int			setIsStillRunning;
-	
+	int			isStillRunning;	
 }
 
 @property(readwrite, copy)	NSTask		*sshTask;
@@ -37,7 +36,7 @@
 @property(readwrite, copy)	NSDate		*startDate;
 @property(readwrite, copy)	NSTimer		*updateWheelTimer;
 @property(readwrite,assign)	id			delegate;
-@property(readwrite)		int			setIsStillRunning;
+@property(readwrite)		int			isStillRunning;
 
 - (void) openTunnel;
 - (void) closeTunnel;
