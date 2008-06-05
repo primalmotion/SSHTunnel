@@ -40,6 +40,10 @@
 	[super dealloc];
 }
 
+
+/**
+ * here is the part for timers 
+ **/
 - (void) checkShStatus:(NSTimer *)theTimer
 {
 	NSData		*data;
@@ -83,6 +87,16 @@
 	[[self updateWheelTimer] invalidate];
 }
 
+- (void) incrementIndicator:(NSTimer *)theTimer
+{
+	[delegate performSelector:@selector(incrementWheelValue)];
+}
+
+
+
+/**
+ * the IBActions
+ **/
 - (void)openTunnel
 {
 	
@@ -117,12 +131,9 @@
 
 
 
-- (void) incrementIndicator:(NSTimer *)theTimer
-{
-	[delegate performSelector:@selector(incrementWheelValue)];
-}
-
-
+/**
+ * This part is for archiving this object
+ **/
 - (id) initWithCoder:(NSCoder *)coder
 {
 	[super init];
