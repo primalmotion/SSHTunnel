@@ -63,6 +63,7 @@
 	
 	data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
 	
+	// here are the predicates used to see the connection state
 	outputContent	= [outputContent stringByAppendingString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
 	checkError		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTION_ERROR'"];
 	checkWrongPass	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'WRONG_PASSWORD'"];
