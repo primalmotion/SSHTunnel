@@ -8,6 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+/*!
+    @class
+    @abstract    This class is the server object to remember the connection 
+    @discussion  <#(comprehensive description)#>
+*/
+
 @interface AMAuth : NSObject <NSCoding> {
 	NSString	*host;
 	NSString	*port;
