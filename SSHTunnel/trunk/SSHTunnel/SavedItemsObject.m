@@ -58,6 +58,7 @@
 	NSPredicate *checkError;
 	NSPredicate *checkWrongPass;
 	NSPredicate *checkConnected;
+	NSPredicate *checkRefused;
 	NSPredicate *checkPort;
 	
 	data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
@@ -66,6 +67,7 @@
 	checkError		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTION_ERROR'"];
 	checkWrongPass	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'WRONG_PASSWORD'"];
 	checkConnected	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTED'"];
+	checkRefused	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTION_REFUSED'"];
 	checkPort		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'Could not request local forwarding.'"];
 	
 	//NSLog(@"-- %@", outputContent);
@@ -79,10 +81,10 @@
 			[[self delegate] performSelector:@selector(errorPanelDisplaywithMessage:) 
 								  withObject:[@"Can't connect. The host address might be misspelled for session " 
 												stringByAppendingString:sessionName]];
+			[delegate performSelector:@selector(formatQuickLink:) withObject:NO];
 			[[self delegate] performSelector:@selector(enableInterface)];
 			[delegate performSelector:@selector(stopWheel)];
 			[delegate performSelector:@selector(updateList)];
-			[delegate formatQuickLink:NO];
 		}
 		else if ([checkWrongPass evaluateWithObject:outputContent] == YES)
 		{
@@ -94,11 +96,28 @@
 			[[self delegate] performSelector:@selector(errorPanelDisplaywithMessage:) 
 								  withObject:[@"Can't connect. The given password was rejected for session " 
 												stringByAppendingString:sessionName]];
+			
+			[delegate performSelector:@selector(formatQuickLink:) withObject:NO];
 			[delegate performSelector:@selector(enableInterface)];
 			[delegate performSelector:@selector(stopWheel)];
 			[delegate performSelector:@selector(updateList)];
-			[delegate formatQuickLink:NO];
 		}
+		else if ([checkRefused evaluateWithObject:outputContent] == YES)
+		{
+			[[NSNotificationCenter defaultCenter]  removeObserver:self 
+															 name:NSFileHandleReadCompletionNotification 
+														   object:[stdOut fileHandleForReading]];
+			[self setIsStillRunning:0];
+			[[self sshTask] terminate];
+			[[self delegate] performSelector:@selector(errorPanelDisplaywithMessage:) 
+								  withObject:[@"Connection was rejected by remote host for session: " 
+											  stringByAppendingString:sessionName]];
+			
+			[delegate performSelector:@selector(formatQuickLink:) withObject:NO];
+			[delegate performSelector:@selector(enableInterface)];
+			[delegate performSelector:@selector(stopWheel)];
+			[delegate performSelector:@selector(updateList)];
+		}		
 		else if ([checkPort evaluateWithObject:outputContent] == YES)
 		{
 			[[NSNotificationCenter defaultCenter]  removeObserver:self 
@@ -109,7 +128,7 @@
 			[[self delegate] performSelector:@selector(errorPanelDisplaywithMessage:) 
 								  withObject:[@"Can't connect. The given port is in use for session " 
 											  stringByAppendingString:sessionName]];
-			[delegate formatQuickLink:NO];
+			[delegate performSelector:@selector(formatQuickLink:) withObject:NO];
 			[delegate performSelector:@selector(enableInterface)];
 			[delegate performSelector:@selector(stopWheel)];
 			[delegate performSelector:@selector(updateList)];
@@ -119,7 +138,9 @@
 			[self setIsStillRunning:1];
 			[[self delegate] performSelector:@selector(errorPanelDisplaywithMessage:) 
 								  withObject:[@"Tunnel is ready for session " stringByAppendingString:sessionName]];
-			[delegate formatQuickLink:YES];
+			
+			// will have to create to method to avoid passing of a bool as object
+			[delegate performSelector:@selector(formatQuickLink:) withObject:YES];
 			[delegate performSelector:@selector(stopWheel)];
 			[delegate performSelector:@selector(updateList)];
 			[delegate performSelector:@selector(disableInterface)];
@@ -140,7 +161,7 @@
 /**
  * the IBActions
  **/
-- (void)openTunnelWithUsername:(NSString *)username Host:(NSString *)tunnelHost Password:(NSString *)password
+- (void) openTunnelWithUsername:(NSString *)username Host:(NSString *)tunnelHost Port:(NSString*)port Password:(NSString *)password
 {
 	NSString	*helperPath;
 	NSArray		*args;
@@ -148,7 +169,7 @@
 	stdOut			= [NSPipe pipe];
 	sshTask			= [[NSTask alloc] init];
 	helperPath		=[[NSBundle mainBundle] pathForResource:@"SSHCommand" ofType:@"sh"];
-	args			= [NSArray arrayWithObjects:localPort, remoteHost, remotePort, username, tunnelHost, password, nil];
+	args			= [NSArray arrayWithObjects:localPort, remoteHost, remotePort, username, tunnelHost, password, port, nil];
 	outputContent	= @"";
 	
 	[[self sshTask] setLaunchPath:helperPath];

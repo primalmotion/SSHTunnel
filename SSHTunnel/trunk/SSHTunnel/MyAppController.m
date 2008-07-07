@@ -66,20 +66,21 @@
 {
 	if ([currentSession isStillRunning] == 1)
 	{
+		NSLog(@"The ssh tunnel has been deleted");
 		[self stopWheel];
 		[currentSession closeTunnel];
 		[tv reloadData];
 		[self enableInterface];
 		[self errorPanelDisplaywithMessage:[@"The ssh tunnel has been close for session " stringByAppendingString:[currentSession sessionName]]];
 		[self stopWheel];
-		NSLog(@"The ssh tunnel has been deleted");
+		
 	}
 	else
 	{	
 		[self disableInterface];
 		AMAuth *auth = [servers objectAtIndex:0];
 
-		[currentSession openTunnelWithUsername:[auth username] Host:[auth host] Password:[auth password]];
+		[currentSession openTunnelWithUsername:[auth username] Host:[auth host] Port:[auth port] Password:[auth password]];
 		[tv reloadData];
 		[self errorPanelDisplaywithMessage:[[@"Starting session " stringByAppendingString:[currentSession sessionName]]
 											stringByAppendingString:@"..."]];
@@ -417,11 +418,15 @@
 	 
 	else if ([[aNotification object] isEqual:tunnelHost])
 		[[servers objectAtIndex:0] setHost:[o stringValue]];
-	
+
+	else if ([[aNotification object] isEqual:tunnelPort])
+	{
+		NSLog(@"toto => %@", [o stringValue]);
+		[[servers objectAtIndex:0] setPort:[o stringValue]];
+	}
 	else if ([[aNotification object] isEqual:userName])
 		[[servers objectAtIndex:0] setUsername:[o stringValue]];
 
-	
 	else if ([[aNotification object] isEqual:password])
 		[[servers objectAtIndex:0] setPassword:[o stringValue]];
 	
@@ -487,7 +492,8 @@
 		[switcher setLabel:@"Manage Sessions"];
 		[[mainWindow contentView] replaceSubview:mainView with:serverView];
 		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
-		[tunnelHost setStringValue:[[servers objectAtIndex:0] host]];
+		[tunnelHost setStringValue:(NSString *)[[servers objectAtIndex:0] host]];
+		[tunnelPort setStringValue:(NSString *)[[servers objectAtIndex:0] port]];
 		[userName setStringValue:[[servers objectAtIndex:0] username]];
 		[password setStringValue:[[servers objectAtIndex:0] password]];
 	}

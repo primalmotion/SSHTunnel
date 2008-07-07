@@ -33,7 +33,7 @@
 @property(readwrite)		int			isStillRunning;
 //@property(readwrite)		BOOL		hasPassphrase;
 
-- (void) openTunnelWithUsername:(NSString *)username Host:(NSString *)tunnelHost Password:(NSString *)password;
+- (void) openTunnelWithUsername:(NSString *)username Host:(NSString *)tunnelHost Port:(NSString*)port Password:(NSString *)password;
 - (void) closeTunnel;
 - (void) checkShStatus:(NSNotification *) notification;
 - (void) listernerForSSHTunnelDown:(NSNotification *)notification;

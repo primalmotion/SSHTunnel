@@ -30,6 +30,7 @@
     IBOutlet NSTextField			*remoteHost;
     IBOutlet NSTextField			*remotePort;
     IBOutlet NSTextField			*tunnelHost;
+	IBOutlet NSTextField			*tunnelPort;
 	IBOutlet NSTextField			*localPort;
 	IBOutlet NSButton				*removeKey;
 	IBOutlet NSToolbarItem			*toolbarSendKeyBouton;

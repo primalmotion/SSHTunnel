@@ -12,6 +12,7 @@
 		0221D4B20DF54930002AB57B /* app.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0221D4B10DF54930002AB57B /* app.icns */; };
 		023B9C4B0DF9AEF700C07FD9 /* RemoveKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 023B9C4A0DF9AEF700C07FD9 /* RemoveKeyCommand.sh */; };
 		02452E9C0DF6D1CD00119375 /* SSHCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02452E9B0DF6D1CD00119375 /* SSHCommand.sh */; };
+		0251B3470E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg in Resources */ = {isa = PBXBuildFile; fileRef = 0251B3460E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg */; };
 		025F9BC40DF98A4700813277 /* keyed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 025F9BC30DF98A4700813277 /* keyed.tiff */; };
 		02620C1C0DF7E79A00C60007 /* statusOrange.tif in Resources */ = {isa = PBXBuildFile; fileRef = 02620C1B0DF7E79A00C60007 /* statusOrange.tif */; };
 		02697F1E0DF9210B00D9C22C /* PutKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */; };
@@ -20,6 +21,9 @@
 		0274BAAC0DF424F800C09AEE /* MyAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0274BAAB0DF424F800C09AEE /* MyAppController.m */; };
 		0274BB310DF43A9F00C09AEE /* SavedItemsObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0274BB300DF43A9F00C09AEE /* SavedItemsObject.m */; };
 		0282BB430E09BA680006BA62 /* AMAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 0282BB420E09BA680006BA62 /* AMAuth.m */; };
+		029818000E0B129E00D0DBE7 /* SplitterHandle.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 029817FF0E0B129E00D0DBE7 /* SplitterHandle.tiff */; };
+		02A7CCE20E0B1BC200E98DE4 /* SVN.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02A7CCE10E0B1BC200E98DE4 /* SVN.rtf */; };
+		02A7CD1E0E0B1F6200E98DE4 /* screenshot 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 02A7CD1D0E0B1F6200E98DE4 /* screenshot 2.png */; };
 		02BAA5FC0DF591D70084F84B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BAA5FB0DF591D70084F84B /* QuartzCore.framework */; };
 		02BC8ED30E0AB7F60005759C /* Blank.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02BC8ED20E0AB7F60005759C /* Blank.icns */; };
 		02BC8ED90E0AB9330005759C /* destroy.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02BC8ED80E0AB9330005759C /* destroy.icns */; };
@@ -38,6 +42,7 @@
 		0221D4B10DF54930002AB57B /* app.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = app.icns; sourceTree = "<group>"; };
 		023B9C4A0DF9AEF700C07FD9 /* RemoveKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = RemoveKeyCommand.sh; sourceTree = "<group>"; };
 		02452E9B0DF6D1CD00119375 /* SSHCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = SSHCommand.sh; sourceTree = "<group>"; };
+		0251B3460E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = SSHTunnelDMG.dmgpkg; sourceTree = "<group>"; };
 		025F9BC30DF98A4700813277 /* keyed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = keyed.tiff; sourceTree = "<group>"; };
 		02620C1B0DF7E79A00C60007 /* statusOrange.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusOrange.tif; sourceTree = "<group>"; };
 		02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = PutKeyCommand.sh; sourceTree = "<group>"; };
@@ -47,9 +52,12 @@
 		0274BAAB0DF424F800C09AEE /* MyAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAppController.m; sourceTree = "<group>"; };
 		0274BB2F0DF43A9F00C09AEE /* SavedItemsObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedItemsObject.h; sourceTree = "<group>"; };
 		0274BB300DF43A9F00C09AEE /* SavedItemsObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedItemsObject.m; sourceTree = "<group>"; };
-		0282BA130E09A4A90006BA62 /* cgsPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cgsPrivate.h; sourceTree = "<group>"; };
+		0282BA130E09A4A90006BA62 /* CGSPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGSPrivate.h; sourceTree = "<group>"; };
 		0282BB410E09BA680006BA62 /* AMAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMAuth.h; sourceTree = "<group>"; };
 		0282BB420E09BA680006BA62 /* AMAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMAuth.m; sourceTree = "<group>"; };
+		029817FF0E0B129E00D0DBE7 /* SplitterHandle.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SplitterHandle.tiff; sourceTree = "<group>"; };
+		02A7CCE10E0B1BC200E98DE4 /* SVN.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = SVN.rtf; sourceTree = "<group>"; };
+		02A7CD1D0E0B1F6200E98DE4 /* screenshot 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screenshot 2.png"; sourceTree = "<group>"; };
 		02BAA5FB0DF591D70084F84B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		02BC8ED20E0AB7F60005759C /* Blank.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Blank.icns; sourceTree = "<group>"; };
 		02BC8ED80E0AB9330005759C /* destroy.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = destroy.icns; sourceTree = "<group>"; };
@@ -95,16 +103,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		027F82830DFA19C200CA21B7 /* KeyMakerController */ = {
+		0251B3450E0F9E900045A2EE /* DMG */ = {
 			isa = PBXGroup;
 			children = (
+				0251B3460E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg */,
 			);
-			name = KeyMakerController;
+			name = DMG;
+			sourceTree = "<group>";
+		};
+		02A7CCED0E0B1C6000E98DE4 /* AMAuth */ = {
+			isa = PBXGroup;
+			children = (
+				0282BB410E09BA680006BA62 /* AMAuth.h */,
+				0282BB420E09BA680006BA62 /* AMAuth.m */,
+			);
+			name = AMAuth;
 			sourceTree = "<group>";
 		};
 		02C5CB4A0DF8A45E000BCE90 /* Divers */ = {
 			isa = PBXGroup;
 			children = (
+				0251B3450E0F9E900045A2EE /* DMG */,
 				02C5CB4B0DF8A45E000BCE90 /* pictures */,
 				02C5CB4D0DF8A45E000BCE90 /* ReadMe */,
 			);
@@ -114,6 +133,7 @@
 		02C5CB4B0DF8A45E000BCE90 /* pictures */ = {
 			isa = PBXGroup;
 			children = (
+				02A7CD1D0E0B1F6200E98DE4 /* screenshot 2.png */,
 				02C5CB4C0DF8A45E000BCE90 /* screenshot 1.png */,
 			);
 			path = pictures;
@@ -124,6 +144,7 @@
 			children = (
 				02C5CB4E0DF8A45E000BCE90 /* ReadMe.pages */,
 				02C5CB5D0DF8A45E000BCE90 /* ReadMe.pdf */,
+				02A7CCE10E0B1BC200E98DE4 /* SVN.rtf */,
 			);
 			path = ReadMe;
 			sourceTree = "<group>";
@@ -172,23 +193,21 @@
 			name = MyAppController;
 			sourceTree = "<group>";
 		};
-		02C5CB600DF8A481000BCE90 /* SavedItemsObject */ = {
+		02C5CB600DF8A481000BCE90 /* Sessions */ = {
 			isa = PBXGroup;
 			children = (
 				0274BB2F0DF43A9F00C09AEE /* SavedItemsObject.h */,
 				0274BB300DF43A9F00C09AEE /* SavedItemsObject.m */,
 			);
-			name = SavedItemsObject;
+			name = Sessions;
 			sourceTree = "<group>";
 		};
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				027F82830DFA19C200CA21B7 /* KeyMakerController */,
+				02A7CCED0E0B1C6000E98DE4 /* AMAuth */,
 				02C5CB5F0DF8A472000BCE90 /* MyAppController */,
-				02C5CB600DF8A481000BCE90 /* SavedItemsObject */,
-				0282BB410E09BA680006BA62 /* AMAuth.h */,
-				0282BB420E09BA680006BA62 /* AMAuth.m */,
+				02C5CB600DF8A481000BCE90 /* Sessions */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -228,7 +247,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				0282BA130E09A4A90006BA62 /* cgsPrivate.h */,
 			);
 			name = SSHTunnel;
 			sourceTree = "<group>";
@@ -236,6 +254,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				0282BA130E09A4A90006BA62 /* CGSPrivate.h */,
 				32CA4F630368D1EE00C91783 /* SSHTunnel_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -245,6 +264,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				029817FF0E0B129E00D0DBE7 /* SplitterHandle.tiff */,
 				02BC8EDC0E0AB9A30005759C /* stopAll.icns */,
 				02BC8ED80E0AB9330005759C /* destroy.icns */,
 				02BC8ED20E0AB7F60005759C /* Blank.icns */,
@@ -340,6 +360,10 @@
 				02BC8ED30E0AB7F60005759C /* Blank.icns in Resources */,
 				02BC8ED90E0AB9330005759C /* destroy.icns in Resources */,
 				02BC8EDD0E0AB9A30005759C /* stopAll.icns in Resources */,
+				029818000E0B129E00D0DBE7 /* SplitterHandle.tiff in Resources */,
+				02A7CCE20E0B1BC200E98DE4 /* SVN.rtf in Resources */,
+				02A7CD1E0E0B1F6200E98DE4 /* screenshot 2.png in Resources */,
+				0251B3470E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
