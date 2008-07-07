@@ -20,7 +20,6 @@
 	NSString	*outputContent;
 	id			delegate;
 	int			isStillRunning;	
-	//BOOL		hasPassphrase;
 }
 
 @property(readwrite, copy)	NSTask		*sshTask;
@@ -31,7 +30,6 @@
 @property(readwrite, copy)	NSDate		*startDate;
 @property(readwrite,assign)	id			delegate;
 @property(readwrite)		int			isStillRunning;
-//@property(readwrite)		BOOL		hasPassphrase;
 
 - (void) openTunnelWithUsername:(NSString *)username Host:(NSString *)tunnelHost Port:(NSString*)port Password:(NSString *)password;
 - (void) closeTunnel;
