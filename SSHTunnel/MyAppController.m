@@ -1,64 +1,46 @@
+//Copyright (C) 2008  Antoine Mercadal
+//
+//This program is free software; you can redistribute it and/or
+//modify it under the terms of the GNU General Public License
+//as published by the Free Software Foundation; either version 2
+//of the License, or (at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program; if not, write to the Free Software
+//Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 #import "MyAppController.h"
 
 @implementation MyAppController
 
-@synthesize	sessions;
-@synthesize servers;
-@synthesize currentSession;
-@synthesize currentServer;
 
 - (id) init
 {
-	[super init];
+	self = [super init];
 	
 	NSFileManager *f = [NSFileManager defaultManager];
-	
-	NSString *saveFolder =  @"~/Library/Application Support/SSHTunnel/";
-	sessionSavePath =  @"~/Library/Application Support/SSHTunnel/sessions.sst";
-	serverSavePath  =  @"~/Library/Application Support/SSHTunnel/servers.sst";
+	NSString *saveFolder	=  @"~/Library/Application Support/SSHTunnel/";
 	
 	if ([f fileExistsAtPath:[saveFolder stringByExpandingTildeInPath]] == NO)
 		[f createDirectoryAtPath:[saveFolder stringByExpandingTildeInPath] attributes:nil];
-		
-	if ([f fileExistsAtPath:[sessionSavePath stringByExpandingTildeInPath]] == YES)
-		[self setSessions:[NSKeyedUnarchiver unarchiveObjectWithFile:[sessionSavePath stringByExpandingTildeInPath]]];
-	else
-		sessions = [[NSMutableArray alloc] init];
 	
-	if ([f fileExistsAtPath:[serverSavePath stringByExpandingTildeInPath]] == YES)
-	{
-		[self setServers:[NSKeyedUnarchiver unarchiveObjectWithFile:[serverSavePath stringByExpandingTildeInPath]]];
-		currentServer = [servers objectAtIndex:0];
-	}
-	else
-	{
-		servers = [[NSMutableArray alloc] init];
-		[servers addObject:[[AMAuth alloc] init]];
-	}
-	
-	
-	int i;
-	for(i = 0; i < [sessions count]; i++)
-		[[sessions objectAtIndex:i] setDelegate:self];
-	
-	if (i > 0)
-		currentSession = [sessions objectAtIndex:0];
-	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(performInfoMessage:) 
+												 name:@"AMNewGeneralMessage" 
+											   object:nil];
 	return self;
+	 
 }
- 
+
+
 - (void) awakeFromNib
 {
-	[tv setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleSourceList];
-	[tv registerForDraggedTypes:[NSArray arrayWithObject:@"MyData"]];
-	[wheel setUsesThreadedAnimation:YES];
-	
-	
-	if ([[servers objectAtIndex:0] host] == nil)
-		[[mainWindow contentView] addSubview:serverView];
-	else
-		[[mainWindow contentView] addSubview:mainView];
-	
+	[[mainWindow contentView] addSubview:mainView];
 }
 
 /**
@@ -66,249 +48,25 @@
  **/
 - (IBAction)toggleTunnel:(id)sender 
 {
-	if ([currentSession isStillRunning] == 1)
+	AMSession	*currentSession = [sessionController getSelectedSession];
+	AMAuth		*currentServer	= [serverController getSelectedServer];
+	
+	if ([currentSession connected] == NO)
 	{
-		NSLog(@"The ssh tunnel has been deleted");
-		[self stopWheel];
 		[currentSession closeTunnel];
-		[tv reloadData];
-		[self enableInterface];
-		[self errorPanelDisplaywithMessage:[@"The ssh tunnel has been close for session " stringByAppendingString:[currentSession sessionName]]];
-		[self stopWheel];
-		
 	}
 	else
 	{	
-		[self disableInterface];
-		AMAuth *auth = [servers objectAtIndex:0];
-
-		[currentSession openTunnelWithUsername:[auth username] Host:[auth host] Port:[auth port] Password:[auth password]];
-		[tv reloadData];
-		[self errorPanelDisplaywithMessage:[[@"Starting session " stringByAppendingString:[currentSession sessionName]]
-											stringByAppendingString:@"..."]];
-		[self startWheel];
-
+		[currentSession openTunnelWithUsername:[currentServer username] 
+										  Host:[currentServer host] 
+										  Port:[currentServer port]
+									  Password:[currentServer password]];
 	}
-}
-
-- (IBAction)addSession:(id)sender
-{
-	SavedItemsObject *o = [[SavedItemsObject alloc] init];
-	
-
-	[o setLocalPort:@""];
-	[o setRemoteHost:@""];
-	[o setRemotePort:@""];
-
-	[o setSessionName:@"New Session"];
-	[o setDelegate:self];
-	[sessions addObject:o];
-	
-	[self saveState];
-	[tv reloadData];
-}
-
-- (IBAction)deleteSession:(id)sender
-{	
-	[[sessions objectAtIndex:[tv selectedRow]] closeTunnel];
-	
-	[sessions removeObjectAtIndex:[tv selectedRow]];
-	[tv reloadData];
-	[tv deselectAll:nil];
-	[tv selectRow:([tv selectedRow] - 1) byExtendingSelection:NO];
-
-	[self saveState];
-
-}
-
-
-- (IBAction) openMainWindow:(id)sender
-{
-	[mainWindow makeKeyAndOrderFront:nil];
-}
-
-- (IBAction) closeMainWindow:(id)sender
-{
-	[mainWindow orderOut:nil];
-}
-
-
-/**
- * this part is to manage the different
- * interace object.
- **/
-- (void) startWheel
-{
-	//NSRect newPos = [bToggleTunnel frame];
-	//newPos.size.width -= 30;
-	//[[bToggleTunnel animator] setFrame:newPos];
-
-	//newPos = [wheel frame];
-	//newPos.origin.x -= 40;
-	//[[wheel animator] setFrame:newPos];
-	
-	//[bToggleTunnel setEnabled:NO];
-	[wheel setHidden:NO];
-	[wheel startAnimation:nil];
-}
-
-- (void) stopWheel
-{
-	//NSRect newPos = [bToggleTunnel frame];
-	//newPos.size.width = 178;
-	//[[bToggleTunnel animator] setFrame:newPos];
-	
-	//newPos = [wheel frame];
-	//newPos.origin.x = 590;
-	//[[wheel animator] setFrame:newPos];
-	[wheel setHidden:YES];
-	[wheel stopAnimation:nil];
-	//[bToggleTunnel setEnabled:YES];
-}
-
-- (void) incrementWheelValue
-{
-	[[wheel animator] setDoubleValue:[wheel doubleValue] + 8.00f];
-	
-}
-
-- (void) updateList
-{
-	NSLog(@"kewkew");
-	[tv reloadData];
-}
-
--(void) enableInterface
-{
-	[remotePort setEnabled:YES];
-	[remoteHost setEnabled:YES];
-	[localPort setEnabled:YES];
-	[bToggleTunnel setTitle:@"Create Tunnel"];
-}
-
--(void) disableInterface
-{
-	[remotePort setEnabled:NO];
-	[remoteHost setEnabled:NO];
-	[localPort setEnabled:NO];
-	[bToggleTunnel setTitle:@"Destroy Tunnel"];
-}
-
-
-
-/**
- * This part is for the delegation of the NSTableView to
- * enable instant save when modified.
- **/
-
-- (void) errorPanelDisplaywithMessage:(NSString *)theMessage
-{
-	NSRect rect = [errorPanel frame];
-	rect.origin.y = 0;
-	[errorMessage setStringValue:theMessage];
-	[[errorPanel animator] setFrame:rect];
-	
-	[NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(errorPanelClose:) userInfo:NULL repeats:NO];
-}
-
-- (void) errorPanelClose:(NSTimer *)theTimer
-{
-	NSRect rect = [errorPanel frame];
-	rect.origin.y = -60;
-	[[errorPanel animator] setFrame:rect];
-}
-
-
-/**
- * This part is for the delegation of the NSTableView to
- * enable instant save when modified.
- **/
-- (int)numberOfRowsInTableView:(NSTableView *)tv 
-{ 
-    return [sessions count];
-}
-
-- (id)tableView:(NSTableView *)tv objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row 
-{
-	
-	if ([[tableColumn identifier] isEqual:@"session"] == YES)
-	{
-		NSString *v = [[sessions objectAtIndex:row]sessionName];
-		return v; 
-	}
-	else if ([[tableColumn identifier] isEqual:@"activity"] == YES)
-	{
-		NSImage *img;
-		if ([[sessions objectAtIndex:row] isStillRunning] == 1)
-			img = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusGreen" 
-																						  ofType:@"tif"]];
-		else if ([[sessions objectAtIndex:row] isStillRunning] == 0)
-			img = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusRed" 
-																						  ofType:@"tif"]];
-		else if ([[sessions objectAtIndex:row] isStillRunning] == 2)
-			img = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusOrange" 
-																						ofType:@"tif"]];
-		[img retain];
-		return img;
-	}
-	//else if ([[tableColumn identifier] isEqual:@"keyed"] == YES)
-	//{
-		//NSImage *img;
-		/*if ([[sessions objectAtIndex:row] hasPassphrase] == YES)
-		{
-			img = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"keyed"
-				   ofType:@"tiff"]];
-			[img retain];
-			return img;
-		}*/
-	//}
-	
-	return nil;
-}
-
-- (void)tableViewSelectionDidChange:(NSNotification *)notification 
-{
-	[self setCurrentSession:[sessions objectAtIndex:[tv selectedRow]]];
-	NSLog(@"current row selected %@", [currentServer host]);
-	if ([currentSession isStillRunning] == 2)
-	{
-		[self formatQuickLink:NO];
-		[self startWheel];
-	}
-	else
-		[self stopWheel];
-	if ([currentSession isStillRunning] == 1)
-	{
-		[self formatQuickLink:YES];
-		[self disableInterface];
-	}
-	else
-	{
-		[self formatQuickLink:NO];
-		[self enableInterface];
-	}
-}
-
-- (void) formatQuickLink:(BOOL)enabled 
-{
-	if ((enabled) && ([[sessions objectAtIndex:[tv selectedRow]] isStillRunning] == 1))
-	{
-		NSString *link = [@"You can access your destination through: http://127.0.0.1:" stringByAppendingString:[currentSession localPort]];
-		[quickLink setTitle:link];
-	}
-	else
-		[quickLink setTitle:@""];
-}
-
-- (IBAction) openUrl:(id)sender
-{
-	if ([quickLink title] != @"")
-		[[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:[[quickLink title] 
-																	  stringByReplacingOccurrencesOfString:@"You can access your destination through: " withString:@""]]];
 }
 
 - (IBAction) killAllSSH:(id)sender
 {
+	
 	int ret = NSRunAlertPanel(@"Warning", @"You are going to kill all active ssh session, even some that are not managed by SSHTunnel. Are you sure?", 
 							  @"Yes", @"Abort", nil);
 	if (ret ==  NSAlertDefaultReturn)
@@ -320,110 +78,72 @@
 	}
 }
 
--(void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (IBAction) openAllSession:(id)sender
 {
-	[[sessions objectAtIndex:rowIndex] setSessionName:anObject];
-	[self saveState];
+	//	AMAuth *auth = [serverController getSelectedServer];
+	//
+	//	for (SavedItemsObject *o in [self sessions])
+	//	{
+	//		if ([o isStillRunning] == 0)
+	//			[o openTunnelWithUsername:[auth username] Host:[auth host] Port:[auth port] Password:[auth password]];
+	//	}
+	//	[tv reloadData];
+}
+
+- (IBAction) closeAllSession:(id)sender
+{
+	//
+	//	for (SavedItemsObject *o in [self sessions])
+	//	{
+	//		if ([o isStillRunning] == 1)
+	//			[o closeTunnel];
+	//	}
+	//	[tv reloadData];
 }
 
 
-- (void) saveState
-{
-	[NSKeyedArchiver archiveRootObject:sessions toFile:[sessionSavePath stringByExpandingTildeInPath]];
-	[NSKeyedArchiver archiveRootObject:servers toFile:[serverSavePath stringByExpandingTildeInPath]];
-}
 
--(BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pboard
-{
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
-	
-    [pboard declareTypes:[NSArray arrayWithObject:@"MyData"] owner:self];
-    [pboard setData:data forType:@"MyData"];
-	
-	data = nil;
-	return YES;
-}
 
-- (NSDragOperation)tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op
-{
-    if (op == NSTableViewDropOn)
-		return NSDragOperationNone;
-	else
-		return NSDragOperationMove;
-}
 
-- (BOOL)tableView:(NSTableView *)aTableView acceptDrop:(id <NSDraggingInfo>)info
-			  row:(int)row dropOperation:(NSTableViewDropOperation)operation
-{
-	
-    NSPasteboard *pboard	= [info draggingPasteboard];
-    NSData *rowData			= [pboard dataForType:@"MyData"];
-    NSIndexSet *rowIndexes	= [NSKeyedUnarchiver unarchiveObjectWithData:rowData];
-    int dragRow				= [rowIndexes firstIndex];
-	SavedItemsObject *o		= [[sessions objectAtIndex:dragRow] retain];
-	
-	[sessions removeObject:o];
-	if (row == [sessions count])
-	{
-		[sessions addObject:o];
-	}
-	else
-	{
-		if (row - 1 < 0)
-			row++;
-		[sessions insertObject:o atIndex:(row - 1)];
-		if (o == currentSession)
-			[tv selectRow:(row - 1) byExtendingSelection:NO];
-	}
-	[tv reloadData];
-	
-	[o release];
-	[self saveState];
-	
-	rowData = nil;
-	rowIndexes = nil;
-	pboard = nil;
-	return YES;
-	
-}
- 
+
+
+
 
 /**
- * This part is for the delegation of the differents NSTextField, to
+ * This part is for the delegation of the NSTableView to
  * enable instant save when modified.
-**/
-- (void)controlTextDidChange:(NSNotification *)aNotification
+ **/
+- (void) performInfoMessage:(NSNotification*)notif
 {
-	//NSTextField *o  =[aNotification object];
-	
-	/*	 
-	if ([[aNotification object] isEqual:localPort])
-		[currentSession setLocalPort:[o stringValue]];
-		 
-	else if ([[aNotification object] isEqual:remoteHost])
-		[currentSession setRemoteHost:[o stringValue]];
-	
-	else if ([[aNotification object] isEqual:remotePort])
-		 [currentSession setRemotePort:[o stringValue]];
-	 
-	else if ([[aNotification object] isEqual:tunnelHost])
-		[[servers objectAtIndex:0] setHost:[o stringValue]];
-
-	else if ([[aNotification object] isEqual:tunnelPort])
-	{
-		NSLog(@"toto => %@", [o stringValue]);
-		[[servers objectAtIndex:0] setPort:[o stringValue]];
-	}
-	else if ([[aNotification object] isEqual:userName])
-		[[servers objectAtIndex:0] setUsername:[o stringValue]];
-
-	else if ([[aNotification object] isEqual:password])
-		[[servers objectAtIndex:0] setPassword:[o stringValue]];
-	*/
-	
-	[self saveState];
-
+	[self errorPanelDisplaywithMessage: (NSString*)[notif object]];
 }
+- (void) errorPanelDisplaywithMessage:(NSString *)theMessage
+{
+	if (timer != nil)
+		[timer invalidate];
+	
+	NSRect rect = [errorPanel frame];
+	rect.origin.y = 0;
+	[errorMessage setStringValue:theMessage];
+	[[errorPanel animator] setFrame:rect];
+	
+	timer = [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(errorPanelClose:) userInfo:NULL repeats:NO];
+}
+- (void) errorPanelClose:(NSTimer *)theTimer
+{
+	NSRect rect = [errorPanel frame];
+	rect.origin.y = -60;
+	[[errorPanel animator] setFrame:rect];
+}
+
+
+
+
+
+
+ 
+
+
 
 
 /**
@@ -432,8 +152,8 @@
  **/
 - (void) applicationWillTerminate: (NSNotification *) notification
 {
-	for (int i = 0; i < [sessions count]; i++)
-		[[sessions objectAtIndex:i] closeTunnel];
+	//for (int i = 0; i < [[self sessions] count]; i++)
+	//	[[[self sessions] objectAtIndex:i] closeTunnel];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
@@ -520,31 +240,15 @@
 	}
 }
 
-
-
-- (IBAction) registerNewAccount:(id)sender
+- (IBAction) openMainWindow:(id)sender
 {
-	
+	[mainWindow makeKeyAndOrderFront:nil];
 }
 
-- (IBAction) openAllSession:(id)sender
+- (IBAction) closeMainWindow:(id)sender
 {
-	AMAuth *auth = [servers objectAtIndex:0];
-	for (SavedItemsObject *o in sessions)
-	{
-		if ([o isStillRunning] == 0)
-			[o openTunnelWithUsername:[auth username] Host:[auth host] Port:[auth port] Password:[auth password]];
-	}
-	[tv reloadData];
+	[mainWindow orderOut:nil];
 }
 
-- (IBAction) closeAllSession:(id)sender
-{
-	for (SavedItemsObject *o in sessions)
-	{
-		if ([o isStillRunning] == 1)
-			[o closeTunnel];
-	}
-	[tv reloadData];
-}
+
 @end

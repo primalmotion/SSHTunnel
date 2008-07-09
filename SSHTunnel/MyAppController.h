@@ -1,60 +1,54 @@
-
+//Copyright (C) 2008  Antoine Mercadal
+//
+//This program is free software; you can redistribute it and/or
+//modify it under the terms of the GNU General Public License
+//as published by the Free Software Foundation; either version 2
+//of the License, or (at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program; if not, write to the Free Software
+//Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <QuartzCore/CAAnimation.h>
 #import <QuartzCore/CoreImage.h>
-#import "SavedItemsObject.h"
+#import "AMSession.h"
 #import "AMAuth.h"
-#import "cgsPrivate.h"
-#import "AccountView.h"
+#import "CGSPrivate.h"
+#import "AMAccountViewController.h"
+#import "AMServerViewController.h"
+#import "AMSessionViewController.h"
 
-/*!
- @class
- @abstract    <#(brief description)#>
- @discussion  <#(comprehensive description)#>
- */
+
 @interface MyAppController : NSObject {
-   	IBOutlet NSButton				*bToggleTunnel;
-	IBOutlet NSProgressIndicator	*wheel;
-	IBOutlet NSTableView			*tv;
-	IBOutlet NSTextField			*errorMessage;
-	IBOutlet NSButton				*quickLink;
-	IBOutlet NSView					*errorPanel;
-	IBOutlet NSWindow				*aboutWindow;
-	IBOutlet NSWindow				*mainWindow;
-	IBOutlet NSView					*serverView;
-	IBOutlet NSView					*mainView;
-	IBOutlet NSView					*aboutView;
-	IBOutlet AccountView			*registerView;
-    IBOutlet NSTextField			*remoteHost;
-    IBOutlet NSTextField			*remotePort;
-	IBOutlet NSTextField			*localPort;
-	IBOutlet NSButton				*removeKey;
-	IBOutlet NSToolbarItem			*toolbarSendKeyBouton;
-	IBOutlet NSToolbarItem			*switcher;
-	IBOutlet NSToolbarItem			*AccountSwitcher;
-
+	
+	IBOutlet NSTextField			 *errorMessage;
+	IBOutlet NSView					 *errorPanel;
+	IBOutlet NSWindow				 *mainWindow;
+	IBOutlet NSView					 *serverView;
+	IBOutlet NSView					 *mainView;
+	IBOutlet NSView					 *aboutView;
+	IBOutlet NSView					 *registerView;
+	IBOutlet AMSessionViewController *sessionController;
+	IBOutlet AMServerViewController  *serverController;
+	NSTimer							 *timer;
+	
 	NSView							*backViewReminder;
-	NSString						*sessionSavePath;
-	NSString						*serverSavePath;
-	SavedItemsObject				*currentSession;
-	NSMutableArray					*sessions;
-	NSMutableArray					*servers;
-	AMAuth							*currentServer;
+	
+	
+	
 }
-@property(readwrite,assign)	NSMutableArray		*sessions;
-@property(readwrite,assign)	NSMutableArray		*servers;
-@property(readwrite,assign)	SavedItemsObject	*currentSession;
-@property(readwrite,assign)	AMAuth				*currentServer;
 
 - (IBAction) toggleTunnel:(id)sender;
-- (IBAction) addSession:(id)sender;
-- (IBAction) deleteSession:(id)sender;
 - (IBAction) openAllSession:(id)sender;
-
 - (IBAction) closeAllSession:(id)sender;
-- (IBAction) openUrl:(id)sender;
 - (IBAction) killAllSSH:(id)sender;
 
 
@@ -67,19 +61,11 @@
 - (IBAction) closeMainWindow:(id)sender;
 
 
-
-- (IBAction) registerNewAccount:(id)sender;
-
+- (void) performInfoMessage:(NSNotification*)notif;
 - (void) errorPanelDisplaywithMessage:(NSString *)message;
 - (void) errorPanelClose:(NSTimer *)theTimer;
-- (void) enableInterface;
-- (void) disableInterface;
-- (void) updateList;
-- (void) startWheel;
-- (void) stopWheel;
-- (void) saveState;
+
 - (void) animateWindow:(NSWindow*)win effect:(CGSTransitionType)fx direction:(CGSTransitionOption)dir duration:(float)dur;
-- (void) formatQuickLink:(BOOL)enabled;
 
 
 

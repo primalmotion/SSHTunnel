@@ -15,24 +15,24 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
+#import "AMAuth.h"
 
-/*!
-    @class
-    @abstract    This class is the server object to remember the connection 
-    @discussion  <#(comprehensive description)#>
-*/
-
-@interface AMAuth : NSObject <NSCoding> {
-	NSString	*host;
-	NSString	*port;
-	NSString	*username;
-	NSString	*password;
-	NSString	*serverName;
+@interface AMAccountViewController : NSObject {
+	IBOutlet NSTextField			*login;
+	IBOutlet NSTextField			*password;
+	IBOutlet NSTextField			*confirmPassword;
+	IBOutlet NSProgressIndicator	*progressor;
+	IBOutlet NSButton				*createButton;
+	IBOutlet NSPopUpButton			*serverPicker;
+	
+	id			delegate;
+	NSTask		*sshTask;
+	NSPipe		*stdOut;
+	NSString	*outputContent;
 }
-@property(readwrite, copy) NSString	*serverName;
-@property(readwrite, copy) NSString	*host;
-@property(readwrite, copy) NSString *port;
-@property(readwrite, copy) NSString	*username;
-@property(readwrite, copy) NSString	*password;
+
+@property(readwrite, assign) id delegate;
+
+- (IBAction) createAccount:(id)sender;
 
 @end
