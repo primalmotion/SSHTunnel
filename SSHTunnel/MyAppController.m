@@ -5,6 +5,7 @@
 @synthesize	sessions;
 @synthesize servers;
 @synthesize currentSession;
+@synthesize currentServer;
 
 - (id) init
 {
@@ -25,17 +26,24 @@
 		sessions = [[NSMutableArray alloc] init];
 	
 	if ([f fileExistsAtPath:[serverSavePath stringByExpandingTildeInPath]] == YES)
+	{
 		[self setServers:[NSKeyedUnarchiver unarchiveObjectWithFile:[serverSavePath stringByExpandingTildeInPath]]];
+		currentServer = [servers objectAtIndex:0];
+	}
 	else
 	{
 		servers = [[NSMutableArray alloc] init];
 		[servers addObject:[[AMAuth alloc] init]];
 	}
 	
+	
 	int i;
 	for(i = 0; i < [sessions count]; i++)
 		[[sessions objectAtIndex:i] setDelegate:self];
-
+	
+	if (i > 0)
+		currentSession = [sessions objectAtIndex:0];
+	
 	return self;
 }
  
@@ -45,18 +53,12 @@
 	[tv registerForDraggedTypes:[NSArray arrayWithObject:@"MyData"]];
 	[wheel setUsesThreadedAnimation:YES];
 	
-	if ([sessions count] > 0)
-	{
-		currentSession = [sessions objectAtIndex:0];
-		[localPort setStringValue:[currentSession localPort]];
-		[remoteHost setStringValue:[currentSession remoteHost]];
-		[remotePort setStringValue:[currentSession remotePort]];
-	}
 	
 	if ([[servers objectAtIndex:0] host] == nil)
 		[[mainWindow contentView] addSubview:serverView];
 	else
 		[[mainWindow contentView] addSubview:mainView];
+	
 }
 
 /**
@@ -119,13 +121,6 @@
 
 }
 
-- (IBAction) openAboutWindow:(id)sender
-{
-	if ([aboutWindow isVisible] == YES)
-		[aboutWindow orderOut:nil];
-	else
-		[aboutWindow makeKeyAndOrderFront:nil];
-}
 
 - (IBAction) openMainWindow:(id)sender
 {
@@ -272,14 +267,9 @@
 }
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification 
-{ 
-	NSLog(@"current row selected %d", [tv selectedRow]);
-
-	[localPort setStringValue:[[sessions objectAtIndex:[tv selectedRow]] localPort]];
-	[remoteHost setStringValue:[[sessions objectAtIndex:[tv selectedRow]] remoteHost]];
-	[remotePort setStringValue:[[sessions objectAtIndex:[tv selectedRow]] remotePort]];
-	currentSession = [sessions objectAtIndex:[tv selectedRow]];
-	
+{
+	[self setCurrentSession:[sessions objectAtIndex:[tv selectedRow]]];
+	NSLog(@"current row selected %@", [currentServer host]);
 	if ([currentSession isStillRunning] == 2)
 	{
 		[self formatQuickLink:NO];
@@ -404,9 +394,9 @@
 **/
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
-	NSTextField *o  =[aNotification object];
+	//NSTextField *o  =[aNotification object];
 	
-		 
+	/*	 
 	if ([[aNotification object] isEqual:localPort])
 		[currentSession setLocalPort:[o stringValue]];
 		 
@@ -429,7 +419,7 @@
 
 	else if ([[aNotification object] isEqual:password])
 		[[servers objectAtIndex:0] setPassword:[o stringValue]];
-	
+	*/
 	
 	[self saveState];
 
@@ -483,44 +473,58 @@
 	handle=0;
 }
 
-- (IBAction) switchWin:(id)sender
+- (IBAction) displayMainView:(id)sender
 {
-	
-	
-	if ([[[mainWindow contentView] subviews] containsObject:mainView])
+	if (![[[mainWindow contentView] subviews] containsObject:mainView])
 	{
-		[switcher setLabel:@"Manage Sessions"];
-		[[mainWindow contentView] replaceSubview:mainView with:serverView];
+		NSView *currentView = [[[mainWindow contentView] subviews] objectAtIndex:0];
+		[[mainWindow contentView] replaceSubview:currentView with:mainView];
 		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
+	}
+}
+
+- (IBAction) displayServerView:(id)sender
+{
+	if (![[[mainWindow contentView] subviews] containsObject:serverView])
+	{
+		NSView *currentView = [[[mainWindow contentView] subviews] objectAtIndex:0];
+		[[mainWindow contentView] replaceSubview:currentView with:serverView];
+		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
+		
+		/*
 		[tunnelHost setStringValue:(NSString *)[[servers objectAtIndex:0] host]];
 		[tunnelPort setStringValue:(NSString *)[[servers objectAtIndex:0] port]];
 		[userName setStringValue:[[servers objectAtIndex:0] username]];
 		[password setStringValue:[[servers objectAtIndex:0] password]];
-	}
-	else
-	{
-		[switcher setLabel:@"Manage Servers"];
-		[[mainWindow contentView] replaceSubview:serverView with:mainView];
-		[[mainWindow contentView] replaceSubview:aboutView with:mainView];
-		[self animateWindow:mainWindow effect:CGSCube direction:CGSRight duration:0.2];
+		 */
 	}
 }
 
-- (IBAction) displayAbout:(id)sender
+- (IBAction) displayAboutView:(id)sender
 {
-	if ([[[mainWindow contentView] subviews] containsObject:aboutView])
+	if (![[[mainWindow contentView] subviews] containsObject:aboutView])
 	{
-		[[mainWindow contentView] replaceSubview:aboutView with:mainView];
-		[self animateWindow:mainWindow effect:CGSCube direction:CGSUp duration:0.2];
+		NSView *currentView = [[[mainWindow contentView] subviews] objectAtIndex:0];
+		[[mainWindow contentView] replaceSubview:currentView with:aboutView];
+		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
 	}
-	else
+}
+
+- (IBAction) displayRegisterView:(id)sender
+{
+	if (![[[mainWindow contentView] subviews] containsObject:registerView])
 	{
-		[switcher setLabel:@"Manage Servers"];
-		
-		[[mainWindow contentView] replaceSubview:serverView with:aboutView];
-		[[mainWindow contentView] replaceSubview:mainView with:aboutView];
-		[self animateWindow:mainWindow effect:CGSCube direction:CGSDown duration:0.2];
+		NSView *currentView = [[[mainWindow contentView] subviews] objectAtIndex:0];
+		[[mainWindow contentView] replaceSubview:currentView with:registerView];
+		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
 	}
+}
+
+
+
+- (IBAction) registerNewAccount:(id)sender
+{
+	
 }
 
 - (IBAction) openAllSession:(id)sender
@@ -529,7 +533,7 @@
 	for (SavedItemsObject *o in sessions)
 	{
 		if ([o isStillRunning] == 0)
-			[o openTunnelWithUsername:[auth username] Host:[auth host] Password:[auth password]];
+			[o openTunnelWithUsername:[auth username] Host:[auth host] Port:[auth port] Password:[auth password]];
 	}
 	[tv reloadData];
 }

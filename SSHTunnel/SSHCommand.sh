@@ -9,7 +9,7 @@ set tunnelHost [lrange $argv 4 4]
 set password [lrange $argv 5 5 ]
 set serverPort [lrange $argv 6 6 ]
 
-spawn ssh -N -L $localPort:$remoteHost:$remotePort $username@$tunnelHost -p $serverPort
+spawn ssh -N -L$localPort:$remoteHost:$remotePort $username@$tunnelHost -p $serverPort  -R *:$localPort:host:hostport
 match_max 100000
 
 set timeout 1

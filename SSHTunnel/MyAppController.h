@@ -7,6 +7,7 @@
 #import "SavedItemsObject.h"
 #import "AMAuth.h"
 #import "cgsPrivate.h"
+#import "AccountView.h"
 
 /*!
  @class
@@ -16,10 +17,8 @@
 @interface MyAppController : NSObject {
    	IBOutlet NSButton				*bToggleTunnel;
 	IBOutlet NSProgressIndicator	*wheel;
-	IBOutlet NSSecureTextField		*password;
 	IBOutlet NSTableView			*tv;
 	IBOutlet NSTextField			*errorMessage;
-	IBOutlet NSTextField			*userName;
 	IBOutlet NSButton				*quickLink;
 	IBOutlet NSView					*errorPanel;
 	IBOutlet NSWindow				*aboutWindow;
@@ -27,39 +26,49 @@
 	IBOutlet NSView					*serverView;
 	IBOutlet NSView					*mainView;
 	IBOutlet NSView					*aboutView;
+	IBOutlet AccountView			*registerView;
     IBOutlet NSTextField			*remoteHost;
     IBOutlet NSTextField			*remotePort;
-    IBOutlet NSTextField			*tunnelHost;
-	IBOutlet NSTextField			*tunnelPort;
 	IBOutlet NSTextField			*localPort;
 	IBOutlet NSButton				*removeKey;
 	IBOutlet NSToolbarItem			*toolbarSendKeyBouton;
 	IBOutlet NSToolbarItem			*switcher;
-	
-	
+	IBOutlet NSToolbarItem			*AccountSwitcher;
+
+	NSView							*backViewReminder;
 	NSString						*sessionSavePath;
 	NSString						*serverSavePath;
 	SavedItemsObject				*currentSession;
 	NSMutableArray					*sessions;
 	NSMutableArray					*servers;
-
+	AMAuth							*currentServer;
 }
-@property(readwrite,assign)	NSMutableArray *sessions;
-@property(readwrite,assign)	NSMutableArray *servers;
-@property(readwrite,assign)	SavedItemsObject *currentSession;
+@property(readwrite,assign)	NSMutableArray		*sessions;
+@property(readwrite,assign)	NSMutableArray		*servers;
+@property(readwrite,assign)	SavedItemsObject	*currentSession;
+@property(readwrite,assign)	AMAuth				*currentServer;
 
 - (IBAction) toggleTunnel:(id)sender;
 - (IBAction) addSession:(id)sender;
 - (IBAction) deleteSession:(id)sender;
-- (IBAction) openAboutWindow:(id)sender;
-- (IBAction) displayAbout:(id)sender;
-- (IBAction) openMainWindow:(id)sender;
-- (IBAction) closeMainWindow:(id)sender;
-- (IBAction) switchWin:(id)sender;
 - (IBAction) openAllSession:(id)sender;
+
 - (IBAction) closeAllSession:(id)sender;
 - (IBAction) openUrl:(id)sender;
 - (IBAction) killAllSSH:(id)sender;
+
+
+- (IBAction) displayServerView:(id)sender;
+- (IBAction) displayAboutView:(id)sender;
+- (IBAction) displayRegisterView:(id)sender;
+- (IBAction) displayMainView:(id)sender;
+
+- (IBAction) openMainWindow:(id)sender;
+- (IBAction) closeMainWindow:(id)sender;
+
+
+
+- (IBAction) registerNewAccount:(id)sender;
 
 - (void) errorPanelDisplaywithMessage:(NSString *)message;
 - (void) errorPanelClose:(NSTimer *)theTimer;
@@ -69,7 +78,7 @@
 - (void) startWheel;
 - (void) stopWheel;
 - (void) saveState;
-- (void)animateWindow:(NSWindow*)win effect:(CGSTransitionType)fx direction:(CGSTransitionOption)dir duration:(float)dur;
+- (void) animateWindow:(NSWindow*)win effect:(CGSTransitionType)fx direction:(CGSTransitionOption)dir duration:(float)dur;
 - (void) formatQuickLink:(BOOL)enabled;
 
 
