@@ -35,7 +35,6 @@
 												 name:@"AMNewGeneralMessage" 
 											   object:nil];
 	return self;
-	 
 }
 
 
@@ -78,7 +77,7 @@
 	for (AMSession *o in [sessionController sessions])
 	{
 		if ([o connected] == NO)
-			[o openTunnelWithUsername:[auth username] Host:[auth host] Port:[auth port] Password:[auth password]];
+			[o openTunnel];
 	}
 }
 
@@ -128,9 +127,6 @@
 
 
 
-
-
-
  
 
 
@@ -152,8 +148,7 @@
 	return YES;
 }
 
-- (void)animateWindow:(NSWindow*)win effect:(CGSTransitionType)fx direction:(CGSTransitionOption)dir
-			 duration:(float)dur
+- (void)animateWindow:(NSWindow*)win effect:(CGSTransitionType)fx direction:(CGSTransitionOption)dir duration:(float)dur
 {
 	int handle;
 	CGSTransitionSpec spec;

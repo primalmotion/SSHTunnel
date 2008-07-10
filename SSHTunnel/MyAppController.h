@@ -61,7 +61,6 @@
 - (IBAction) openMainWindow:(id)sender;
 - (IBAction) closeMainWindow:(id)sender;
 
-
 - (void) performInfoMessage:(NSNotification*)notif;
 - (void) errorPanelDisplaywithMessage:(NSString *)message;
 - (void) errorPanelClose:(NSTimer *)theTimer;
@@ -69,13 +68,4 @@
 - (void) animateWindow:(NSWindow*)win effect:(CGSTransitionType)fx direction:(CGSTransitionOption)dir duration:(float)dur;
 
 
-
-
-
-/// TMP ZONE
-
-
-
-
-/// TMP ZONE
 @end
