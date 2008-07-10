@@ -18,34 +18,42 @@
 
 @implementation AMAccountViewController
 
-@synthesize delegate;
+@synthesize login;
+@synthesize password;
+@synthesize confirmPassword;
+@synthesize isCreatingAccount;
 
-- (void) awakeFromNib
+- (id) init
 {
-	[progressor setHidden:YES];
+	self = [super init];
+	
+	[self setIsCreatingAccount:NO];
+
+	return self;
 }
 
 - (IBAction) createAccount:(id)sender
 {
-	if ([[createButton title] isEqual:@"Register on Abornet"])
+	
+	if ([self isCreatingAccount] == NO)
 	{
 		stdOut			= [NSPipe pipe];
 		sshTask			= [[NSTask alloc] init];
 		outputContent	= @"";
 		NSString		*helperPath = nil;
 		NSArray			*args = nil;
-		
+
 		if ([[serverPicker titleOfSelectedItem] isEqual:@"Abornet.org"])
 		{
 			helperPath		= [[NSBundle mainBundle] pathForResource:@"createAbornetAccount" ofType:@"sh"];
-			args			= [NSArray arrayWithObjects:[login stringValue], [password stringValue], nil];
+			args			= [NSArray arrayWithObjects:login, password, nil];
 		}
 		else
 			return;
 			
-		if ([[password stringValue] length] >= 6)
+		if ([password length] >= 6)
 		{
-			if (![[password stringValue] isEqual:[confirmPassword stringValue]])
+			if (![password isEqual:confirmPassword])
 			{
 				NSRunAlertPanel(@"Incorrect password", @"Your password not matching", @"Ok", nil, nil);
 				return;
@@ -57,13 +65,12 @@
 			return;
 		}
 		
-		if ([[login stringValue] length] >= 7)
+		if ([login length] >= 7)
 		{
 			NSRunAlertPanel(@"Incorrect username", @"Your login must be at maximum of 6 characters lenght", @"Ok", nil, nil);
 			return;
 		}
-		
-		[createButton setTitle:@"Abort Registration"];
+	
 		[sshTask setLaunchPath:helperPath];
 		[sshTask setArguments:args];
 		[sshTask setStandardOutput:stdOut];
@@ -76,16 +83,14 @@
 												   object:[[sshTask standardOutput] fileHandleForReading]];
 
 		[[stdOut fileHandleForReading] readInBackgroundAndNotify];
-		[progressor startAnimation:nil];
-		[progressor setHidden:NO];
+		[self setIsCreatingAccount:YES];
 		[sshTask launch];
 	}
 	else
 	{
 		[sshTask terminate];
 		[createButton setTitle:@"Register on Abornet"];
-		[progressor stopAnimation:nil];
-		[progressor setHidden:YES];
+		[self setIsCreatingAccount:NO];
 	}
 }
 
@@ -111,9 +116,8 @@
 		{
 			[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification object:[stdOut fileHandleForReading]];
 			[sshTask terminate];
-			[progressor stopAnimation:nil];
-			[progressor setHidden:YES];
 			NSRunAlertPanel(@"Error", @"Login already exists", @"ok", nil, nil);
+			[self setIsCreatingAccount:NO];
 		}
 		else if ([checkSuccess evaluateWithObject:outputContent] == YES)
 		{
@@ -121,31 +125,21 @@
 															 name:NSFileHandleReadCompletionNotification 
 														   object:[stdOut fileHandleForReading]];
 			[sshTask terminate];
-			[progressor stopAnimation:nil];
-			[progressor setHidden:YES];
-			int ret = NSRunAlertPanel(@"Account Created", @"Operation sucess. Would you like to use this account with SSTunnel?", 
-							@"Yes, please configure for me", @"No, I will do it by myself", nil);
+			[self setIsCreatingAccount:NO];
+			NSRunAlertPanel(@"Account Created", @"Operation sucess. The server has been added into the list", 
+							@"Ok", nil, nil);
 			
-			if (ret == NSAlertDefaultReturn)
-			{
-				NSMutableArray *serv = (NSMutableArray*)[delegate valueForKey:@"servers"];
-				if (serv != nil)
-				{
-					AMAuth *newAuth = [[AMAuth alloc] init];
-					[newAuth setServerName:@"Abornet"];
-					[newAuth setHost:@"m-net.arbornet.org"];
-					[newAuth setPort:@"22"];
-					[newAuth setUsername:[login stringValue]];
-					[newAuth setPassword:[password stringValue]];
-					[delegate performSelector:@selector(setServers:) withObject:serv];
-					[delegate performSelector:@selector(saveState)];
-					[delegate performSelector:@selector(displayServerView:)];
-				}
-			}
+			AMAuth *newAuth = [[AMAuth alloc] init];
+			[newAuth setServerName:@"Abornet"];
+			[newAuth setHost:@"m-net.arbornet.org"];
+			[newAuth setPort:@"22"];
+			[newAuth setUsername:login];
+			[newAuth setPassword:password];
+			[[serverController serversArrayController] addObject:newAuth];
+			[serverController saveState];
 		}
 		else
 			[[stdOut fileHandleForReading] readInBackgroundAndNotify];
-		
 		
 		data = nil;
 		checkExistingLogin = nil;

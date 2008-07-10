@@ -25,6 +25,7 @@
 @synthesize statusImagePath;
 @synthesize connected;
 @synthesize connectionInProgress;
+@synthesize currentServer;
 
 - (id) init
 {
@@ -35,6 +36,11 @@
 	[self setConnectionInProgress:NO];
 	
 	[self addObserver:self forKeyPath:@"sessionName" 
+			  options:(NSKeyValueObservingOptionNew | 
+					   NSKeyValueObservingOptionOld)
+			  context:NULL];
+	
+	[self addObserver:self forKeyPath:@"currentServer" 
 			  options:(NSKeyValueObservingOptionNew | 
 					   NSKeyValueObservingOptionOld)
 			  context:NULL];
@@ -53,6 +59,7 @@
 	remoteHost		= [[coder decodeObjectForKey:@"MVremoteHost"] retain];
 	remotePort		= [[coder decodeObjectForKey:@"MVremotePort"] retain];
 	statusImagePath	= [[coder decodeObjectForKey:@"MVStatusImagePath"] retain];
+	currentServer	= [[coder decodeObjectForKey:@"MVcurrentServer"] retain];
 	
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
@@ -61,6 +68,12 @@
 			  options:(NSKeyValueObservingOptionNew | 
 					   NSKeyValueObservingOptionOld)
 			  context:NULL];
+	
+	[self addObserver:self forKeyPath:@"currentServer" 
+			  options:(NSKeyValueObservingOptionNew | 
+					   NSKeyValueObservingOptionOld)
+			  context:NULL];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
 	return self;
@@ -68,6 +81,7 @@
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+	NSLog(@"OBSERVING A CHANGE IN SOME PROPRIETIES");
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"AMSessionNameHasChange" object:self];
 }
 
@@ -185,15 +199,17 @@
 /**
  * the IBActions
  **/
-- (void) openTunnelWithUsername:(NSString *)username Host:(NSString *)tunnelHost Port:(NSString*)port Password:(NSString *)password
+- (void) openTunnel
 {
 	NSString	*helperPath;
 	NSArray		*args;
-
+	
 	stdOut			= [NSPipe pipe];
 	sshTask			= [[NSTask alloc] init];
-	helperPath		=[[NSBundle mainBundle] pathForResource:@"SSHCommand" ofType:@"sh"];
-	args			= [NSArray arrayWithObjects:localPort, remoteHost, remotePort, username, tunnelHost, password, port, nil];
+	helperPath		= [[NSBundle mainBundle] pathForResource:@"SSHCommand" ofType:@"sh"];
+	args			= [NSArray arrayWithObjects:localPort, remoteHost, remotePort, [currentServer username],
+					   [currentServer host], [currentServer password], [currentServer port], nil];
+	
 	outputContent	= @"";
 	
 	[sshTask setLaunchPath:helperPath];
@@ -257,5 +273,6 @@
 	[coder encodeObject:remoteHost forKey:@"MVremoteHost"];
 	[coder encodeObject:remotePort forKey:@"MVremotePort"];
 	[coder encodeObject:statusImagePath forKey:@"MVStatusImagePath"];
+	[coder encodeObject:currentServer forKey:@"MVcurrentServer"];
 }
 @end

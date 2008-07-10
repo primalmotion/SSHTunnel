@@ -15,9 +15,10 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import "MyAppController.h"
+#include <unistd.h>
 
 @implementation MyAppController
-
+@synthesize hostName;
 
 - (id) init
 {
@@ -39,8 +40,9 @@
 
 
 - (void) awakeFromNib
-{
+{	
 	[[mainWindow contentView] addSubview:mainView];
+	[self setHostName:[[NSHost currentHost] name]];
 }
 
 /**
@@ -49,19 +51,10 @@
 - (IBAction)toggleTunnel:(id)sender 
 {
 	AMSession	*currentSession = [sessionController getSelectedSession];
-	AMAuth		*currentServer	= [serverController getSelectedServer];
-	
 	if ([currentSession connected] == NO)
-	{
 		[currentSession closeTunnel];
-	}
 	else
-	{	
-		[currentSession openTunnelWithUsername:[currentServer username] 
-										  Host:[currentServer host] 
-										  Port:[currentServer port]
-									  Password:[currentServer password]];
-	}
+		[currentSession openTunnel];
 }
 
 - (IBAction) killAllSSH:(id)sender
@@ -80,25 +73,22 @@
 
 - (IBAction) openAllSession:(id)sender
 {
-	//	AMAuth *auth = [serverController getSelectedServer];
-	//
-	//	for (SavedItemsObject *o in [self sessions])
-	//	{
-	//		if ([o isStillRunning] == 0)
-	//			[o openTunnelWithUsername:[auth username] Host:[auth host] Port:[auth port] Password:[auth password]];
-	//	}
-	//	[tv reloadData];
+	AMAuth *auth = [serverController getSelectedServer];
+
+	for (AMSession *o in [sessionController sessions])
+	{
+		if ([o connected] == NO)
+			[o openTunnelWithUsername:[auth username] Host:[auth host] Port:[auth port] Password:[auth password]];
+	}
 }
 
 - (IBAction) closeAllSession:(id)sender
 {
-	//
-	//	for (SavedItemsObject *o in [self sessions])
-	//	{
-	//		if ([o isStillRunning] == 1)
-	//			[o closeTunnel];
-	//	}
-	//	[tv reloadData];
+	for (AMSession *o in [sessionController sessions])
+	{
+		if ([o connected] == YES)
+			[o closeTunnel];
+	}
 }
 
 
@@ -152,8 +142,8 @@
  **/
 - (void) applicationWillTerminate: (NSNotification *) notification
 {
-	//for (int i = 0; i < [[self sessions] count]; i++)
-	//	[[[self sessions] objectAtIndex:i] closeTunnel];
+	for (int i = 0; i < [[sessionController sessions] count]; i++)
+		[[[sessionController sessions] objectAtIndex:i] closeTunnel];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag

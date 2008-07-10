@@ -16,23 +16,27 @@
 
 #import <Cocoa/Cocoa.h>
 #import "AMAuth.h"
+#import "AMServerViewController.h"
 
 @interface AMAccountViewController : NSObject {
-	IBOutlet NSTextField			*login;
-	IBOutlet NSTextField			*password;
-	IBOutlet NSTextField			*confirmPassword;
-	IBOutlet NSProgressIndicator	*progressor;
+	NSMutableString					*login;
+	NSMutableString					*password;
+	NSMutableString					*confirmPassword;
+	BOOL							isCreatingAccount;
+	
 	IBOutlet NSButton				*createButton;
 	IBOutlet NSPopUpButton			*serverPicker;
+	IBOutlet AMServerViewController *serverController;
 	
-	id			delegate;
 	NSTask		*sshTask;
 	NSPipe		*stdOut;
 	NSString	*outputContent;
 }
 
-@property(readwrite, assign) id delegate;
-
+@property(readwrite)			BOOL				isCreatingAccount;
+@property(readwrite, assign)	NSMutableString		*login;
+@property(readwrite, assign)	NSMutableString		*password;
+@property(readwrite, assign)	NSMutableString		*confirmPassword;
 - (IBAction) createAccount:(id)sender;
 
 @end

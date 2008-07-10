@@ -38,13 +38,14 @@
 	IBOutlet NSView					 *registerView;
 	IBOutlet AMSessionViewController *sessionController;
 	IBOutlet AMServerViewController  *serverController;
+
 	NSTimer							 *timer;
-	
-	NSView							*backViewReminder;
-	
+	NSView							 *backViewReminder;
+	NSString						 *hostName;
 	
 	
 }
+@property(readwrite, assign) NSString *hostName;
 
 - (IBAction) toggleTunnel:(id)sender;
 - (IBAction) openAllSession:(id)sender;

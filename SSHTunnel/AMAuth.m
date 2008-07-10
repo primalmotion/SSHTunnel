@@ -70,7 +70,7 @@
 
 - (NSString *) description
 {
-	return host;
+	return serverName;
 }
 
 @end
