@@ -1,3 +1,19 @@
+//Copyright (C) 2008  Antoine Mercadal
+//
+//This program is free software; you can redistribute it and/or
+//modify it under the terms of the GNU General Public License
+//as published by the Free Software Foundation; either version 2
+//of the License, or (at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program; if not, write to the Free Software
+//Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 #import "AMWindow.h"
 
 //typedef struct s_AMContextInfo {
@@ -26,25 +42,9 @@
 	[alert setInformativeText:message];
 	[alert setAlertStyle:NSWarningAlertStyle];
 	
-//	AMContextInfo *context = malloc(sizeof(AMContextInfo));
-//	context->object = sender;
-//	context->selector = sel;
-	
 	[alert beginSheetModalForWindow:self 
 					  modalDelegate:sender 
 					 didEndSelector:NSSelectorFromString(sel) 
 						contextInfo:nil];
 }
-
-//- (void)alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
-//{
-//	alert = nil;
-//	AMContextInfo *context = (AMContextInfo *)contextInfo;
-//	
-//	if (context->selector != nil)
-//		[context->object performSelector:NSSelectorFromString(context->selector)];
-//
-//	free(context);
-//}
-
 @end
