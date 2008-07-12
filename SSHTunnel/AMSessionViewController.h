@@ -15,17 +15,20 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
+#import "AMBaseViewController.h"
 #import "AMSession.h"
 
-@interface AMSessionViewController :NSObject {
+@interface AMSessionViewController :AMBaseViewController {
 	
 	IBOutlet NSArrayController		*sessionsArrayController;
 	
 	NSMutableArray					*sessions;
 	NSString						*sessionSavePath;
+	NSTimer							*pingDelayer;
 }
 @property(readwrite, assign)	NSMutableArray		*sessions;
 
+- (void) performSaveProcess:(NSTimer *)theTimer;
 - (void) saveState;
 - (void) handleDataNameChange:(NSNotification*)notif;
 - (AMSession*) getSelectedSession;

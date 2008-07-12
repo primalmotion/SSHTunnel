@@ -40,7 +40,7 @@
 
 - (void) awakeFromNib
 {	
-	[[mainWindow contentView] addSubview:mainView];
+	[[mainApplicationWindow contentView] addSubview:sessionView];
 	[self setHostName:[[NSHost currentHost] name]];
 }
 
@@ -58,10 +58,19 @@
 
 - (IBAction) killAllSSH:(id)sender
 {
-	
-	int ret = NSRunAlertPanel(@"Warning", @"You are going to kill all active ssh session, even some that are not managed by SSHTunnel. Are you sure?", 
-							  @"Yes", @"Abort", nil);
-	if (ret ==  NSAlertDefaultReturn)
+	[mainApplicationWindow runSheetAlertTitle:NSLocalizedString(@"KILLALLSSH_TITLE", nil) 
+									  message:NSLocalizedString(@"KILLALLSSH_MESSAGE", nil)
+								  firstButton:NSLocalizedString(@"OK", nil)
+								 secondButton:NSLocalizedString(@"CANCEL", nil)
+										 from:self
+									 selector:(@"executeKillAllSSH:returnCode:contextInfo:")];
+}
+
+- (void) executeKillAllSSH:(NSAlert *)alert returnCode:(int)returnCode
+				   contextInfo:(void *)contextInfo;
+{
+	// Do not ask me why NSAlertDefaultReturn doesn't work...
+	if (returnCode ==  1000)
 	{
 		NSTask *t = [[NSTask alloc] init];
 		[t setLaunchPath:@"/usr/bin/killall"];
@@ -72,8 +81,6 @@
 
 - (IBAction) openAllSession:(id)sender
 {
-	AMAuth *auth = [serverController getSelectedServer];
-
 	for (AMSession *o in [sessionController sessions])
 	{
 		if ([o connected] == NO)
@@ -140,6 +147,8 @@
 {
 	for (int i = 0; i < [[sessionController sessions] count]; i++)
 		[[[sessionController sessions] objectAtIndex:i] closeTunnel];
+	[serverController performSaveProcess:nil];
+	[sessionController performSaveProcess:nil];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
@@ -178,23 +187,23 @@
 	handle=0;
 }
 
-- (IBAction) displayMainView:(id)sender
+- (IBAction) displaySessionView:(id)sender
 {
-	if (![[[mainWindow contentView] subviews] containsObject:mainView])
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
 	{
-		NSView *currentView = [[[mainWindow contentView] subviews] objectAtIndex:0];
-		[[mainWindow contentView] replaceSubview:currentView with:mainView];
-		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[mainApplicationWindow contentView] replaceSubview:currentView with:sessionView];
+		[self animateWindow:mainApplicationWindow effect:CGSCube direction:CGSLeft duration:0.2];
 	}
 }
 
 - (IBAction) displayServerView:(id)sender
 {
-	if (![[[mainWindow contentView] subviews] containsObject:serverView])
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
 	{
-		NSView *currentView = [[[mainWindow contentView] subviews] objectAtIndex:0];
-		[[mainWindow contentView] replaceSubview:currentView with:serverView];
-		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[mainApplicationWindow contentView] replaceSubview:currentView with:serverView];
+		[self animateWindow:mainApplicationWindow effect:CGSCube direction:CGSLeft duration:0.2];
 		
 		/*
 		[tunnelHost setStringValue:(NSString *)[[servers objectAtIndex:0] host]];
@@ -207,32 +216,32 @@
 
 - (IBAction) displayAboutView:(id)sender
 {
-	if (![[[mainWindow contentView] subviews] containsObject:aboutView])
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
 	{
-		NSView *currentView = [[[mainWindow contentView] subviews] objectAtIndex:0];
-		[[mainWindow contentView] replaceSubview:currentView with:aboutView];
-		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[mainApplicationWindow contentView] replaceSubview:currentView with:aboutView];
+		[self animateWindow:mainApplicationWindow effect:CGSCube direction:CGSLeft duration:0.2];
 	}
 }
 
 - (IBAction) displayRegisterView:(id)sender
 {
-	if (![[[mainWindow contentView] subviews] containsObject:registerView])
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
 	{
-		NSView *currentView = [[[mainWindow contentView] subviews] objectAtIndex:0];
-		[[mainWindow contentView] replaceSubview:currentView with:registerView];
-		[self animateWindow:mainWindow effect:CGSCube direction:CGSLeft duration:0.2];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[mainApplicationWindow contentView] replaceSubview:currentView with:registerView];
+		[self animateWindow:mainApplicationWindow effect:CGSCube direction:CGSLeft duration:0.2];
 	}
 }
 
 - (IBAction) openMainWindow:(id)sender
 {
-	[mainWindow makeKeyAndOrderFront:nil];
+	[mainApplicationWindow makeKeyAndOrderFront:nil];
 }
 
 - (IBAction) closeMainWindow:(id)sender
 {
-	[mainWindow orderOut:nil];
+	[mainApplicationWindow orderOut:nil];
 }
 
 

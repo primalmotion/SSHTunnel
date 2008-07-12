@@ -28,11 +28,18 @@
 	NSString	*username;
 	NSString	*password;
 	NSString	*serverName;
+	NSString	*statusImagePath;
+	
+	NSTask		*ping;
+	NSPipe		*stdOut;
 }
 @property(readwrite, copy) NSString	*serverName;
 @property(readwrite, copy) NSString	*host;
 @property(readwrite, copy) NSString *port;
 @property(readwrite, copy) NSString	*username;
 @property(readwrite, copy) NSString	*password;
+@property(readwrite, copy) NSString	*statusImagePath;
 
+- (void) pingHost;
+- (void) handleEndOfPing:(NSNotification *) aNotification;
 @end

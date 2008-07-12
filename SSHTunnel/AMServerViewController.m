@@ -35,6 +35,8 @@
 	else
 		[self setServers:[[NSMutableArray alloc] init]];
 	
+	f= nil;
+	
 	[serversArrayController addObserver:self 
 							 forKeyPath:@"arrangedObjects" 
 								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
@@ -56,6 +58,7 @@
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+	NSLog(@"Arranged object changes for seever");
 	[self saveState];
 }
 
@@ -66,8 +69,19 @@
 
 - (void) saveState
 {
+	if (pingDelayer != nil)
+		[pingDelayer invalidate];
+	
+	NSLog(@"Servers saving processes programmed.");
+	pingDelayer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(performSaveProcess:) userInfo:nil repeats:NO];
+	
+}
+
+- (void) performSaveProcess:(NSTimer *)theTimer
+{
 	NSLog(@"Servers status saved.");
 	[NSKeyedArchiver archiveRootObject:[self servers] toFile:[serverSavePath stringByExpandingTildeInPath]];
+	[[self getSelectedServer] pingHost];
 }
 
 - (AMAuth*) getSelectedServer
@@ -75,6 +89,11 @@
 	return (AMAuth*)[[serversArrayController selectedObjects] objectAtIndex:0];
 }
 
+- (IBAction) refreshPings:(id)sender
+{
+	for(AMAuth *s in servers)
+		[s pingHost];
+}
 
 
 @end

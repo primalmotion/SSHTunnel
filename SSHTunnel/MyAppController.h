@@ -25,15 +25,14 @@
 #import "AMAccountViewController.h"
 #import "AMServerViewController.h"
 #import "AMSessionViewController.h"
+#import "AMBaseViewController.h"
 
-
-@interface MyAppController : NSObject {
+@interface MyAppController : AMBaseViewController {
 	
 	IBOutlet NSTextField			 *errorMessage;
 	IBOutlet NSView					 *errorPanel;
-	IBOutlet NSWindow				 *mainWindow;
 	IBOutlet NSView					 *serverView;
-	IBOutlet NSView					 *mainView;
+	IBOutlet NSView					 *sessionView;
 	IBOutlet NSView					 *aboutView;
 	IBOutlet NSView					 *registerView;
 	IBOutlet AMSessionViewController *sessionController;
@@ -51,12 +50,12 @@
 - (IBAction) openAllSession:(id)sender;
 - (IBAction) closeAllSession:(id)sender;
 - (IBAction) killAllSSH:(id)sender;
-
+- (void) executeKillAllSSH:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (IBAction) displayServerView:(id)sender;
 - (IBAction) displayAboutView:(id)sender;
 - (IBAction) displayRegisterView:(id)sender;
-- (IBAction) displayMainView:(id)sender;
+- (IBAction) displaySessionView:(id)sender;
 
 - (IBAction) openMainWindow:(id)sender;
 - (IBAction) closeMainWindow:(id)sender;

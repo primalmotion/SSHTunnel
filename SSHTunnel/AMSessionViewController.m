@@ -33,6 +33,8 @@
 	else
 		[self setSessions:[[NSMutableArray alloc] init]];
 	
+	f = nil;
+	
 	[sessionsArrayController addObserver:self 
 							  forKeyPath:@"arrangedObjects" 
 								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
@@ -64,9 +66,20 @@
 
 - (void) saveState
 {
+	if (pingDelayer != nil)
+		[pingDelayer invalidate];
+	
+	NSLog(@"Sessions saving processes programmed.");
+	pingDelayer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(performSaveProcess:) userInfo:nil repeats:NO];
+	
+}
+
+- (void) performSaveProcess:(NSTimer *)theTimer
+{
 	NSLog(@"Sessions status saved.");
 	[NSKeyedArchiver archiveRootObject:[self sessions] toFile:[sessionSavePath stringByExpandingTildeInPath]];
 }
+
 
 - (AMSession*) getSelectedSession
 {

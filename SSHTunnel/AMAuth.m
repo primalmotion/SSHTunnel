@@ -23,6 +23,7 @@
 @synthesize username;
 @synthesize password;
 @synthesize port;
+@synthesize statusImagePath;
 
 - (id) init
 {
@@ -33,12 +34,72 @@
 					   NSKeyValueObservingOptionOld)
 			  context:NULL];
 	
+	[self pingHost];
+	
 	return self;
+}
+
+- (void) pingHost
+{
+	ping			= [[NSTask alloc] init];
+	stdOut			= [NSPipe pipe];
+	
+	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusOrange" ofType:@"tif"]];
+	[ping setLaunchPath:@"/sbin/ping"];
+	[ping setArguments:[NSArray arrayWithObjects:@"-c", @"1", @"-t", @"2", [self host], nil]];
+	[ping setStandardOutput:stdOut];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(handleEndOfPing:)
+												 name:NSFileHandleReadToEndOfFileCompletionNotification
+											   object:[[ping standardOutput] fileHandleForReading]];
+	
+	
+	[[stdOut fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
+	[ping launch];
+}
+
+- (void) handleEndOfPing:(NSNotification *) aNotification
+{
+	NSData		*data;
+	NSString	*outputContent;
+	NSPredicate *checkSuccess;
+	
+	data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
+		
+	outputContent		= [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	checkSuccess		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] '0% packet loss'"];
+	
+	
+	if ([checkSuccess evaluateWithObject:outputContent] == YES)
+		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusGreen" ofType:@"tif"]];
+	else
+		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+	
+	[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification object:[stdOut fileHandleForReading]];
+	[ping terminate];
+	data = nil;
+	outputContent = nil;
+	checkSuccess = nil;
+	ping = nil;
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"AMServerNameHasChanged" object:self];
+}
+
+- (void) dealloc
+{
+	host = nil;
+	port = nil;
+	username = nil;
+	password = nil;
+	serverName = nil;
+	statusImagePath = nil;
+	stdOut = nil;
+	
+	[super dealloc];
 }
 
 - (id) initWithCoder:(NSCoder *)coder
@@ -55,6 +116,7 @@
 			  options:(NSKeyValueObservingOptionNew | 
 					   NSKeyValueObservingOptionOld)
 			  context:NULL];
+	[self pingHost];
 	
 	return self;
 }

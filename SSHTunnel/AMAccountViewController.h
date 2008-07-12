@@ -15,28 +15,30 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
+#import "AMBaseViewController.h"
 #import "AMAuth.h"
+#import "AMPopUpButton.h"
 #import "AMServerViewController.h"
 
-@interface AMAccountViewController : NSObject {
+@interface AMAccountViewController : AMBaseViewController {
 	NSMutableString					*login;
 	NSMutableString					*password;
 	NSMutableString					*confirmPassword;
 	BOOL							isCreatingAccount;
 	
 	IBOutlet NSButton				*createButton;
-	IBOutlet NSPopUpButton			*serverPicker;
+	IBOutlet AMPopUpButton			*serverPicker;
 	IBOutlet AMServerViewController *serverController;
 	
-	NSTask		*sshTask;
-	NSPipe		*stdOut;
-	NSString	*outputContent;
+	NSTask			*sshTask;
+	NSPipe			*stdOut;
 }
 
-@property(readwrite)			BOOL				isCreatingAccount;
 @property(readwrite, assign)	NSMutableString		*login;
 @property(readwrite, assign)	NSMutableString		*password;
 @property(readwrite, assign)	NSMutableString		*confirmPassword;
-- (IBAction) createAccount:(id)sender;
+@property(readwrite)			BOOL				isCreatingAccount;
 
+- (IBAction) createAccount:(id)sender;
+- (BOOL) validateCurrentUserInformations;
 @end

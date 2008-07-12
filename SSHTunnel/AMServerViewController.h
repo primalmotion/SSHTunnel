@@ -13,16 +13,18 @@
 //You should have received a copy of the GNU General Public License
 //along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#import "AMAuth.h"
+
 #import <Cocoa/Cocoa.h>
+#import "AMBaseViewController.h"
+#import "AMAuth.h"
 
-
-@interface AMServerViewController : NSObject {
+@interface AMServerViewController : AMBaseViewController {
 
 	IBOutlet NSArrayController		*serversArrayController;
 	
 	NSMutableArray					*servers;
 	NSString						*serverSavePath;
+	NSTimer							*pingDelayer;
 	
 	
 }
@@ -30,8 +32,11 @@
 @property(readwrite, assign)	NSMutableArray		*servers;
 @property(readwrite, assign)	NSArrayController	*serversArrayController;
 
+- (void) performSaveProcess:(NSTimer *)theTimer;
 - (void) saveState;
 - (void) handleDataNameChange:(NSNotification*)notif;
 - (AMAuth*) getSelectedServer;
+
+- (IBAction) refreshPings:(id)sender;
 
 @end

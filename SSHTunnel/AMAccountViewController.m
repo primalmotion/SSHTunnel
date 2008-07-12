@@ -28,7 +28,6 @@
 	self = [super init];
 	
 	[self setIsCreatingAccount:NO];
-
 	return self;
 }
 
@@ -37,45 +36,21 @@
 	
 	if ([self isCreatingAccount] == NO)
 	{
+		NSString		*helperPath;
+		NSArray			*args;
+		
 		stdOut			= [NSPipe pipe];
 		sshTask			= [[NSTask alloc] init];
-		outputContent	= @"";
-		NSString		*helperPath = nil;
-		NSArray			*args = nil;
-
-		if ([[serverPicker titleOfSelectedItem] isEqual:@"Abornet.org"])
-		{
-			helperPath		= [[NSBundle mainBundle] pathForResource:@"createAbornetAccount" ofType:@"sh"];
-			args			= [NSArray arrayWithObjects:login, password, nil];
-		}
-		else
-			return;
-			
-		if ([password length] >= 6)
-		{
-			if (![password isEqual:confirmPassword])
-			{
-				NSRunAlertPanel(@"Incorrect password", @"Your password not matching", @"Ok", nil, nil);
-				return;
-			}
-		}
-		else
-		{
-			NSRunAlertPanel(@"Incorrect password", @"Your password must be at least 6 characters", @"Ok", nil, nil);
-			return;
-		}
 		
-		if ([login length] >= 7)
-		{
-			NSRunAlertPanel(@"Incorrect username", @"Your login must be at maximum of 6 characters lenght", @"Ok", nil, nil);
+		if ([self validateCurrentUserInformations] == NO)
 			return;
-		}
-	
+		
+		helperPath		= [[NSBundle mainBundle] pathForResource:[serverPicker getCurrentServerShScriptName] ofType:@"sh"];
+		args			= [NSArray arrayWithObjects:login, password, nil];
+
 		[sshTask setLaunchPath:helperPath];
 		[sshTask setArguments:args];
 		[sshTask setStandardOutput:stdOut];
-		
-		
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self 
 												 selector:@selector(checkShStatus:)
@@ -85,12 +60,15 @@
 		[[stdOut fileHandleForReading] readInBackgroundAndNotify];
 		[self setIsCreatingAccount:YES];
 		[sshTask launch];
+		
+		helperPath = nil;
+		args = nil;
 	}
 	else
 	{
 		[sshTask terminate];
-		[createButton setTitle:@"Register on Abornet"];
 		[self setIsCreatingAccount:NO];
+		sshTask = nil;
 	}
 }
 
@@ -98,26 +76,30 @@
 - (void) checkShStatus:(NSNotification *) aNotification
 {
 	NSData		*data;
+	NSString	*outputContent	= @"";
 	NSPredicate *checkExistingLogin;
 	NSPredicate *checkSuccess;
 
 	
 	data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
+	outputContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	
-	outputContent		= [outputContent stringByAppendingString:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
 	checkExistingLogin	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'LOGIN_EXISTS'"];
 	checkSuccess		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'LOGIN_CREATED'"];
 
-	
-	NSLog(@"-- %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 	if ([data length])
 	{
 		if ([checkExistingLogin evaluateWithObject:outputContent] == YES)
 		{
 			[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification object:[stdOut fileHandleForReading]];
 			[sshTask terminate];
-			NSRunAlertPanel(@"Error", @"Login already exists", @"ok", nil, nil);
 			[self setIsCreatingAccount:NO];
+			[mainApplicationWindow runSheetAlertTitle:NSLocalizedString(@"ACCOUNT_CREATION_INCORRECT_LOGIN_TITLE", nil) 
+											  message:NSLocalizedString(@"ACCOUNT_CREATION_INCORRECT_LOGIN_EXISTS", nil)
+										  firstButton:NSLocalizedString(@"OK", nil)
+										 secondButton:nil 
+												 from:self
+											 selector:nil];
 		}
 		else if ([checkSuccess evaluateWithObject:outputContent] == YES)
 		{
@@ -126,17 +108,22 @@
 														   object:[stdOut fileHandleForReading]];
 			[sshTask terminate];
 			[self setIsCreatingAccount:NO];
-			NSRunAlertPanel(@"Account Created", @"Operation sucess. The server has been added into the list", 
-							@"Ok", nil, nil);
+			[mainApplicationWindow runSheetAlertTitle:NSLocalizedString(@"ACCOUNT_CREATION_SUCESSFULL_TITLE", nil) 
+											  message:NSLocalizedString(@"ACCOUNT_string_CREATION_SUCCESSFULL", nil)
+										  firstButton:NSLocalizedString(@"OK", nil)
+										 secondButton:nil 
+												 from:self
+											 selector:nil];
 			
 			AMAuth *newAuth = [[AMAuth alloc] init];
-			[newAuth setServerName:@"Abornet"];
-			[newAuth setHost:@"m-net.arbornet.org"];
-			[newAuth setPort:@"22"];
+			[newAuth setServerName:[serverPicker getCurrentServerName]];
+			[newAuth setHost:[serverPicker getCurrentServerUrl]];
+			[newAuth setPort:[serverPicker getCurrentServerPort]];
 			[newAuth setUsername:login];
 			[newAuth setPassword:password];
 			[[serverController serversArrayController] addObject:newAuth];
 			[serverController saveState];
+			outputContent = nil;
 		}
 		else
 			[[stdOut fileHandleForReading] readInBackgroundAndNotify];
@@ -144,9 +131,65 @@
 		data = nil;
 		checkExistingLogin = nil;
 		checkSuccess = nil;
+		outputContent = nil;
+		
 	}
 }
 
+- (BOOL) validateCurrentUserInformations
+{
+	if (![[NSFileManager defaultManager] fileExistsAtPath:[[NSBundle mainBundle] 
+														   pathForResource:[serverPicker getCurrentServerShScriptName]
+														   ofType:@"sh"]])
+	{
+		[self setIsCreatingAccount:NO];
+		[mainApplicationWindow runSheetAlertTitle:NSLocalizedString(@"INTERNAL_ERROR_MESSAGE", nil) 
+										  message:NSLocalizedString(@"ACCOUNT_SERVER_PLIST_WRONG_MESSAGE", nil)
+									  firstButton:NSLocalizedString(@"OK", nil)
+									 secondButton:nil 
+											 from:self
+										 selector:nil];
+		return NO;
+	}
+	
+	if ([password length] < 6)
+	{
+		[self setIsCreatingAccount:NO];
+		[mainApplicationWindow runSheetAlertTitle:NSLocalizedString(@"ACCOUNT_CREATION_INCORRECT_PASSWORD_TITLE", nil) 
+										  message:NSLocalizedString(@"ACCOUNT_CREATION_INCORRECT_PASSWORD_TOO_SHORT", nil)
+									  firstButton:NSLocalizedString(@"OK", nil)
+									 secondButton:nil 
+											 from:self  
+										 selector:nil];
+		return NO;
+	}
+	
+	if (![password isEqual:confirmPassword])
+	{
+		[self setIsCreatingAccount:NO];
+		[mainApplicationWindow runSheetAlertTitle:NSLocalizedString(@"ACCOUNT_CREATION_INCORRECT_PASSWORD_TITLE", nil) 
+										  message:NSLocalizedString(@"ACCOUNT_CREATION_INCORRECT_PASSWORD_NOT_MATCH", nil)
+									  firstButton:NSLocalizedString(@"OK", nil)
+									 secondButton:nil 
+											 from:self  
+										 selector:nil];
+		return NO;
+	}
+
+	if ([login length] >= 7)
+	{
+		[self setIsCreatingAccount:NO];
+		[mainApplicationWindow runSheetAlertTitle:NSLocalizedString(@"ACCOUNT_CREATION_INCORRECT_LOGIN_TITLE", nil) 
+										  message:NSLocalizedString(@"ACCOUNT_CREATION_INCORRECT_LOGIN_TOO_LONG", nil)
+									  firstButton:NSLocalizedString(@"OK", nil)
+									 secondButton:nil 
+											 from:self
+										 selector:nil];
+		return NO;
+	}
+	
+	return YES;
+}
 					
 
 @end
