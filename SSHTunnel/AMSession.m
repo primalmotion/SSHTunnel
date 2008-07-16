@@ -26,6 +26,7 @@
 @synthesize connected;
 @synthesize connectionInProgress;
 @synthesize currentServer;
+@synthesize outgoingTunnel;
 
 - (id) init
 {
@@ -34,6 +35,7 @@
 	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
+	[self setOutgoingTunnel:0];
 	
 	[self addObserver:self forKeyPath:@"sessionName" 
 			  options:(NSKeyValueObservingOptionNew | 
@@ -60,9 +62,11 @@
 	remotePort		= [[coder decodeObjectForKey:@"MVremotePort"] retain];
 	statusImagePath	= [[coder decodeObjectForKey:@"MVStatusImagePath"] retain];
 	currentServer	= [[coder decodeObjectForKey:@"MVcurrentServer"] retain];
+	outgoingTunnel	= [coder decodeIntForKey:@"MVoutgoingTunnel"];
 	
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
+
 	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
 	[self addObserver:self forKeyPath:@"sessionName" 
 			  options:(NSKeyValueObservingOptionNew | 
@@ -208,7 +212,7 @@
 	sshTask			= [[NSTask alloc] init];
 	helperPath		= [[NSBundle mainBundle] pathForResource:@"SSHCommand" ofType:@"sh"];
 	args			= [NSArray arrayWithObjects:localPort, remoteHost, remotePort, [currentServer username],
-					   [currentServer host], [currentServer password], [currentServer port], nil];
+					   [currentServer host], [currentServer password], [currentServer port], [NSString stringWithFormat:@"%d", outgoingTunnel], nil];
 	
 	outputContent	= @"";
 	
@@ -274,5 +278,6 @@
 	[coder encodeObject:remotePort forKey:@"MVremotePort"];
 	[coder encodeObject:statusImagePath forKey:@"MVStatusImagePath"];
 	[coder encodeObject:currentServer forKey:@"MVcurrentServer"];
+	[coder encodeInt:outgoingTunnel forKey:@"MVoutgoingTunnel"];
 }
 @end

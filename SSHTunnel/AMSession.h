@@ -24,7 +24,7 @@
 	NSString	*remotePort;	
 	NSString	*statusImagePath;
 	AMAuth		*currentServer;
-	
+	NSInteger	outgoingTunnel;
 	BOOL		connected;
 	BOOL		connectionInProgress;
 	
@@ -40,6 +40,7 @@
 @property(readwrite, assign)	NSString	*statusImagePath;
 @property(readwrite)			BOOL		connected;
 @property(readwrite)			BOOL		connectionInProgress;
+@property(readwrite, assign)	NSInteger	outgoingTunnel;
 
 - (void) openTunnel;
 - (void) closeTunnel;

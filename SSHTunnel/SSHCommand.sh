@@ -1,5 +1,6 @@
 #!/usr/bin/expect -f
 #!/bin/sh
+
 # Copyright (C) 2008  Antoine Mercadal
 # 
 # This program is free software; you can redistribute it and/or
@@ -23,8 +24,16 @@ set username [lrange $argv 3 3]
 set tunnelHost [lrange $argv 4 4]
 set password [lrange $argv 5 5 ]
 set serverPort [lrange $argv 6 6 ]
+set tunnelType [lrange $argv 7 7 ]
 
-spawn ssh -N -L$localPort:$remoteHost:$remotePort $username@$tunnelHost -p $serverPort  -R *:$localPort:host:hostport
+set zero '0'
+
+if { $tunnelType == 0 }  {
+	spawn ssh -N -L$localPort:$remoteHost:$remotePort $username@$tunnelHost -p $serverPort  -R *:$localPort:host:hostport
+} else {
+	spawn ssh -q -N -R $remotePort:127.0.0.1:$localPort $username@$tunnelHost
+} 
+
 match_max 100000
 
 set timeout 1
