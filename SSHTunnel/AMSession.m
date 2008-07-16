@@ -27,6 +27,7 @@
 @synthesize connectionInProgress;
 @synthesize currentServer;
 @synthesize outgoingTunnel;
+@synthesize tunnelTypeImagePath;
 
 - (id) init
 {
@@ -50,6 +51,23 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
 	return self;
+}
+
+- (void) setOutgoingTunnel:(NSInteger)newValue
+{
+	[self willChangeValueForKey:@"outgoingTunnel"];
+	[self willChangeValueForKey:@"tunnelTypeImagePath"];
+	outgoingTunnel = newValue;
+	[self didChangeValueForKey:@"outgoingTunnel"];
+	[self didChangeValueForKey:@"tunnelTypeImagePath"];
+}
+
+- (NSString*) tunnelTypeImagePath
+{
+	if ([self outgoingTunnel] == 0)
+		return [[NSBundle mainBundle] pathForResource:@"outTunnel" ofType:@"tif"];
+	else 
+		return [[NSBundle mainBundle] pathForResource:@"inTunnel" ofType:@"tif"];
 }
 
 - (id) initWithCoder:(NSCoder *)coder

@@ -23,6 +23,7 @@
 	NSString	*remoteHost;
 	NSString	*remotePort;	
 	NSString	*statusImagePath;
+	NSString	*tunnelTypeImagePath;
 	AMAuth		*currentServer;
 	NSInteger	outgoingTunnel;
 	BOOL		connected;
@@ -38,6 +39,7 @@
 @property(readwrite, assign)	NSString	*remoteHost;
 @property(readwrite, assign)	NSString	*remotePort;
 @property(readwrite, assign)	NSString	*statusImagePath;
+@property(readwrite, assign)	NSString	*tunnelTypeImagePath;
 @property(readwrite)			BOOL		connected;
 @property(readwrite)			BOOL		connectionInProgress;
 @property(readwrite, assign)	NSInteger	outgoingTunnel;
