@@ -37,32 +37,44 @@
 	
 	f= nil;
 	
+	return self;
+}
+
+- (void) createObservers;
+{
 	[serversArrayController addObserver:self 
-							 forKeyPath:@"arrangedObjects" 
+							 forKeyPath:@"selection.serverName" 
 								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
 								context:NULL];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(handleDataNameChange:) 
-												 name:@"AMServerNameHasChanged" 
-											   object:nil];
-
-	return self;
+	[serversArrayController addObserver:self 
+							 forKeyPath:@"selection.host" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:NULL];
 	
+	[serversArrayController addObserver:self 
+							 forKeyPath:@"selection.port" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:NULL];
+	
+	[serversArrayController addObserver:self 
+							 forKeyPath:@"selection.username" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:NULL];
+	
+	[serversArrayController addObserver:self 
+							 forKeyPath:@"selection.password" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:NULL];
 }
 
-- (void) handleDataNameChange:(NSNotification*)notif
+- (void) awakeFromNib
 {
-	[self saveState];
+	[self createObservers];
 }
+
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-	NSLog(@"Arranged object changes for seever");
-	[self saveState];
-}
-
-- (void)controlTextDidChange:(NSNotification *)aNotification
 {
 	[self saveState];
 }
@@ -84,14 +96,14 @@
 	[[self getSelectedServer] pingHost];
 }
 
-- (AMAuth*) getSelectedServer
+- (AMServer*) getSelectedServer
 {
-	return (AMAuth*)[[serversArrayController selectedObjects] objectAtIndex:0];
+	return (AMServer*)[[serversArrayController selectedObjects] objectAtIndex:0];
 }
 
 - (IBAction) refreshPings:(id)sender
 {
-	for(AMAuth *s in servers)
+	for(AMServer *s in servers)
 		[s pingHost];
 }
 

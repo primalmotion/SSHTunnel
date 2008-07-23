@@ -21,6 +21,9 @@
 @interface AMSessionViewController :AMBaseViewController {
 	
 	IBOutlet NSArrayController		*sessionsArrayController;
+	IBOutlet NSBox					*tunnelConfigBox;
+	IBOutlet NSView					*outputTunnelConfigView;
+	IBOutlet NSView					*inputTunnelConfigView;
 	
 	NSMutableArray					*sessions;
 	NSString						*sessionSavePath;
@@ -28,9 +31,10 @@
 }
 @property(readwrite, assign)	NSMutableArray		*sessions;
 
+- (void) createObservers;
 - (void) performSaveProcess:(NSTimer *)theTimer;
 - (void) saveState;
-- (void) handleDataNameChange:(NSNotification*)notif;
+
 - (AMSession*) getSelectedSession;
 
 @end

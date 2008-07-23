@@ -1797,7 +1797,7 @@ IG5ldyBhY2NvdW50IG9uIGEgZnJlZSBzaGVsbCBzZXJ2aWNlLg</string>
 												<object class="_NSCornerView" key="NSCornerView" id="1025485450">
 													<reference key="NSNextResponder" ref="409158499"/>
 													<int key="NSvFlags">-2147483392</int>
-													<string key="NSFrame">{{171, 0}, {16, 17}}</string>
+													<string key="NSFrame">{{-26, 0}, {16, 17}}</string>
 													<reference key="NSSuperview" ref="409158499"/>
 												</object>
 												<object class="NSMutableArray" key="NSTableColumns">
@@ -1924,6 +1924,7 @@ IG5ldyBhY2NvdW50IG9uIGEgZnJlZSBzaGVsbCBzZXJ2aWNlLg</string>
 										</object>
 										<string key="NSFrame">{{1, 17}, {185, 275}}</string>
 										<reference key="NSSuperview" ref="409158499"/>
+										<reference key="NSNextKeyView" ref="826621923"/>
 										<reference key="NSDocView" ref="826621923"/>
 										<reference key="NSBGColor" ref="907691060"/>
 										<int key="NScvFlags">6</int>
@@ -1956,6 +1957,7 @@ IG5ldyBhY2NvdW50IG9uIGEgZnJlZSBzaGVsbCBzZXJ2aWNlLg</string>
 										</object>
 										<string key="NSFrame">{{1, 0}, {185, 17}}</string>
 										<reference key="NSSuperview" ref="409158499"/>
+										<reference key="NSNextKeyView" ref="468534817"/>
 										<reference key="NSDocView" ref="468534817"/>
 										<reference key="NSBGColor" ref="907691060"/>
 										<int key="NScvFlags">4</int>
@@ -1964,6 +1966,7 @@ IG5ldyBhY2NvdW50IG9uIGEgZnJlZSBzaGVsbCBzZXJ2aWNlLg</string>
 								</object>
 								<string key="NSFrame">{{0, 20}, {187, 293}}</string>
 								<reference key="NSSuperview" ref="50863619"/>
+								<reference key="NSNextKeyView" ref="1073610310"/>
 								<int key="NSsFlags">562</int>
 								<reference key="NSVScroller" ref="264902692"/>
 								<reference key="NSHScroller" ref="49206438"/>
@@ -3532,7 +3535,7 @@ dGUuA</string>
 					<string>StatusImagePath</string>
 					<string>statusImagePath</string>
 				</object>
-				<string key="NSObjectClassName">AMAuth</string>
+				<string key="NSObjectClassName">AMServer</string>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>

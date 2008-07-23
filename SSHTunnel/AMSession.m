@@ -368,10 +368,14 @@
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"AMNewGeneralMessage" 
 																object:[@"Sucessfully connects session "
 																		stringByAppendingString:[self sessionName]]];
+		
 			if ([self outgoingTunnel] == 0)
 				[self setConnectionLink:[@"127.0.0.1:" stringByAppendingString:[portsMap serviceLocalPorts]]];
 			else
 				[self setConnectionLink:[[[self currentServer] host] stringByAppendingString:[@":" stringByAppendingString:[portsMap serviceRemotePorts]]]];
+			
+			[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject: NSStringPboardType] owner: nil];
+			[[NSPasteboard generalPasteboard] setString:[self connectionLink] forType:NSStringPboardType];
 		}
 		else
 			[[stdOut fileHandleForReading] readInBackgroundAndNotify];

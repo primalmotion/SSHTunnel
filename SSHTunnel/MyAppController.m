@@ -53,7 +53,9 @@
 	if ([currentSession connected] == NO)
 		[currentSession closeTunnel];
 	else
+	{
 		[currentSession openTunnel];
+	}
 }
 
 - (IBAction) killAllSSH:(id)sender
@@ -98,6 +100,10 @@
 }
 
 
+- (IBAction) openSessionInSafari:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[@"http://" stringByAppendingString:[sender title]]]];
+}
 
 
 
@@ -147,7 +153,9 @@
 {
 	for (int i = 0; i < [[sessionController sessions] count]; i++)
 		[[[sessionController sessions] objectAtIndex:i] closeTunnel];
+
 	[serverController performSaveProcess:nil];
+	[serviceController performSaveProcess:nil];
 	[sessionController performSaveProcess:nil];
 }
 
@@ -157,43 +165,13 @@
 	return YES;
 }
 
-- (void)animateWindow:(NSWindow*)win effect:(CGSTransitionType)fx direction:(CGSTransitionOption)dir duration:(float)dur
-{
-	int handle;
-	CGSTransitionSpec spec;
-	
-
-	handle = -1;
-	
-	spec.unknown1=0;
-	spec.type=fx;
-	spec.option=dir;
-	spec.option |= (1<<7);
-	spec.backColour=NULL;
-	spec.wid=[win windowNumber];
-	
-	
-	CGSConnection cgs= _CGSDefaultConnection();
-	CGSNewTransition(cgs, &spec, &handle);
-	
-	[win display];
-	
-	if (fx == CGSNone)
-		dur = 0.f; // if no transition effect, no need to have a duration, (it would be strange to wait for nothin') -> je n'te l'fai pas dire mec
-	
-	CGSInvokeTransition(cgs, handle, dur);
-	usleep((useconds_t)(dur * 1000000));
-	CGSReleaseTransition(cgs, handle);
-	handle=0;
-}
 
 - (IBAction) displaySessionView:(id)sender
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[mainApplicationWindow contentView] replaceSubview:currentView with:sessionView];
-		[self animateWindow:mainApplicationWindow effect:CGSCube direction:CGSLeft duration:0.2];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:sessionView];
 	}
 }
 
@@ -202,15 +180,7 @@
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[mainApplicationWindow contentView] replaceSubview:currentView with:serverView];
-		[self animateWindow:mainApplicationWindow effect:CGSCube direction:CGSLeft duration:0.2];
-		
-		/*
-		[tunnelHost setStringValue:(NSString *)[[servers objectAtIndex:0] host]];
-		[tunnelPort setStringValue:(NSString *)[[servers objectAtIndex:0] port]];
-		[userName setStringValue:[[servers objectAtIndex:0] username]];
-		[password setStringValue:[[servers objectAtIndex:0] password]];
-		 */
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serverView];
 	}
 }
 
@@ -219,8 +189,7 @@
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[mainApplicationWindow contentView] replaceSubview:currentView with:aboutView];
-		[self animateWindow:mainApplicationWindow effect:CGSCube direction:CGSLeft duration:0.2];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:aboutView];
 	}
 }
 
@@ -229,8 +198,16 @@
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[mainApplicationWindow contentView] replaceSubview:currentView with:registerView];
-		[self animateWindow:mainApplicationWindow effect:CGSCube direction:CGSLeft duration:0.2];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:registerView];
+	}
+}
+
+- (IBAction) displayServiceView:(id)sender
+{
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
+	{
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serviceView];
 	}
 }
 

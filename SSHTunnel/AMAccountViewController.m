@@ -115,7 +115,7 @@
 												 from:self
 											 selector:nil];
 			
-			AMAuth *newAuth = [[AMAuth alloc] init];
+			AMServer *newAuth = [[AMServer alloc] init];
 			[newAuth setServerName:[serverPicker getCurrentServerName]];
 			[newAuth setHost:[serverPicker getCurrentServerUrl]];
 			[newAuth setPort:[serverPicker getCurrentServerPort]];

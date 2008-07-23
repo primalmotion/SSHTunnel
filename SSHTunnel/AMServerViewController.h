@@ -16,7 +16,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "AMBaseViewController.h"
-#import "AMAuth.h"
+#import "AMServer.h"
 
 @interface AMServerViewController : AMBaseViewController {
 
@@ -32,10 +32,11 @@
 @property(readwrite, assign)	NSMutableArray		*servers;
 @property(readwrite, assign)	NSArrayController	*serversArrayController;
 
+- (void) createObservers;
+
 - (void) performSaveProcess:(NSTimer *)theTimer;
 - (void) saveState;
-- (void) handleDataNameChange:(NSNotification*)notif;
-- (AMAuth*) getSelectedServer;
+- (AMServer*) getSelectedServer;
 
 - (IBAction) refreshPings:(id)sender;
 

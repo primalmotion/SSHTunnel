@@ -15,30 +15,26 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
-#import "AMBaseViewController.h"
-#import "AMServer.h"
-#import "AMPopUpButton.h"
-#import "AMServerViewController.h"
 
-@interface AMAccountViewController : AMBaseViewController {
-	NSMutableString					*login;
-	NSMutableString					*password;
-	NSMutableString					*confirmPassword;
-	BOOL							isCreatingAccount;
+
+@interface AMServer : NSObject <NSCoding> {
+	NSString	*host;
+	NSString	*port;
+	NSString	*username;
+	NSString	*password;
+	NSString	*serverName;
+	NSString	*statusImagePath;
 	
-	IBOutlet NSButton				*createButton;
-	IBOutlet AMPopUpButton			*serverPicker;
-	IBOutlet AMServerViewController *serverController;
-	
-	NSTask			*sshTask;
-	NSPipe			*stdOut;
+	NSTask		*ping;
+	NSPipe		*stdOut;
 }
+@property(readwrite, assign) NSString	*serverName;
+@property(readwrite, assign) NSString	*host;
+@property(readwrite, assign) NSString *port;
+@property(readwrite, assign) NSString	*username;
+@property(readwrite, assign) NSString	*password;
+@property(readwrite, assign) NSString	*statusImagePath;
 
-@property(readwrite, assign)	NSMutableString		*login;
-@property(readwrite, assign)	NSMutableString		*password;
-@property(readwrite, assign)	NSMutableString		*confirmPassword;
-@property(readwrite)			BOOL				isCreatingAccount;
-
-- (IBAction) createAccount:(id)sender;
-- (BOOL) validateCurrentUserInformations;
+- (void) pingHost;
+- (void) handleEndOfPing:(NSNotification *) aNotification;
 @end

@@ -20,12 +20,12 @@
 #import <QuartzCore/CAAnimation.h>
 #import <QuartzCore/CoreImage.h>
 #import "AMSession.h"
-#import "AMAuth.h"
-#import "CGSPrivate.h"
+#import "AMServer.h"
 #import "AMAccountViewController.h"
 #import "AMServerViewController.h"
 #import "AMSessionViewController.h"
 #import "AMBaseViewController.h"
+#import "AMServiceViewController.h"
 
 @interface MyAppController : AMBaseViewController {
 	
@@ -35,9 +35,11 @@
 	IBOutlet NSView					 *sessionView;
 	IBOutlet NSView					 *aboutView;
 	IBOutlet NSView					 *registerView;
+	IBOutlet NSView					 *serviceView;
 	IBOutlet AMSessionViewController *sessionController;
 	IBOutlet AMServerViewController  *serverController;
-
+	IBOutlet AMServiceViewController *serviceController;
+	
 	NSTimer							 *timer;
 	NSView							 *backViewReminder;
 	NSString						 *hostName;
@@ -46,6 +48,7 @@
 }
 @property(readwrite, assign) NSString *hostName;
 
+- (IBAction) openSessionInSafari:(id)sender;
 - (IBAction) toggleTunnel:(id)sender;
 - (IBAction) openAllSession:(id)sender;
 - (IBAction) closeAllSession:(id)sender;
@@ -56,6 +59,7 @@
 - (IBAction) displayAboutView:(id)sender;
 - (IBAction) displayRegisterView:(id)sender;
 - (IBAction) displaySessionView:(id)sender;
+- (IBAction) displayServiceView:(id)sender;
 
 - (IBAction) openMainWindow:(id)sender;
 - (IBAction) closeMainWindow:(id)sender;
@@ -63,8 +67,6 @@
 - (void) performInfoMessage:(NSNotification*)notif;
 - (void) errorPanelDisplaywithMessage:(NSString *)message;
 - (void) errorPanelClose:(NSTimer *)theTimer;
-
-- (void) animateWindow:(NSWindow*)win effect:(CGSTransitionType)fx direction:(CGSTransitionOption)dir duration:(float)dur;
 
 
 @end

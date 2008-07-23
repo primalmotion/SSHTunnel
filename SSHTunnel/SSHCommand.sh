@@ -17,22 +17,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-set localPort [lrange $argv 0 0]
-set remoteHost [lrange $argv 1 1]
-set remotePort [lrange $argv 2 2]
-set username [lrange $argv 3 3]
-set tunnelHost [lrange $argv 4 4]
-set password [lrange $argv 5 5 ]
-set serverPort [lrange $argv 6 6 ]
-set tunnelType [lrange $argv 7 7 ]
+set arguments [lindex $argv 0]
+set password [lindex $argv 1]
 
-set zero '0'
-
-if { $tunnelType == 0 }  {
-	spawn ssh -N -L$localPort:$remoteHost:$remotePort $username@$tunnelHost -p $serverPort  -R *:$localPort:host:hostport
-} else {
-	spawn ssh -q -N -R $remotePort:127.0.0.1:$localPort $username@$tunnelHost
-} 
+eval spawn $arguments
 
 match_max 100000
 

@@ -16,12 +16,22 @@
 
 #import "AMWindow.h"
 
-//typedef struct s_AMContextInfo {
-//	id			object;
-//	NSString	*selector;
-//} AMContextInfo;
-
 @implementation AMWindow
+
+- (void) awakeFromNib
+{
+	NSView *contentView = [self contentView];
+    [contentView setWantsLayer:YES];
+	
+    transition = [CATransition animation];
+    [transition setType:kCATransitionPush];
+    [transition setSubtype:kCATransitionFromBottom];
+	
+    NSDictionary *ani = [NSDictionary dictionaryWithObject:transition 
+                                                    forKey:@"subviews"];
+	
+	[[self contentView] setAnimations:ani];
+}
 
 - (void) runSheetAlertTitle:(NSString*)title 
 				   message:(NSString*)message 

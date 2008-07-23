@@ -20,10 +20,10 @@
 
 @synthesize	sessions;
 
-
 - (id) init
 {
 	self = [super init];
+	
 	
 	NSFileManager *f = [NSFileManager defaultManager];
 	sessionSavePath	=  @"~/Library/Application Support/SSHTunnel/sessions.sst";
@@ -35,32 +35,97 @@
 	
 	f = nil;
 	
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"arrangedObjects" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:NULL];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(handleDataNameChange:) 
-												 name:@"AMSessionNameHasChange" 
-											   object:nil];
-	
 	return self;
+}
+
+- (void) createObservers
+{
+	NSLog(@";adfjsnfjkgfngjnfdgkjdfngkjngjkfngkjf");
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.currentServer" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+	
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.localPort" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+	
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.sessionName" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+	
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.remoteHost" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+	
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.remotePort" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.statusImagePath" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.tunnelTypeImagePath" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.outgoingTunnel" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+	
 	
 }
 
-- (void) handleDataNameChange:(NSNotification*)notif
+
+- (void) awakeFromNib
 {
-	[self saveState];
+	NSInteger tunnelType = 0;
+	if ([[sessionsArrayController arrangedObjects] count] > 0)
+		tunnelType = [[[sessionsArrayController selectedObjects] objectAtIndex:0] outgoingTunnel];
+	
+	if (tunnelType == 0)
+	{
+		[tunnelConfigBox setContentView:outputTunnelConfigView];
+	}
+	else
+	{
+		[tunnelConfigBox setContentView:inputTunnelConfigView];
+		if ([[[[sessionsArrayController selectedObjects] objectAtIndex:0] remoteHost] isEqual:@""] == YES)
+			[[[sessionsArrayController selectedObjects] objectAtIndex:0] setRemoteHost:@"127.0.0.1"];
+	}
+
+	[self createObservers];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-	[self saveState];
-}
-
-- (void)controlTextDidChange:(NSNotification *)aNotification
-{
+	if ([keyPath isEqual:@"selection.outgoingTunnel"])
+	{
+		NSInteger tunnelType = [[[object selectedObjects] objectAtIndex:0] outgoingTunnel];
+		
+		if (tunnelType == 0)
+		{
+			[tunnelConfigBox setContentView:outputTunnelConfigView];
+		}
+		else
+		{
+			[tunnelConfigBox setContentView:inputTunnelConfigView];
+			if ([[[[sessionsArrayController selectedObjects] objectAtIndex:0] remoteHost] length] == 0)
+			{
+				[[[object selectedObjects] objectAtIndex:0] setRemoteHost:@"127.0.0.1"];
+				NSLog(@"remote host empty: filling with : %@", [[[object selectedObjects] objectAtIndex:0] remoteHost]);
+			}
+		}
+	}
+	
 	[self saveState];
 }
 

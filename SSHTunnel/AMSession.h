@@ -15,38 +15,42 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Foundation/Foundation.h>
-#import "AMAuth.h"
+#import "AMServer.h"
+#import "AMService.h"
 
 @interface AMSession : NSObject <NSCoding> {
 	NSString	*sessionName;
-	NSString	*localPort;
 	NSString	*remoteHost;
-	NSString	*remotePort;	
+	AMService	*portsMap;	
 	NSString	*statusImagePath;
 	NSString	*tunnelTypeImagePath;
-	AMAuth		*currentServer;
+	AMServer	*currentServer;
 	NSInteger	outgoingTunnel;
 	BOOL		connected;
 	BOOL		connectionInProgress;
+	NSString	*connectionLink;
 	
 	NSString	*outputContent;
 	NSTask		*sshTask;
 	NSPipe		*stdOut;
 }
-@property(readwrite, assign)	AMAuth		*currentServer;
+@property(readwrite, assign)	AMServer	*currentServer;
+@property(readwrite, assign)	AMService	*portsMap;
 @property(readwrite, assign)	NSString	*sessionName;
-@property(readwrite, assign)	NSString	*localPort;
 @property(readwrite, assign)	NSString	*remoteHost;
-@property(readwrite, assign)	NSString	*remotePort;
 @property(readwrite, assign)	NSString	*statusImagePath;
 @property(readwrite, assign)	NSString	*tunnelTypeImagePath;
+@property(readwrite, assign)	NSString	*connectionLink;
 @property(readwrite)			BOOL		connected;
 @property(readwrite)			BOOL		connectionInProgress;
-@property(readwrite, assign)	NSInteger	outgoingTunnel;
+@property(readwrite)			NSInteger	outgoingTunnel;
+
 
 - (void) openTunnel;
 - (void) closeTunnel;
 - (void) checkShStatus:(NSNotification *) notification;
 - (void) listernerForSSHTunnelDown:(NSNotification *)notification;
+- (NSMutableArray *) parsePortsSequence:(NSString*)seq;
+- (NSMutableString *) prepareSSHCommand:(NSMutableArray *)remotePorts localPorts:(NSMutableArray *)localPorts;
 
 @end
