@@ -165,12 +165,12 @@
 	return YES;
 }
 
-
 - (IBAction) displaySessionView:(id)sender
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:sessionView];
 	}
 }
@@ -180,6 +180,7 @@
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serverView];
 	}
 }
@@ -189,6 +190,7 @@
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:aboutView];
 	}
 }
@@ -198,6 +200,7 @@
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:registerView];
 	}
 }
@@ -207,6 +210,7 @@
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
 	{
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serviceView];
 	}
 }

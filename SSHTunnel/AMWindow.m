@@ -19,19 +19,25 @@
 @implementation AMWindow
 
 - (void) awakeFromNib
-{
-	NSView *contentView = [self contentView];
-    [contentView setWantsLayer:YES];
-	
+{	
     transition = [CATransition animation];
     [transition setType:kCATransitionPush];
     [transition setSubtype:kCATransitionFromBottom];
+	[transition setDelegate:self];
 	
     NSDictionary *ani = [NSDictionary dictionaryWithObject:transition 
                                                     forKey:@"subviews"];
 	
 	[[self contentView] setAnimations:ani];
+	[[self contentView] setWantsLayer:YES];
 }
+
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+	NSLog(@"Removing Core Layer.");
+	//[[self contentView] setWantsLayer:NO];
+}
+
 
 - (void) runSheetAlertTitle:(NSString*)title 
 				   message:(NSString*)message 
