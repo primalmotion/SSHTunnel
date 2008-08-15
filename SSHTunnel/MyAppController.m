@@ -40,8 +40,22 @@
 
 - (void) awakeFromNib
 {	
-	[[mainApplicationWindow contentView] addSubview:sessionView];
 	[self setHostName:[[NSHost currentHost] name]];
+	
+//	transition = [CATransition animation];
+//    [transition setType:kCATransitionPush];
+//    [transition setSubtype:kCATransitionFromBottom];
+//	[transition setDelegate:self];
+//	
+//    currentAnimation = [NSDictionary dictionaryWithObject:transition 
+//									  forKey:@"subviews"];
+//	
+//	[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+//	[[mainApplicationWindow contentView] setWantsLayer:YES];
+	
+	[[mainApplicationWindow contentView] addSubview:sessionView];
+//	NSLog(@"Awaked from nib");
+	
 }
 
 /**
@@ -165,12 +179,29 @@
 	return YES;
 }
 
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+	[[mainApplicationWindow contentView] setWantsLayer:NO];
+	NSLog(@"Removing Core Layer.");
+}
+
+- (void)animationDidStart:(CAAnimation *)theAnimation
+{
+	[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+	NSLog(@"animation did start.");
+}
+
+
+
 - (IBAction) displaySessionView:(id)sender
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
 	{
+//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
+//		[[mainApplicationWindow contentView] setWantsLayer:YES];
+//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+		
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:sessionView];
 	}
 }
@@ -179,8 +210,9 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
 	{
+//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
+//		[[mainApplicationWindow contentView] setWantsLayer:YES];
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serverView];
 	}
 }
@@ -189,8 +221,9 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
 	{
+//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
+//		[[mainApplicationWindow contentView] setWantsLayer:YES];
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:aboutView];
 	}
 }
@@ -199,8 +232,9 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
 	{
+//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
+//		[[mainApplicationWindow contentView] setWantsLayer:YES];
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:registerView];
 	}
 }
@@ -209,8 +243,9 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
 	{
+//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
+//		[[mainApplicationWindow contentView] setWantsLayer:YES];
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		//[currentView setWantsLayer:YES];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serviceView];
 	}
 }

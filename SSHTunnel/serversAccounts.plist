@@ -5,24 +5,13 @@
 	<key>0</key>
 	<dict>
 		<key>name</key>
-		<string>Abornet</string>
+		<string>Arbornet</string>
 		<key>url</key>
 		<string>m-net.arbornet.org</string>
 		<key>port</key>
 		<string>22</string>
 		<key>shScriptName</key>
 		<string>createAbornetAccount</string>
-	</dict>
-	<key>1</key>
-	<dict>
-		<key>name</key>
-		<string>Nowhere</string>
-		<key>url</key>
-		<string>www.nowhere.com</string>
-		<key>port</key>
-		<string>42</string>
-		<key>shScriptName</key>
-		<string>createNowwhereAccount</string>
 	</dict>
 </dict>
 </plist>

@@ -43,6 +43,8 @@
 	NSTimer							 *timer;
 	NSView							 *backViewReminder;
 	NSString						 *hostName;
+	CATransition					 *transition;
+	NSDictionary					 *currentAnimation;
 	
 	
 }

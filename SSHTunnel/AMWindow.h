@@ -19,6 +19,8 @@
 
 @interface AMWindow : NSWindow {
 	CATransition *transition;
+	NSDictionary *ani;
 }
+
 - (void) runSheetAlertTitle:(NSString*)title message:(NSString*)message firstButton:(NSString*)button1 secondButton:(NSString*)button2 from:(id)sender selector:(NSString*)sel;
 @end
