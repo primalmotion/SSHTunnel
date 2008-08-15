@@ -44,7 +44,8 @@
 		if (resp == NSAlertDefaultReturn)
 			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://code.google.com/p/cocoa-sshtunnel/downloads/list"]];
 		
-	}	
+	}
+	[self setTitle:[NSString stringWithFormat:@"SSHTunnel v%@.%@", currentMajorVersion, currentMinorVersion]];
 }
 
 - (void) runSheetAlertTitle:(NSString*)title 
