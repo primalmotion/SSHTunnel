@@ -83,7 +83,7 @@
 	
 	data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
 	outputContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	
+	NSLog(outputContent);
 	checkExistingLogin	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'LOGIN_EXISTS'"];
 	checkSuccess		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'LOGIN_CREATED'"];
 
