@@ -29,16 +29,17 @@
 
 @interface MyAppController : AMBaseViewController {
 	
-	IBOutlet NSTextField			 *errorMessage;
-	IBOutlet NSView					 *errorPanel;
-	IBOutlet NSView					 *serverView;
-	IBOutlet NSView					 *sessionView;
-	IBOutlet NSView					 *aboutView;
-	IBOutlet NSView					 *registerView;
-	IBOutlet NSView					 *serviceView;
-	IBOutlet AMSessionViewController *sessionController;
-	IBOutlet AMServerViewController  *serverController;
-	IBOutlet AMServiceViewController *serviceController;
+	IBOutlet NSTextField				*errorMessage;
+	IBOutlet NSView						*errorPanel;
+	IBOutlet NSView						*serverView;
+	IBOutlet NSView						*sessionView;
+	IBOutlet NSView						*aboutView;
+	IBOutlet NSView						*registerView;
+	IBOutlet NSView						*serviceView;
+	IBOutlet AMSessionViewController	*sessionController;
+	IBOutlet AMServerViewController		*serverController;
+	IBOutlet AMServiceViewController	*serviceController;
+	IBOutlet NSUserDefaultsController	*preferencesController;
 	
 	NSTimer							 *timer;
 	NSView							 *backViewReminder;
@@ -55,6 +56,7 @@
 - (IBAction) openAllSession:(id)sender;
 - (IBAction) closeAllSession:(id)sender;
 - (IBAction) killAllSSH:(id)sender;
+- (IBAction) checkForNewVersion:(id)sender;
 - (void) executeKillAllSSH:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (IBAction) displayServerView:(id)sender;

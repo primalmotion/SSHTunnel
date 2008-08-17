@@ -20,33 +20,9 @@
 
 - (void) awakeFromNib
 {
-	[self checkForNewVersion];
 }
 
-- (void) checkForNewVersion
-{
-	NSString *currentVersion = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleVersion"];
-	NSDictionary *serverVersion = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:@"http://antoinemercadal.fr/updates/sshtunnel/versions.plist"]];
-	
-	NSNumber *currentMajorVersion = [NSNumber numberWithInt:[[[currentVersion  componentsSeparatedByString:@"."] objectAtIndex:0] intValue]];
-	NSNumber *currentMinorVersion = [NSNumber numberWithInt:[[[currentVersion  componentsSeparatedByString:@"."] objectAtIndex:1] intValue]];
-	
-	NSNumber *remoteMajorVersion = [NSNumber numberWithInt:[[serverVersion objectForKey:@"Major"] intValue]];
-	NSNumber *remoteMinorVersion = [NSNumber numberWithInt:[[serverVersion objectForKey:@"Minor"] intValue]];
-	
-	NSLog(@"currentMajorVersion: %@ < remoteMajorVersion: %@", currentMajorVersion, remoteMajorVersion);
-	
-	if (([currentMajorVersion intValue] < [remoteMajorVersion intValue]) 
-		|| ( ([currentMajorVersion intValue] == [remoteMajorVersion intValue]) && ([currentMinorVersion intValue] < [remoteMinorVersion intValue])))
-	{
-		int resp = NSRunAlertPanel([NSString stringWithFormat:@"Your version is %@.%@. The current version is now %@.%@", currentMajorVersion, currentMinorVersion, remoteMajorVersion, remoteMinorVersion],
-								   [serverVersion valueForKey:@"Changes"], @"Go to webpage", @"Ignore", nil);
-		if (resp == NSAlertDefaultReturn)
-			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://code.google.com/p/cocoa-sshtunnel/downloads/list"]];
-		
-	}
-	[self setTitle:[NSString stringWithFormat:@"SSHTunnel v%@.%@", currentMajorVersion, currentMinorVersion]];
-}
+
 
 - (void) runSheetAlertTitle:(NSString*)title 
 				   message:(NSString*)message 

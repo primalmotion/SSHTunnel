@@ -34,6 +34,10 @@
 											 selector:@selector(performInfoMessage:) 
 												 name:@"AMNewGeneralMessage" 
 											   object:nil];
+	
+	NSDictionary *initialValues = [NSDictionary dictionaryWithObject:@"YES" forKey:@"checkForNewVersion"];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:initialValues];
+	
 	return self;
 }
 
@@ -41,21 +45,10 @@
 - (void) awakeFromNib
 {	
 	[self setHostName:[[NSHost currentHost] name]];
-	
-//	transition = [CATransition animation];
-//    [transition setType:kCATransitionPush];
-//    [transition setSubtype:kCATransitionFromBottom];
-//	[transition setDelegate:self];
-//	
-//    currentAnimation = [NSDictionary dictionaryWithObject:transition 
-//									  forKey:@"subviews"];
-//	
-//	[[mainApplicationWindow contentView] setAnimations:currentAnimation];
-//	[[mainApplicationWindow contentView] setWantsLayer:YES];
-	
 	[[mainApplicationWindow contentView] addSubview:sessionView];
-//	NSLog(@"Awaked from nib");
 	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"checkForNewVersion"] == YES)
+		[self checkForNewVersion:nil];
 }
 
 /**
@@ -113,13 +106,43 @@
 	}
 }
 
-
 - (IBAction) openSessionInSafari:(id)sender
 {
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[@"http://" stringByAppendingString:[sender title]]]];
 }
 
-
+- (IBAction) checkForNewVersion:(id)sender
+{
+	NSLog(@"-> Checking for new version of the programm on internet");
+	
+	NSString *currentVersion		= [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleVersion"];
+	NSDictionary *serverVersion		= [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:@"http://antoinemercadal.fr/updates/sshtunnel/versions.plist"]];
+	NSNumber *currentMajorVersion	= [NSNumber numberWithInt:[[[currentVersion  componentsSeparatedByString:@"."] objectAtIndex:0] intValue]];
+	NSNumber *currentMinorVersion	= [NSNumber numberWithInt:[[[currentVersion  componentsSeparatedByString:@"."] objectAtIndex:1] intValue]];
+	NSNumber *remoteMajorVersion	= [NSNumber numberWithInt:[[serverVersion objectForKey:@"Major"] intValue]];
+	NSNumber *remoteMinorVersion	= [NSNumber numberWithInt:[[serverVersion objectForKey:@"Minor"] intValue]];
+	
+	if (([currentMajorVersion intValue] < [remoteMajorVersion intValue]) 
+		|| ( ([currentMajorVersion intValue] == [remoteMajorVersion intValue]) 
+			&& ([currentMinorVersion intValue] < [remoteMinorVersion intValue])))
+	{
+		int resp = NSRunAlertPanel([NSString stringWithFormat:@"New version %@.%@ is out!", 
+									remoteMajorVersion, remoteMinorVersion],
+								   [serverVersion valueForKey:@"Changes"], 
+								   @"Download Version", 
+								   @"Ignore", 
+								   nil);
+		
+		if (resp == NSAlertDefaultReturn)
+			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[serverVersion objectForKey:@"DownloadURL"]]];
+		
+	}
+	else if ([(NSButton *)[sender title] isEqualTo:@"Check Now"])
+	{
+		NSRunAlertPanel(@"Version Checker", @"You copy of SSHTunnel is actually up-to-date", @"OK", nil, nil);
+	}
+	[mainApplicationWindow setTitle:[NSString stringWithFormat:@"SSHTunnel v%@.%@", currentMajorVersion, currentMinorVersion]];
+}
 
 
 
