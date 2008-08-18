@@ -35,6 +35,9 @@
 												 name:@"AMNewGeneralMessage" 
 											   object:nil];
 	
+
+	
+	
 	NSDictionary *initialValues = [NSDictionary dictionaryWithObject:@"YES" forKey:@"checkForNewVersion"];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:initialValues];
 	
@@ -46,17 +49,33 @@
 {	
 	[self setHostName:[[NSHost currentHost] name]];
 	[[mainApplicationWindow contentView] addSubview:sessionView];
-	
+	NSThread *t = [[NSThread alloc] init];
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"checkForNewVersion"] == YES)
-		[self checkForNewVersion:nil];
+		[self performSelector:@selector(checkForNewVersion:) onThread:t withObject:nil waitUntilDone:NO];
 }
 
 /**
  * Here are the IBAction of the interface
  **/
+
+- (IBAction) openTunnel:(id)sender
+{
+	AMSession	*currentSession = [sessionController getSelectedSession];
+	if ([currentSession connected] == NO)
+		[currentSession openTunnel];
+}
+
+- (IBAction) closeTunnel:(id)sender
+{
+	AMSession	*currentSession = [sessionController getSelectedSession];
+
+	[currentSession closeTunnel];
+}
+
 - (IBAction)toggleTunnel:(id)sender 
 {
 	AMSession	*currentSession = [sessionController getSelectedSession];
+	
 	if ([currentSession connected] == NO)
 		[currentSession closeTunnel];
 	else
@@ -101,8 +120,8 @@
 {
 	for (AMSession *o in [sessionController sessions])
 	{
-		if ([o connected] == YES)
-			[o closeTunnel];
+		NSLog(@"Session %@ closed.", [o sessionName]);
+		[o closeTunnel];
 	}
 }
 

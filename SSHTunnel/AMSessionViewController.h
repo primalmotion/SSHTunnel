@@ -24,12 +24,13 @@
 	IBOutlet NSBox					*tunnelConfigBox;
 	IBOutlet NSView					*outputTunnelConfigView;
 	IBOutlet NSView					*inputTunnelConfigView;
-	
+
 	NSMutableArray					*sessions;
 	NSString						*sessionSavePath;
 	NSTimer							*pingDelayer;
 }
 @property(readwrite, assign)	NSMutableArray		*sessions;
+@property(readwrite, assign)	NSArrayController	*sessionsArrayController;
 
 - (void) createObservers;
 - (void) performSaveProcess:(NSTimer *)theTimer;

@@ -19,6 +19,7 @@
 @implementation AMSessionViewController
 
 @synthesize	sessions;
+@synthesize sessionsArrayController;
 
 - (id) init
 {
@@ -33,6 +34,7 @@
 	else
 		[self setSessions:[[NSMutableArray alloc] init]];
 	
+	
 	f = nil;
 	
 	return self;
@@ -40,7 +42,6 @@
 
 - (void) createObservers
 {
-	NSLog(@";adfjsnfjkgfngjnfdgkjdfngkjngjkfngkjf");
 	[sessionsArrayController addObserver:self 
 							  forKeyPath:@"selection.currentServer" 
 								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
@@ -81,12 +82,24 @@
 								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
 								 context:nil];
 	
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.useDynamicProxy" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+	
+	[sessionsArrayController addObserver:self 
+							  forKeyPath:@"selection.dynamicProxyPort" 
+								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								 context:nil];
+	
+	
 	
 }
 
 
 - (void) awakeFromNib
 {
+	
 	NSInteger tunnelType = 0;
 	if ([[sessionsArrayController arrangedObjects] count] > 0)
 		tunnelType = [[[sessionsArrayController selectedObjects] objectAtIndex:0] outgoingTunnel];

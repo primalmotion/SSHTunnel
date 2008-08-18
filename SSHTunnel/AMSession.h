@@ -29,6 +29,8 @@
 	BOOL		connected;
 	BOOL		connectionInProgress;
 	NSString	*connectionLink;
+	NSString	*dynamicProxyPort;
+	BOOL		useDynamicProxy;
 	
 	NSString	*outputContent;
 	NSTask		*sshTask;
@@ -41,6 +43,8 @@
 @property(readwrite, assign)	NSString	*statusImagePath;
 @property(readwrite, assign)	NSString	*tunnelTypeImagePath;
 @property(readwrite, assign)	NSString	*connectionLink;
+@property(readwrite, assign)	NSString	*dynamicProxyPort;
+@property(readwrite)			BOOL		useDynamicProxy;
 @property(readwrite)			BOOL		connected;
 @property(readwrite)			BOOL		connectionInProgress;
 @property(readwrite)			NSInteger	outgoingTunnel;

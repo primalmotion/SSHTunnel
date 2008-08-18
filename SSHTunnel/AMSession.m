@@ -28,7 +28,8 @@
 @synthesize outgoingTunnel;
 @synthesize tunnelTypeImagePath;
 @synthesize connectionLink;
-
+@synthesize dynamicProxyPort;
+@synthesize useDynamicProxy;
 
 /**
  Initializations, deallocations and archiving
@@ -42,6 +43,8 @@
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
 	[self setOutgoingTunnel:0];
+	[self setDynamicProxyPort:@"0"];
+	[self setUseDynamicProxy:NO];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
@@ -52,12 +55,14 @@
 {
 	self = [super init];
 	
-	sessionName		= [[coder decodeObjectForKey:@"MVsessionName"] retain];
-	portsMap		= [[coder decodeObjectForKey:@"portsMap"] retain];
-	remoteHost		= [[coder decodeObjectForKey:@"MVremoteHost"] retain];
-	statusImagePath	= [[coder decodeObjectForKey:@"MVStatusImagePath"] retain];
-	currentServer	= [[coder decodeObjectForKey:@"MVcurrentServer"] retain];
-	outgoingTunnel	= [coder decodeIntForKey:@"MVoutgoingTunnel"];
+	sessionName			= [[coder decodeObjectForKey:@"MVsessionName"] retain];
+	portsMap			= [[coder decodeObjectForKey:@"portsMap"] retain];
+	remoteHost			= [[coder decodeObjectForKey:@"MVremoteHost"] retain];
+	statusImagePath		= [[coder decodeObjectForKey:@"MVStatusImagePath"] retain];
+	currentServer		= [[coder decodeObjectForKey:@"MVcurrentServer"] retain];
+	dynamicProxyPort	= [[coder decodeObjectForKey:@"MVdynamicProxyPort"] retain];
+	outgoingTunnel		= [coder decodeIntForKey:@"MVoutgoingTunnel"];
+	useDynamicProxy		= [coder decodeBoolForKey:@"MVuseDynamicProxy"];
 	
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
@@ -66,8 +71,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
-	
-	
+
 	return self;
 }
 
@@ -79,6 +83,8 @@
 	[coder encodeObject:statusImagePath forKey:@"MVStatusImagePath"];
 	[coder encodeObject:currentServer forKey:@"MVcurrentServer"];
 	[coder encodeInt:outgoingTunnel forKey:@"MVoutgoingTunnel"];
+	[coder encodeObject:dynamicProxyPort forKey:@"MVdynamicProxyPort"];
+	[coder encodeBool:useDynamicProxy forKey:@"MVuseDynamicProxy"];
 }
 
 - (void) dealloc
@@ -177,28 +183,37 @@
 	
 	if ([self outgoingTunnel] == 0)
 	{
-		for(NSString * s in remotePorts)
+		int i;
+		for(i = 0; i < [remotePorts count]; i++)
 		{
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -L "];
-			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[localPorts objectAtIndex:0]];
+			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[localPorts objectAtIndex:i]];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@":"];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:remoteHost];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@":"];
-			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:s];
+			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[remotePorts objectAtIndex:i]];
 		}
 	}
 	else
 	{
-		for(NSString * s in localPorts)
+		int i;
+		for(i = 0; i < [remotePorts count]; i++)
 		{
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -R "];
-			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[remotePorts objectAtIndex:0]];
+			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[remotePorts objectAtIndex:i]];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@":"];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"127.0.0.1"];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@":"];
-			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:s];
+			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[localPorts objectAtIndex:i]];
 		}
 	}
+	
+	if ([self useDynamicProxy] == YES)
+	{
+		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -D "];
+		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[self dynamicProxyPort]];
+	}
+	
 	
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" "];
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer username]];
@@ -206,6 +221,8 @@
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer host]];
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -p "];
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer port]];
+
+	NSLog(@"Used SSH Command : %@", argumentsString);
 	
 	return argumentsString;
 }
@@ -227,23 +244,17 @@
 	stdOut			= [NSPipe pipe];
 	sshTask			= [[NSTask alloc] init];
 	helperPath		= [[NSBundle mainBundle] pathForResource:@"SSHCommand" ofType:@"sh"];
+	
 	remotePorts		= [self parsePortsSequence:[portsMap serviceRemotePorts]];
 	localPorts		= [self parsePortsSequence:[portsMap serviceLocalPorts]];
-	
 	
 	// OK SO NO I'VE TO MAKE SOMETHING IN THE SSH SCRIPT TO HANDLE THE POSSIBLE
 	// DELUGE OF PORTS PASSING TROUGHT ARGUMENTS... Let's have a break..
 	
 	argumentsString = [self prepareSSHCommand:remotePorts localPorts:localPorts];
-
-
-	NSLog(@"ARGUUMENTS: %@", argumentsString);
 	
 	args			= [NSArray arrayWithObjects:argumentsString, [currentServer password], nil];
 
-//	args			= [NSArray arrayWithObjects:[localPort servicePort], remoteHost, [remotePort servicePort], [currentServer username],
-//					   [currentServer host], [currentServer password], [currentServer port], [NSString stringWithFormat:@"%d", outgoingTunnel], nil];
-	
 	outputContent	= @"";
 	
 	[sshTask setLaunchPath:helperPath];

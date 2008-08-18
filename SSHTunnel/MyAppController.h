@@ -41,6 +41,7 @@
 	IBOutlet AMServiceViewController	*serviceController;
 	IBOutlet NSUserDefaultsController	*preferencesController;
 	
+	
 	NSTimer							 *timer;
 	NSView							 *backViewReminder;
 	NSString						 *hostName;
@@ -53,6 +54,8 @@
 
 - (IBAction) openSessionInSafari:(id)sender;
 - (IBAction) toggleTunnel:(id)sender;
+- (IBAction) openTunnel:(id)sender;
+- (IBAction) closeTunnel:(id)sender;
 - (IBAction) openAllSession:(id)sender;
 - (IBAction) closeAllSession:(id)sender;
 - (IBAction) killAllSSH:(id)sender;
