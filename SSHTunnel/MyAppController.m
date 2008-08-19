@@ -37,8 +37,9 @@
 	
 
 	
-	
-	NSDictionary *initialValues = [NSDictionary dictionaryWithObject:@"YES" forKey:@"checkForNewVersion"];
+	NSDictionary *initialValues = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"YES", @"YES", @"NO", @"NO", @"0", @"0", nil] 
+															  forKeys:[NSArray arrayWithObjects:@"checkForNewVersion", @"useGraphicalEffects",@"forceSSHVersion2", @"useKeychainIntegration", @"selectedTransitionType", @"selectedTransitionSubtype", nil]];
+
 	[[NSUserDefaults standardUserDefaults] registerDefaults:initialValues];
 	
 	return self;
@@ -49,6 +50,14 @@
 {	
 	[self setHostName:[[NSHost currentHost] name]];
 	[[mainApplicationWindow contentView] addSubview:sessionView];
+	
+	transition = [[CATransition alloc] init];
+	[transition setType:kCATransitionPush];
+	[transition setSubtype:kCATransitionFromBottom];
+	[transition setDelegate:self];
+	
+	currentAnimation = [NSDictionary dictionaryWithObject:transition forKey:@"subviews"];
+	
 	NSThread *t = [[NSThread alloc] init];
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"checkForNewVersion"] == YES)
 		[self performSelector:@selector(checkForNewVersion:) onThread:t withObject:nil waitUntilDone:NO];
@@ -132,7 +141,7 @@
 
 - (IBAction) checkForNewVersion:(id)sender
 {
-	NSLog(@"-> Checking for new version of the programm on internet");
+	NSLog(@"Checking for new version of the programm on internet");
 	
 	NSString *currentVersion		= [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleVersion"];
 	NSDictionary *serverVersion		= [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:@"http://antoinemercadal.fr/updates/sshtunnel/versions.plist"]];
@@ -223,13 +232,13 @@
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
 {
-	[[mainApplicationWindow contentView] setWantsLayer:NO];
+//	[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+//	[[mainApplicationWindow contentView] setWantsLayer:NO];
 	NSLog(@"Removing Core Layer.");
 }
 
 - (void)animationDidStart:(CAAnimation *)theAnimation
 {
-	[[mainApplicationWindow contentView] setAnimations:currentAnimation];
 	NSLog(@"animation did start.");
 }
 
@@ -239,9 +248,7 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
 	{
-//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
 //		[[mainApplicationWindow contentView] setWantsLayer:YES];
-//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
 		
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:sessionView];

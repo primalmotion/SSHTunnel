@@ -15,6 +15,8 @@
 	IBOutlet NSView *backgroundImage;
 	IBOutlet MyAppController *appController;
 	IBOutlet AMSessionViewController *sessionController;
+	IBOutlet NSView *onLabel;
+	IBOutlet NSView *offLabel;
 	
 	NSColor *startingColor;
 	NSColor *endingColor;
