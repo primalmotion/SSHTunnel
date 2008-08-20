@@ -8,6 +8,9 @@
 @synthesize serviceDescription;
 @synthesize inputService;
 
+
+#pragma mark Initializations
+
 - (id) init
 {
 	self = [super init];
@@ -51,7 +54,6 @@
 	return self;
 }
 
-
 - (void) encodeWithCoder:(NSCoder *) coder
 {	
 	[coder encodeObject:serviceName forKey:@"serviceName"];
@@ -59,6 +61,9 @@
 	[coder encodeObject:serviceLocalPorts forKey:@"serviceLocalPorts"];
 	[coder encodeObject:serviceDescription forKey:@"serviceDescription"];
 }
+
+
+#pragma mark Overloaded accessors
 
 - (NSString *) description
 {

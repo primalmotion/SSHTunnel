@@ -31,47 +31,9 @@
 	return self;
 }
 
-- (IBAction) createAccount:(id)sender
-{
-	
-	if ([self isCreatingAccount] == NO)
-	{
-		NSString		*helperPath;
-		NSArray			*args;
-		
-		stdOut			= [NSPipe pipe];
-		sshTask			= [[NSTask alloc] init];
-		
-		if ([self validateCurrentUserInformations] == NO)
-			return;
-		
-		helperPath		= [[NSBundle mainBundle] pathForResource:[serverPicker getCurrentServerShScriptName] ofType:@"sh"];
-		args			= [NSArray arrayWithObjects:login, password, nil];
 
-		[sshTask setLaunchPath:helperPath];
-		[sshTask setArguments:args];
-		[sshTask setStandardOutput:stdOut];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self 
-												 selector:@selector(checkShStatus:)
-													 name:NSFileHandleReadCompletionNotification
-												   object:[[sshTask standardOutput] fileHandleForReading]];
 
-		[[stdOut fileHandleForReading] readInBackgroundAndNotify];
-		[self setIsCreatingAccount:YES];
-		[sshTask launch];
-		
-		helperPath = nil;
-		args = nil;
-	}
-	else
-	{
-		[sshTask terminate];
-		[self setIsCreatingAccount:NO];
-		sshTask = nil;
-	}
-}
-
+#pragma mark Observers and delegates
 
 - (void) checkShStatus:(NSNotification *) aNotification
 {
@@ -83,7 +45,7 @@
 	
 	data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
 	outputContent = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	NSLog(outputContent);
+
 	checkExistingLogin	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'LOGIN_EXISTS'"];
 	checkSuccess		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'LOGIN_CREATED'"];
 
@@ -135,6 +97,10 @@
 		
 	}
 }
+
+
+
+#pragma mark Helper methods
 
 - (BOOL) validateCurrentUserInformations
 {
@@ -190,6 +156,50 @@
 	
 	return YES;
 }
-					
+	
+
+
+#pragma mark Interface actions
+
+- (IBAction) createAccount:(id)sender
+{
+	
+	if ([self isCreatingAccount] == NO)
+	{
+		NSString		*helperPath;
+		NSArray			*args;
+		
+		stdOut			= [NSPipe pipe];
+		sshTask			= [[NSTask alloc] init];
+		
+		if ([self validateCurrentUserInformations] == NO)
+			return;
+		
+		helperPath		= [[NSBundle mainBundle] pathForResource:[serverPicker getCurrentServerShScriptName] ofType:@"sh"];
+		args			= [NSArray arrayWithObjects:login, password, nil];
+		
+		[sshTask setLaunchPath:helperPath];
+		[sshTask setArguments:args];
+		[sshTask setStandardOutput:stdOut];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self 
+												 selector:@selector(checkShStatus:)
+													 name:NSFileHandleReadCompletionNotification
+												   object:[[sshTask standardOutput] fileHandleForReading]];
+		
+		[[stdOut fileHandleForReading] readInBackgroundAndNotify];
+		[self setIsCreatingAccount:YES];
+		[sshTask launch];
+		
+		helperPath = nil;
+		args = nil;
+	}
+	else
+	{
+		[sshTask terminate];
+		[self setIsCreatingAccount:NO];
+		sshTask = nil;
+	}
+}
 
 @end

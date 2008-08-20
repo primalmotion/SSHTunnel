@@ -22,6 +22,9 @@
 @synthesize servers;
 @synthesize serversArrayController;
 
+
+#pragma mark Initializations 
+
 - (id) init
 {
 	self = [super init];
@@ -30,14 +33,31 @@
 	
 	serverSavePath			=  @"~/Library/Application Support/SSHTunnel/servers.sst";
 	
-	if ([f fileExistsAtPath:[serverSavePath stringByExpandingTildeInPath]] == YES)
-		[self setServers:[NSKeyedUnarchiver unarchiveObjectWithFile:[serverSavePath stringByExpandingTildeInPath]]];
-	else
-		[self setServers:[[NSMutableArray alloc] init]];
+	@try
+	{
+		if ([f fileExistsAtPath:[serverSavePath stringByExpandingTildeInPath]] == YES)
+			[self setServers:[NSKeyedUnarchiver unarchiveObjectWithFile:[serverSavePath stringByExpandingTildeInPath]]];
+		else
+			[self setServers:[[NSMutableArray alloc] init]];
+	}
+	@catch (NSException *e) 
+	{
+		int rep = NSRunAlertPanel(@"Error while loading datas", @"SSHTunnel was unable to load its saved state. Would you like to revert to the factory presets ? ", @"Yes", @"No", nil);
+		if (rep == NSAlertDefaultReturn)
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMErrorLoadingSavedState object:nil];
+		else
+			exit(0);
+	}
+
 	
 	f= nil;
 	
 	return self;
+}
+
+- (void) awakeFromNib
+{
+	[self createObservers];
 }
 
 - (void) createObservers;
@@ -68,16 +88,18 @@
 								context:NULL];
 }
 
-- (void) awakeFromNib
-{
-	[self createObservers];
-}
 
+
+#pragma mark Observers and delegates
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	[self saveState];
 }
+
+
+
+#pragma mark Saving processes
 
 - (void) saveState
 {
@@ -96,16 +118,23 @@
 	[[self getSelectedServer] pingHost];
 }
 
+
+
+#pragma mark Helpers methods
+
 - (AMServer*) getSelectedServer
 {
 	return (AMServer*)[[serversArrayController selectedObjects] objectAtIndex:0];
 }
+
+
+
+#pragma mark Interface actions
 
 - (IBAction) refreshPings:(id)sender
 {
 	for(AMServer *s in servers)
 		[s pingHost];
 }
-
 
 @end

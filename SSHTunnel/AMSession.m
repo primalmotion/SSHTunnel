@@ -25,15 +25,14 @@
 @synthesize connected;
 @synthesize connectionInProgress;
 @synthesize currentServer;
-@synthesize outgoingTunnel;
+@synthesize sessionTunnelType;
 @synthesize tunnelTypeImagePath;
 @synthesize connectionLink;
 @synthesize dynamicProxyPort;
 @synthesize useDynamicProxy;
 
-/**
- Initializations, deallocations and archiving
- **/
+
+#pragma mark Initilizations
 
 - (id) init
 {
@@ -42,9 +41,10 @@
 	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
-	[self setOutgoingTunnel:0];
+	[self setSessionTunnelType:0];
 	[self setDynamicProxyPort:@"0"];
 	[self setUseDynamicProxy:NO];
+
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
@@ -61,7 +61,7 @@
 	statusImagePath		= [[coder decodeObjectForKey:@"MVStatusImagePath"] retain];
 	currentServer		= [[coder decodeObjectForKey:@"MVcurrentServer"] retain];
 	dynamicProxyPort	= [[coder decodeObjectForKey:@"MVdynamicProxyPort"] retain];
-	outgoingTunnel		= [coder decodeIntForKey:@"MVoutgoingTunnel"];
+	sessionTunnelType		= [coder decodeIntForKey:@"MVoutgoingTunnel"];
 	useDynamicProxy		= [coder decodeBoolForKey:@"MVuseDynamicProxy"];
 	
 	[self setConnected:NO];
@@ -82,7 +82,7 @@
 	[coder encodeObject:remoteHost forKey:@"MVremoteHost"];
 	[coder encodeObject:statusImagePath forKey:@"MVStatusImagePath"];
 	[coder encodeObject:currentServer forKey:@"MVcurrentServer"];
-	[coder encodeInt:outgoingTunnel forKey:@"MVoutgoingTunnel"];
+	[coder encodeInt:sessionTunnelType forKey:@"MVoutgoingTunnel"];
 	[coder encodeObject:dynamicProxyPort forKey:@"MVdynamicProxyPort"];
 	[coder encodeBool:useDynamicProxy forKey:@"MVuseDynamicProxy"];
 }
@@ -106,24 +106,26 @@
 
 
 
-/**
- overriding some accessors
- **/
+
+#pragma mark Overloaded accesors
 
 - (NSString*) tunnelTypeImagePath
 {
-	if ([self outgoingTunnel] == 0)
+	if ([self sessionTunnelType] == 0)
 		return [[NSBundle mainBundle] pathForResource:@"outTunnel" ofType:@"tif"];
+	else if ([self sessionTunnelType] == 1) 
+		return [[NSBundle mainBundle] pathForResource:@"inTunnel" ofType:@"tif"];
 	else 
 		return [[NSBundle mainBundle] pathForResource:@"inTunnel" ofType:@"tif"];
+
 }
 
-- (void) setOutgoingTunnel:(NSInteger)newValue
+- (void) setSessionTunnelType:(NSInteger)newValue
 {
 	[self willChangeValueForKey:@"outgoingTunnel"];
 	[self willChangeValueForKey:@"tunnelTypeImagePath"];
 	[self willChangeValueForKey:@"remoteHost"];
-	outgoingTunnel = newValue;
+	sessionTunnelType = newValue;
 	[self didChangeValueForKey:@"outgoingTunnel"];
 	[self didChangeValueForKey:@"tunnelTypeImagePath"];
 	[self didChangeValueForKey:@"remoteHost"];
@@ -132,9 +134,23 @@
 
 
 
-/**
- Performing computing operation on strings
- **/
+#pragma mark Helper methods
+
+- (void)setProxyEnableForThisSession:(BOOL)enabled onPort:(NSString*)port
+{
+	NSTask *activateProxy = [[NSTask alloc] init];
+	[activateProxy setLaunchPath:@"/usr/sbin/networksetup"];
+	
+	if (enabled)
+		[activateProxy setArguments:[NSArray arrayWithObjects:@"-setsocksfirewallproxy", 
+									 [[NSUserDefaults standardUserDefaults] stringForKey:@"networkServicesForProxies"], 
+									 @"127.0.0.1", port, @"off", nil]];
+	else
+		[activateProxy setArguments:[NSArray arrayWithObjects:@"-setsocksfirewallproxystate",  
+									 [[NSUserDefaults standardUserDefaults] stringForKey:@"networkServicesForProxies"], @"off", nil]];
+
+	[activateProxy launch];
+}
 
 - (NSMutableArray *) parsePortsSequence:(NSString*)seq
 {
@@ -177,11 +193,14 @@
 	return ports;
 }
 
-- (NSMutableString *) prepareSSHCommand:(NSMutableArray *)remotePorts localPorts:(NSMutableArray *)localPorts  
+- (NSMutableString *) prepareSSHCommandWithRemotePorts:(NSMutableArray *)remotePorts localPorts:(NSMutableArray *)localPorts  
 {
 	NSMutableString *argumentsString = @"ssh -N";
 	
-	if ([self outgoingTunnel] == 0)
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"forceSSHVersion2"])
+		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -2 "];
+	
+	if ([self sessionTunnelType] == 0)
 	{
 		int i;
 		for(i = 0; i < [remotePorts count]; i++)
@@ -194,7 +213,7 @@
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[remotePorts objectAtIndex:i]];
 		}
 	}
-	else
+	else if ([self sessionTunnelType] == 1)
 	{
 		int i;
 		for(i = 0; i < [remotePorts count]; i++)
@@ -208,12 +227,16 @@
 		}
 	}
 	
-	if ([self useDynamicProxy] == YES)
+	if (([self useDynamicProxy] == YES) || ([self sessionTunnelType] == 2))
 	{
 		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -D "];
 		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[self dynamicProxyPort]];
 	}
 	
+	if ([self sessionTunnelType] == 2)
+	{
+		[self setProxyEnableForThisSession:YES onPort:dynamicProxyPort];
+	}
 	
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" "];
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer username]];
@@ -229,9 +252,8 @@
 
 
 
-/**
- Control the ssh command
- **/
+
+#pragma mark Control methods
 
 - (void) openTunnel
 {
@@ -251,7 +273,7 @@
 	// OK SO NO I'VE TO MAKE SOMETHING IN THE SSH SCRIPT TO HANDLE THE POSSIBLE
 	// DELUGE OF PORTS PASSING TROUGHT ARGUMENTS... Let's have a break..
 	
-	argumentsString = [self prepareSSHCommand:remotePorts localPorts:localPorts];
+	argumentsString = [self prepareSSHCommandWithRemotePorts:remotePorts localPorts:localPorts];
 	
 	args			= [NSArray arrayWithObjects:argumentsString, [currentServer password], nil];
 
@@ -260,7 +282,7 @@
 	[sshTask setLaunchPath:helperPath];
 	[sshTask setArguments:args];
 
-		[sshTask setStandardOutput:stdOut];
+	[sshTask setStandardOutput:stdOut];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(checkShStatus:)
@@ -277,7 +299,8 @@
 	
 	
 	[sshTask launch];
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"AMNewGeneralMessage" 
+	NSLog(@"Session %@ is now launched.", [self sessionName]);
+	[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 														object:[@"Initializing connexion for session "
 																stringByAppendingString:[self sessionName]]];
 	
@@ -289,15 +312,17 @@
 
 - (void) closeTunnel
 {
+	if ([self sessionTunnelType] == 2)
+		[self setProxyEnableForThisSession:NO onPort:nil];
+	
+	NSLog(@"Session %@ is now closed.", [self sessionName]);
 	[sshTask terminate];
 	sshTask = nil;
 }
 
 
 
-/*
- Listener and observer for the NSTask (termination and incoming data processing)
-*/
+#pragma mark Observers and delegates
 - (void) checkShStatus:(NSNotification *) aNotification
 {
 	NSData		*data;
@@ -314,7 +339,7 @@
 	checkWrongPass	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'WRONG_PASSWORD'"];
 	checkConnected	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTED'"];
 	checkRefused	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTION_REFUSED'"];
-	checkPort		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'Could not request local forwarding.'"];
+	checkPort		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'Could not request local forwarding'"];
 	
 	if ([data length])
 	{
@@ -327,9 +352,10 @@
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"AMNewGeneralMessage" 
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage 
 																object:[@"Unknown error for session " 
 																		stringByAppendingString:[self sessionName]]];
+			NSRunAlertPanel(@"Error while connecting", @"Unknown error as occured while connecting." , @"Ok", nil, nil);
 		}
 		else if ([checkWrongPass evaluateWithObject:outputContent] == YES)
 		{
@@ -339,9 +365,10 @@
 			[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"AMNewGeneralMessage" 
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 																object:[@"Wrong server password for session "
 																		stringByAppendingString:[self sessionName]]];
+			NSRunAlertPanel(@"Error while connecting", @"The password or username set for the server are wrong" , @"Ok", nil, nil);
 		}
 		else if ([checkRefused evaluateWithObject:outputContent] == YES)
 		{
@@ -352,9 +379,10 @@
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"AMNewGeneralMessage" 
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 																object:[@"Connexion has been refused by server for session "
 																		stringByAppendingString:[self sessionName]]];
+			NSRunAlertPanel(@"Error while connecting", @"Connection has been rejected by the server." , @"Ok", nil, nil);
 		}		
 		else if ([checkPort evaluateWithObject:outputContent] == YES)
 		{
@@ -365,9 +393,10 @@
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"AMNewGeneralMessage" 
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 																object:[@"Wrong server port for session " 
 																		stringByAppendingString:[self sessionName]]];
+			NSRunAlertPanel(@"Error while connecting", @"The port is already in used on server." , @"Ok", nil, nil);
 		}
 		else if ([checkConnected evaluateWithObject:outputContent] == YES)
 		{
@@ -376,11 +405,11 @@
 			[self setConnected:YES];
 			[self setConnectionInProgress:NO];
 			[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusGreen" ofType:@"tif"]];
-			[[NSNotificationCenter defaultCenter] postNotificationName:@"AMNewGeneralMessage" 
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 																object:[@"Sucessfully connects session "
 																		stringByAppendingString:[self sessionName]]];
 		
-			if ([self outgoingTunnel] == 0)
+			if ([self sessionTunnelType] == 0)
 				[self setConnectionLink:[@"127.0.0.1:" stringByAppendingString:[portsMap serviceLocalPorts]]];
 			else
 				[self setConnectionLink:[[[self currentServer] host] stringByAppendingString:[@":" stringByAppendingString:[portsMap serviceRemotePorts]]]];
@@ -400,9 +429,7 @@
 }
 
 - (void) listernerForSSHTunnelDown:(NSNotification *)notification
-{
-	NSLog(@"NOTIFICATION RECU DE : ", [notification object]);
-	
+{	
 	[[stdOut fileHandleForReading] closeFile];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSTaskDidTerminateNotification object:sshTask];
 	[self setConnected:NO];
@@ -410,7 +437,7 @@
 	[self setConnectionLink:@""];
 	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"AMNewGeneralMessage" 
+	[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 														object:[@"Connexion close for session "
 																stringByAppendingString:[self sessionName]]];
 }

@@ -20,68 +20,200 @@
 @implementation MyAppController
 @synthesize hostName;
 
+#pragma mark Initialisation methods
 - (id) init
 {
 	self = [super init];
 	
 	NSFileManager *f = [NSFileManager defaultManager];
-	NSString *saveFolder	=  @"~/Library/Application Support/SSHTunnel/";
+	saveFolder	=  @"~/Library/Application Support/SSHTunnel/";
 	
 	if ([f fileExistsAtPath:[saveFolder stringByExpandingTildeInPath]] == NO)
-		[f createDirectoryAtPath:[saveFolder stringByExpandingTildeInPath] attributes:nil];
-	
+		[self prepareApplicationSupports:f];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(performInfoMessage:) 
-												 name:@"AMNewGeneralMessage" 
+												 name:AMNewGeneralMessage
 											   object:nil];
 	
-
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											  selector:@selector(resetApplicationSupportFolder:) 
+												 name:AMErrorLoadingSavedState 
+											   object:nil];
 	
-	NSDictionary *initialValues = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"YES", @"YES", @"NO", @"NO", @"0", @"0", nil] 
-															  forKeys:[NSArray arrayWithObjects:@"checkForNewVersion", @"useGraphicalEffects",@"forceSSHVersion2", @"useKeychainIntegration", @"selectedTransitionType", @"selectedTransitionSubtype", nil]];
+	NSDictionary *initialValues = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"YES", @"YES", @"NO", @"NO", @"0", @"0", @"Airport", nil] 
+															  forKeys:[NSArray arrayWithObjects:@"checkForNewVersion", @"useGraphicalEffects",@"forceSSHVersion2", @"useKeychainIntegration", @"selectedTransitionType", @"selectedTransitionSubtype", @"networkServicesForProxies", nil]];
 
 	[[NSUserDefaults standardUserDefaults] registerDefaults:initialValues];
 	
 	return self;
 }
 
-
 - (void) awakeFromNib
 {	
 	[self setHostName:[[NSHost currentHost] name]];
 	[[mainApplicationWindow contentView] addSubview:sessionView];
 	
-	transition = [[CATransition alloc] init];
-	[transition setType:kCATransitionPush];
-	[transition setSubtype:kCATransitionFromBottom];
-	[transition setDelegate:self];
+	[preferencesController addObserver:self forKeyPath:@"values.selectedTransitionType" options:NSKeyValueObservingOptionNew context:nil];
+	[preferencesController addObserver:self forKeyPath:@"values.selectedTransitionSubtype" options:NSKeyValueObservingOptionNew context:nil];
+	[preferencesController addObserver:self forKeyPath:@"values.useGraphicalEffects" options:NSKeyValueObservingOptionNew context:nil];
 	
-	currentAnimation = [NSDictionary dictionaryWithObject:transition forKey:@"subviews"];
-	
-	NSThread *t = [[NSThread alloc] init];
+	[self setAnimationsTypes];
+
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"checkForNewVersion"] == YES)
-		[self performSelector:@selector(checkForNewVersion:) onThread:t withObject:nil waitUntilDone:NO];
+	{
+		[self checkNewVersionOnServerFromUser:NO];
+	}
 }
 
-/**
- * Here are the IBAction of the interface
- **/
 
-- (IBAction) openTunnel:(id)sender
+#pragma mark Helper methods
+- (void) setAnimationsTypes 
+{
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useGraphicalEffects"])
+	{
+		transition = [[CATransition alloc] init];
+		[[mainApplicationWindow contentView] setWantsLayer:YES];
+		
+		if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedTransitionType"] isEqualTo:@"0"])
+			[transition setType:kCATransitionPush];
+		else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedTransitionType"] isEqualTo:@"1"])
+			[transition setType:kCATransitionReveal];
+		else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedTransitionType"] isEqualTo:@"2"])
+			[transition setType:kCATransitionFade];
+		else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedTransitionType"] isEqualTo:@"3"])
+			[transition setType:kCATransitionMoveIn];
+		
+		if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedTransitionSubtype"] isEqualTo:@"0"])
+			[transition setSubtype:kCATransitionFromTop];
+		else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedTransitionSubtype"] isEqualTo:@"1"])
+			[transition setSubtype:kCATransitionFromBottom];
+		else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedTransitionSubtype"] isEqualTo:@"2"])
+			[transition setSubtype:kCATransitionFromLeft];
+		else if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedTransitionSubtype"] isEqualTo:@"3"])
+			[transition setSubtype:kCATransitionFromRight];
+		
+		[transition setDelegate:self];
+		currentAnimation = [NSDictionary dictionaryWithObject:transition forKey:@"subviews"];
+		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+	}
+	else
+		[[mainApplicationWindow contentView] setWantsLayer:NO];
+	
+}
+
+- (void) executeKillAllSSH:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+{
+	// Do not ask me why NSAlertDefaultReturn doesn't work...
+	if (returnCode ==  1000)
+	{
+		NSTask *t = [[NSTask alloc] init];
+		[t setLaunchPath:@"/usr/bin/killall"];
+		[t setArguments:[NSArray arrayWithObject:@"ssh"]];
+		[t launch];
+	}
+}
+
+- (void) prepareApplicationSupports: (NSFileManager *) fileManager  
+{
+	[fileManager createDirectoryAtPath:[saveFolder stringByExpandingTildeInPath] attributes:nil];
+	
+	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
+				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/services.sst"] 
+				  handler:nil];
+	
+	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"servers" ofType:@"sst"] 
+				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/servers.sst"]
+				  handler:nil];
+	
+	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
+				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/sessions.sst"] 
+				  handler:nil];
+}
+
+- (void) checkNewVersionOnServerFromUser:(BOOL)userRequest
+{
+	NSLog(@"Checking for new version of the programm on internet");
+	
+	NSString *currentVersion		= [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleVersion"];
+	NSDictionary *serverVersion		= [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:@"http://antoinemercadal.fr/updates/sshtunnel/versions.plist"]];
+	NSNumber *currentMajorVersion	= [NSNumber numberWithInt:[[[currentVersion  componentsSeparatedByString:@"."] objectAtIndex:0] intValue]];
+	NSNumber *currentMinorVersion	= [NSNumber numberWithInt:[[[currentVersion  componentsSeparatedByString:@"."] objectAtIndex:1] intValue]];
+	NSNumber *remoteMajorVersion	= [NSNumber numberWithInt:[[serverVersion objectForKey:@"Major"] intValue]];
+	NSNumber *remoteMinorVersion	= [NSNumber numberWithInt:[[serverVersion objectForKey:@"Minor"] intValue]];
+	
+	if (([currentMajorVersion intValue] < [remoteMajorVersion intValue]) 
+		|| ( ([currentMajorVersion intValue] == [remoteMajorVersion intValue]) 
+			&& ([currentMinorVersion intValue] < [remoteMinorVersion intValue])))
+	{
+		int resp = NSRunAlertPanel([NSString stringWithFormat:@"New version %@.%@ is out!", 
+									remoteMajorVersion, remoteMinorVersion],
+								   [serverVersion valueForKey:@"Changes"], 
+								   @"Download Version", 
+								   @"Ignore", 
+								   nil);
+		
+		if (resp == NSAlertDefaultReturn)
+			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[serverVersion objectForKey:@"DownloadURL"]]];
+	}
+	else if (userRequest)
+		NSBeginAlertSheet(@"Version Checker", @"OK", nil, nil, preferencesWindow, nil, nil, nil, nil, @"You copy of SSHTunnel is actually up-to-date");
+}
+
+
+#pragma mark Binding observer and Delegates
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	NSLog(@"Animations preferences changes detected");
+	[self setAnimationsTypes];
+}
+
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+//	[[mainApplicationWindow contentView] setWantsLayer:NO];
+//	NSLog(@"Removing Core Layer.");
+}
+
+- (void)animationDidStart:(CAAnimation *)theAnimation
+{
+//	[[mainApplicationWindow contentView] setWantsLayer:YES];
+//	NSLog(@"animation did start.");
+}
+
+
+
+#pragma mark Interface builder actions
+
+- (IBAction) resetApplicationSupportFolder:(id)sender
+{
+	NSFileManager *f = [NSFileManager defaultManager];
+	
+	int rep = NSRunAlertPanel(@"Reset factory presets", @"Are you really sure you want to reset the factory presets ? Note you have to relaunch application.", @"Yes", @"No", nil);
+	
+	if (rep == NSAlertDefaultReturn)
+	{
+		[f removeFileAtPath:saveFolder handler:nil];
+		[self prepareApplicationSupports:f];
+		[[NSApplication sharedApplication] stop:nil];
+	}
+}
+
+- (IBAction) openSession:(id)sender
 {
 	AMSession	*currentSession = [sessionController getSelectedSession];
-	if ([currentSession connected] == NO)
+	if (([currentSession connected] == NO) && ([currentSession connectionInProgress] == NO))
 		[currentSession openTunnel];
 }
 
-- (IBAction) closeTunnel:(id)sender
+- (IBAction) closeSession:(id)sender
 {
 	AMSession	*currentSession = [sessionController getSelectedSession];
-
+	
 	[currentSession closeTunnel];
 }
 
-- (IBAction)toggleTunnel:(id)sender 
+- (IBAction) toggleTunnel:(id)sender 
 {
 	AMSession	*currentSession = [sessionController getSelectedSession];
 	
@@ -101,19 +233,6 @@
 								 secondButton:NSLocalizedString(@"CANCEL", nil)
 										 from:self
 									 selector:(@"executeKillAllSSH:returnCode:contextInfo:")];
-}
-
-- (void) executeKillAllSSH:(NSAlert *)alert returnCode:(int)returnCode
-				   contextInfo:(void *)contextInfo;
-{
-	// Do not ask me why NSAlertDefaultReturn doesn't work...
-	if (returnCode ==  1000)
-	{
-		NSTask *t = [[NSTask alloc] init];
-		[t setLaunchPath:@"/usr/bin/killall"];
-		[t setArguments:[NSArray arrayWithObject:@"ssh"]];
-		[t launch];
-	}
 }
 
 - (IBAction) openAllSession:(id)sender
@@ -141,114 +260,15 @@
 
 - (IBAction) checkForNewVersion:(id)sender
 {
-	NSLog(@"Checking for new version of the programm on internet");
-	
-	NSString *currentVersion		= [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleVersion"];
-	NSDictionary *serverVersion		= [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:@"http://antoinemercadal.fr/updates/sshtunnel/versions.plist"]];
-	NSNumber *currentMajorVersion	= [NSNumber numberWithInt:[[[currentVersion  componentsSeparatedByString:@"."] objectAtIndex:0] intValue]];
-	NSNumber *currentMinorVersion	= [NSNumber numberWithInt:[[[currentVersion  componentsSeparatedByString:@"."] objectAtIndex:1] intValue]];
-	NSNumber *remoteMajorVersion	= [NSNumber numberWithInt:[[serverVersion objectForKey:@"Major"] intValue]];
-	NSNumber *remoteMinorVersion	= [NSNumber numberWithInt:[[serverVersion objectForKey:@"Minor"] intValue]];
-	
-	if (([currentMajorVersion intValue] < [remoteMajorVersion intValue]) 
-		|| ( ([currentMajorVersion intValue] == [remoteMajorVersion intValue]) 
-			&& ([currentMinorVersion intValue] < [remoteMinorVersion intValue])))
-	{
-		int resp = NSRunAlertPanel([NSString stringWithFormat:@"New version %@.%@ is out!", 
-									remoteMajorVersion, remoteMinorVersion],
-								   [serverVersion valueForKey:@"Changes"], 
-								   @"Download Version", 
-								   @"Ignore", 
-								   nil);
-		
-		if (resp == NSAlertDefaultReturn)
-			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[serverVersion objectForKey:@"DownloadURL"]]];
-		
-	}
-	else if ([(NSButton *)[sender title] isEqualTo:@"Check Now"])
-	{
-		NSRunAlertPanel(@"Version Checker", @"You copy of SSHTunnel is actually up-to-date", @"OK", nil, nil);
-	}
-	[mainApplicationWindow setTitle:[NSString stringWithFormat:@"SSHTunnel v%@.%@", currentMajorVersion, currentMinorVersion]];
+	[self checkNewVersionOnServerFromUser:YES];
 }
-
-
-
-
-
-/**
- * This part is for the delegation of the NSTableView to
- * enable instant save when modified.
- **/
-- (void) performInfoMessage:(NSNotification*)notif
-{
-	[self errorPanelDisplaywithMessage: (NSString*)[notif object]];
-}
-- (void) errorPanelDisplaywithMessage:(NSString *)theMessage
-{
-	if (timer != nil)
-		[timer invalidate];
-	
-	NSRect rect = [errorPanel frame];
-	rect.origin.y = 0;
-	[errorMessage setStringValue:theMessage];
-	[[errorPanel animator] setFrame:rect];
-	
-	timer = [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(errorPanelClose:) userInfo:NULL repeats:NO];
-}
-- (void) errorPanelClose:(NSTimer *)theTimer
-{
-	NSRect rect = [errorPanel frame];
-	rect.origin.y = -60;
-	[[errorPanel animator] setFrame:rect];
-}
-
-
-
- 
-
-
-
-
-/**
- * This part is for the delegation of the NSApplication to
- * allow closing all ssh session before terminating
- **/
-- (void) applicationWillTerminate: (NSNotification *) notification
-{
-	for (int i = 0; i < [[sessionController sessions] count]; i++)
-		[[[sessionController sessions] objectAtIndex:i] closeTunnel];
-
-	[serverController performSaveProcess:nil];
-	[serviceController performSaveProcess:nil];
-	[sessionController performSaveProcess:nil];
-}
-
-- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
-{
-	[self openMainWindow:nil];    
-	return YES;
-}
-
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
-{
-//	[[mainApplicationWindow contentView] setAnimations:currentAnimation];
-//	[[mainApplicationWindow contentView] setWantsLayer:NO];
-	NSLog(@"Removing Core Layer.");
-}
-
-- (void)animationDidStart:(CAAnimation *)theAnimation
-{
-	NSLog(@"animation did start.");
-}
-
-
 
 - (IBAction) displaySessionView:(id)sender
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
 	{
 //		[[mainApplicationWindow contentView] setWantsLayer:YES];
+//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
 		
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:sessionView];
@@ -259,8 +279,9 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
 	{
-//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
 //		[[mainApplicationWindow contentView] setWantsLayer:YES];
+//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+		
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serverView];
 	}
@@ -270,8 +291,9 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
 	{
-//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
 //		[[mainApplicationWindow contentView] setWantsLayer:YES];
+//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+		
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:aboutView];
 	}
@@ -281,8 +303,9 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
 	{
-//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
 //		[[mainApplicationWindow contentView] setWantsLayer:YES];
+//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+		
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:registerView];
 	}
@@ -292,8 +315,9 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
 	{
-//		[[mainApplicationWindow contentView] setLayer:[CALayer layer]];
-//		[[mainApplicationWindow contentView] setWantsLayer:YES];
+		[[mainApplicationWindow contentView] setWantsLayer:YES];
+		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+		
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serviceView];
 	}
@@ -309,5 +333,52 @@
 	[mainApplicationWindow orderOut:nil];
 }
 
+
+#pragma mark Messaging display methods
+
+- (void) performInfoMessage:(NSNotification*)notif
+{
+	[self errorPanelDisplaywithMessage: (NSString*)[notif object]];
+}
+
+- (void) errorPanelDisplaywithMessage:(NSString *)theMessage
+{
+	if (timer != nil)
+		[timer invalidate];
+	
+	NSRect rect = [errorPanel frame];
+	rect.origin.y = 0;
+	[errorMessage setStringValue:theMessage];
+	[[errorPanel animator] setFrame:rect];
+	
+	timer = [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(errorPanelClose:) userInfo:NULL repeats:NO];
+}
+
+- (void) errorPanelClose:(NSTimer *)theTimer
+{
+	NSRect rect = [errorPanel frame];
+	rect.origin.y = -60;
+	[[errorPanel animator] setFrame:rect];
+}
+
+
+
+#pragma mark Application status managers
+
+- (void) applicationWillTerminate: (NSNotification *) notification
+{
+	for (int i = 0; i < [[sessionController sessions] count]; i++)
+		[[[sessionController sessions] objectAtIndex:i] closeTunnel];
+
+	[serverController performSaveProcess:nil];
+	[serviceController performSaveProcess:nil];
+	[sessionController performSaveProcess:nil];
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
+{
+	[self openMainWindow:nil];    
+	return YES;
+}
 
 @end

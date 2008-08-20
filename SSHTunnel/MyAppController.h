@@ -19,6 +19,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import <QuartzCore/CAAnimation.h>
 #import <QuartzCore/CoreImage.h>
+
+#import "messages.h"
+
 #import "AMSession.h"
 #import "AMServer.h"
 #import "AMAccountViewController.h"
@@ -26,6 +29,7 @@
 #import "AMSessionViewController.h"
 #import "AMBaseViewController.h"
 #import "AMServiceViewController.h"
+
 
 @interface MyAppController : AMBaseViewController {
 	
@@ -36,6 +40,7 @@
 	IBOutlet NSView						*aboutView;
 	IBOutlet NSView						*registerView;
 	IBOutlet NSView						*serviceView;
+	IBOutlet NSWindow					*preferencesWindow;
 	IBOutlet AMSessionViewController	*sessionController;
 	IBOutlet AMServerViewController		*serverController;
 	IBOutlet AMServiceViewController	*serviceController;
@@ -47,30 +52,37 @@
 	NSString						 *hostName;
 	CATransition					 *transition;
 	NSDictionary					 *currentAnimation;
+	NSString						 *saveFolder;
 	
 	
 }
 @property(readwrite, assign) NSString *hostName;
 
+#pragma mark Interface Actions
 - (IBAction) openSessionInSafari:(id)sender;
 - (IBAction) toggleTunnel:(id)sender;
-- (IBAction) openTunnel:(id)sender;
-- (IBAction) closeTunnel:(id)sender;
+- (IBAction) openSession:(id)sender;
+- (IBAction) closeSession:(id)sender;
 - (IBAction) openAllSession:(id)sender;
 - (IBAction) closeAllSession:(id)sender;
 - (IBAction) killAllSSH:(id)sender;
 - (IBAction) checkForNewVersion:(id)sender;
-- (void) executeKillAllSSH:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-
+- (IBAction) resetApplicationSupportFolder:(id)sender;
 - (IBAction) displayServerView:(id)sender;
 - (IBAction) displayAboutView:(id)sender;
 - (IBAction) displayRegisterView:(id)sender;
 - (IBAction) displaySessionView:(id)sender;
 - (IBAction) displayServiceView:(id)sender;
-
 - (IBAction) openMainWindow:(id)sender;
 - (IBAction) closeMainWindow:(id)sender;
 
+#pragma mark Helper methods
+- (void) executeKillAllSSH:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void) setAnimationsTypes;
+- (void) prepareApplicationSupports: (NSFileManager *) fileManager;
+- (void) checkNewVersionOnServerFromUser:(BOOL)userRequest;
+
+#pragma mark Messaging methods
 - (void) performInfoMessage:(NSNotification*)notif;
 - (void) errorPanelDisplaywithMessage:(NSString *)message;
 - (void) errorPanelClose:(NSTimer *)theTimer;

@@ -15,6 +15,7 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
+
 #import "AMBaseViewController.h"
 #import "AMSession.h"
 
@@ -24,7 +25,8 @@
 	IBOutlet NSBox					*tunnelConfigBox;
 	IBOutlet NSView					*outputTunnelConfigView;
 	IBOutlet NSView					*inputTunnelConfigView;
-
+	IBOutlet NSView					*proxyConfigView;
+	
 	NSMutableArray					*sessions;
 	NSString						*sessionSavePath;
 	NSTimer							*pingDelayer;
@@ -32,10 +34,14 @@
 @property(readwrite, assign)	NSMutableArray		*sessions;
 @property(readwrite, assign)	NSArrayController	*sessionsArrayController;
 
+#pragma mark Observers and delegates
 - (void) createObservers;
+
+#pragma mark Saving processes
 - (void) performSaveProcess:(NSTimer *)theTimer;
 - (void) saveState;
 
+#pragma mark Helper methods
 - (AMSession*) getSelectedSession;
 
 @end

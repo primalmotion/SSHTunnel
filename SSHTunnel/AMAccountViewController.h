@@ -15,6 +15,9 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
+
+#import "messages.h"
+
 #import "AMBaseViewController.h"
 #import "AMServer.h"
 #import "AMPopUpButton.h"
@@ -39,6 +42,10 @@
 @property(readwrite, assign)	NSMutableString		*confirmPassword;
 @property(readwrite)			BOOL				isCreatingAccount;
 
-- (IBAction) createAccount:(id)sender;
+#pragma mark Helper methods
 - (BOOL) validateCurrentUserInformations;
+
+#pragma mark Interface actions
+- (IBAction) createAccount:(id)sender;
+
 @end

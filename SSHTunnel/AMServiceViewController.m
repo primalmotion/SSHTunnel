@@ -4,6 +4,7 @@
 
 @synthesize services;
 
+#pragma mark Initilisations
 - (id) init
 {
 	self = [super init];
@@ -14,8 +15,19 @@
 	
 	if ([f fileExistsAtPath:[serviceSavePath stringByExpandingTildeInPath]] == YES)
 	{
-		[self setServices:[NSKeyedUnarchiver unarchiveObjectWithFile:[serviceSavePath stringByExpandingTildeInPath]]];
-		NSLog(@"Services state recovered");
+		@try
+		{
+			[self setServices:[NSKeyedUnarchiver unarchiveObjectWithFile:[serviceSavePath stringByExpandingTildeInPath]]];
+			NSLog(@"Services state recovered");
+		}
+		@catch (NSException *e) 
+		{
+			int rep = NSRunAlertPanel(@"Error while loading datas", @"SSHTunnel was unable to load its saved state. Would you like to revert to the factory presets ? ", @"Yes", @"No", nil);
+			if (rep == NSAlertDefaultReturn)
+				[[NSNotificationCenter defaultCenter] postNotificationName:AMErrorLoadingSavedState object:nil];
+			else
+				exit(0);
+		}
 	}
 	else
 	{
@@ -30,6 +42,11 @@
 	}
 	f = nil;
 	return self;
+}
+
+- (void) awakeFromNib
+{
+	[self createObservers];
 }
 
 - (void) createObservers
@@ -51,16 +68,18 @@
 								context:nil];
 }
 
-- (void) awakeFromNib
-{
-	[self createObservers];
-}
+
+
+#pragma mark Obeservers and delegates
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	[self saveState];
 }
 
+
+
+#pragma mark Saveing processes
 - (void) saveState
 {
 	if (pingDelayer != nil)

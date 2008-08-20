@@ -25,6 +25,8 @@
 @synthesize port;
 @synthesize statusImagePath;
 
+
+#pragma mark Initializations
 - (id) init
 {
 	self = [super init];
@@ -71,30 +73,17 @@
 	[coder encodeObject:serverName forKey:@"serverName"];
 }
 
+
+#pragma mark Overloaded accessors
+
 - (NSString *) description
 {
 	return serverName;
 }
 
-- (void) pingHost
-{
-	ping			= [[NSTask alloc] init];
-	stdOut			= [NSPipe pipe];
-	
-	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusOrange" ofType:@"tif"]];
-	[ping setLaunchPath:@"/sbin/ping"];
-	[ping setArguments:[NSArray arrayWithObjects:@"-c", @"1", @"-t", @"2", [self host], nil]];
-	[ping setStandardOutput:stdOut];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(handleEndOfPing:)
-												 name:NSFileHandleReadToEndOfFileCompletionNotification
-											   object:[[ping standardOutput] fileHandleForReading]];
-	
-	
-	[[stdOut fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
-	[ping launch];
-}
+
+
+#pragma mark Observers and delegates
 
 - (void) handleEndOfPing:(NSNotification *) aNotification
 {
@@ -120,5 +109,33 @@
 	checkSuccess = nil;
 	ping = nil;
 }
+
+
+
+#pragma mark Helper methods
+
+- (void) pingHost
+{
+	ping			= [[NSTask alloc] init];
+	stdOut			= [NSPipe pipe];
+	
+	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusOrange" ofType:@"tif"]];
+	[ping setLaunchPath:@"/sbin/ping"];
+	[ping setArguments:[NSArray arrayWithObjects:@"-c", @"1", @"-t", @"2", [self host], nil]];
+	[ping setStandardOutput:stdOut];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(handleEndOfPing:)
+												 name:NSFileHandleReadToEndOfFileCompletionNotification
+											   object:[[ping standardOutput] fileHandleForReading]];
+	
+	
+	[[stdOut fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
+	[ping launch];
+}
+
+
+
+
 
 @end

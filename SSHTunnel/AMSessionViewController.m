@@ -21,6 +21,7 @@
 @synthesize	sessions;
 @synthesize sessionsArrayController;
 
+#pragma mark Initializations
 - (id) init
 {
 	self = [super init];
@@ -29,15 +30,50 @@
 	NSFileManager *f = [NSFileManager defaultManager];
 	sessionSavePath	=  @"~/Library/Application Support/SSHTunnel/sessions.sst";
 	
-	if ([f fileExistsAtPath:[sessionSavePath stringByExpandingTildeInPath]] == YES)
-		[self setSessions:[NSKeyedUnarchiver unarchiveObjectWithFile:[sessionSavePath stringByExpandingTildeInPath]]];
-	else
-		[self setSessions:[[NSMutableArray alloc] init]];
-	
+	@try
+	{
+		if ([f fileExistsAtPath:[sessionSavePath stringByExpandingTildeInPath]] == YES)
+			[self setSessions:[NSKeyedUnarchiver unarchiveObjectWithFile:[sessionSavePath stringByExpandingTildeInPath]]];
+		else
+			[self setSessions:[[NSMutableArray alloc] init]];
+	}
+	@catch (NSException *e) 
+	{
+		int rep = NSRunAlertPanel(@"Error while loading datas", @"SSHTunnel was unable to load its saved state. Would you like to revert to the factory presets ? ", @"Yes", @"No", nil);
+		if (rep == NSAlertDefaultReturn)
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMErrorLoadingSavedState object:nil];
+		else
+			exit(0);
+	}
 	
 	f = nil;
 	
 	return self;
+}
+
+- (void) awakeFromNib
+{
+	
+	NSInteger tunnelType = 0;
+	if ([[sessionsArrayController arrangedObjects] count] > 0)
+		tunnelType = [[[sessionsArrayController selectedObjects] objectAtIndex:0] sessionTunnelType];
+	
+	if (tunnelType == 0)
+	{
+		[tunnelConfigBox setContentView:outputTunnelConfigView];
+	}
+	else if (tunnelType == 1)
+	{
+		[tunnelConfigBox setContentView:inputTunnelConfigView];
+		if ([[[[sessionsArrayController selectedObjects] objectAtIndex:0] remoteHost] isEqual:@""] == YES)
+			[[[sessionsArrayController selectedObjects] objectAtIndex:0] setRemoteHost:@"127.0.0.1"];
+	}
+	else if (tunnelType == 2)
+	{
+		[tunnelConfigBox setContentView:proxyConfigView];
+	}
+	
+	[self createObservers];
 }
 
 - (void) createObservers
@@ -97,38 +133,19 @@
 }
 
 
-- (void) awakeFromNib
-{
-	
-	NSInteger tunnelType = 0;
-	if ([[sessionsArrayController arrangedObjects] count] > 0)
-		tunnelType = [[[sessionsArrayController selectedObjects] objectAtIndex:0] outgoingTunnel];
-	
-	if (tunnelType == 0)
-	{
-		[tunnelConfigBox setContentView:outputTunnelConfigView];
-	}
-	else
-	{
-		[tunnelConfigBox setContentView:inputTunnelConfigView];
-		if ([[[[sessionsArrayController selectedObjects] objectAtIndex:0] remoteHost] isEqual:@""] == YES)
-			[[[sessionsArrayController selectedObjects] objectAtIndex:0] setRemoteHost:@"127.0.0.1"];
-	}
 
-	[self createObservers];
-}
-
+#pragma mark Observers and delegates
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	if ([keyPath isEqual:@"selection.outgoingTunnel"])
 	{
-		NSInteger tunnelType = [[[object selectedObjects] objectAtIndex:0] outgoingTunnel];
+		NSInteger tunnelType = [[[object selectedObjects] objectAtIndex:0] sessionTunnelType];
 		
 		if (tunnelType == 0)
 		{
 			[tunnelConfigBox setContentView:outputTunnelConfigView];
 		}
-		else
+		else if (tunnelType == 1)
 		{
 			[tunnelConfigBox setContentView:inputTunnelConfigView];
 			if ([[[[sessionsArrayController selectedObjects] objectAtIndex:0] remoteHost] length] == 0)
@@ -137,11 +154,18 @@
 				NSLog(@"remote host empty: filling with : %@", [[[object selectedObjects] objectAtIndex:0] remoteHost]);
 			}
 		}
+		else if (tunnelType == 2)
+		{
+			[tunnelConfigBox setContentView:proxyConfigView];
+		}
 	}
 	
 	[self saveState];
 }
 
+
+
+#pragma mark Saving processes
 - (void) saveState
 {
 	if (pingDelayer != nil)
@@ -159,9 +183,15 @@
 }
 
 
+
+#pragma mark Helper methods
+
 - (AMSession*) getSelectedSession
 {
-	return (AMSession*)[[sessionsArrayController selectedObjects] objectAtIndex:0];
+	if ([[sessionsArrayController selectedObjects] count] > 0)
+		 return (AMSession*)[[sessionsArrayController selectedObjects] objectAtIndex:0];
+	else
+		 return nil;
 }
 
 

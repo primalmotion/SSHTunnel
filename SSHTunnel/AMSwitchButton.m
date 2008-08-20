@@ -39,11 +39,6 @@
 
 - (void) awakeFromNib
 {	
-	
-	
-	 NSLog(@"-------------> %@", [switchView animationForKey:@"frame"]);
-	//[switchView setAnimations:[NSDictionary dictionaryWithObject:anim  forKey:@"frame"]];
-	
 	[self addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[self bind:@"status" toObject:[sessionController sessionsArrayController]  withKeyPath:@"selection.connected" options:nil];
 }
@@ -89,7 +84,7 @@
 	newFrame.origin.x = 7;
 	[[onLabel animator] setFrame:newFrame];
 
-	[appController openTunnel:nil];
+	[appController openSession:nil];
 	[NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(display) userInfo:nil repeats:NO];
 }
 
@@ -109,7 +104,7 @@
 	newFrame.origin.x -= [onLabel frame].size.width + 7;
 	[[onLabel animator] setFrame:newFrame];
 	
-	[appController closeTunnel:nil];
+	[appController closeSession:nil];
 	[NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(display) userInfo:nil repeats:NO];
 }
 

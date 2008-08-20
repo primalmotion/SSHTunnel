@@ -16,7 +16,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface AMServer : NSObject <NSCoding> {
 	NSString	*host;
 	NSString	*port;
@@ -35,6 +34,9 @@
 @property(readwrite, assign) NSString	*password;
 @property(readwrite, assign) NSString	*statusImagePath;
 
+#pragma mark Helper methods
 - (void) pingHost;
+
+#pragma mark Observers and delegates
 - (void) handleEndOfPing:(NSNotification *) aNotification;
 @end

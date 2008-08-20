@@ -15,6 +15,9 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
+
+#import "messages.h"
+
 #import "AMBaseViewController.h"
 #import "AMServer.h"
 
@@ -28,16 +31,20 @@
 	
 	
 }
-
 @property(readwrite, assign)	NSMutableArray		*servers;
 @property(readwrite, assign)	NSArrayController	*serversArrayController;
 
+#pragma mark Observers and delegates
 - (void) createObservers;
 
+#pragma mark Saving processes
 - (void) performSaveProcess:(NSTimer *)theTimer;
 - (void) saveState;
+
+#pragma mark Helper methods
 - (AMServer*) getSelectedServer;
 
+#pragma mark Interface actions
 - (IBAction) refreshPings:(id)sender;
 
 @end

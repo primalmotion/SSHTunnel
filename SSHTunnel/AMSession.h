@@ -15,8 +15,11 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Foundation/Foundation.h>
-#import "AMServer.h"
-#import "AMService.h"
+
+#import "messages.h"
+
+#import "AMServer.h";
+#import "AMService.h";
 
 @interface AMSession : NSObject <NSCoding> {
 	NSString	*sessionName;
@@ -25,7 +28,7 @@
 	NSString	*statusImagePath;
 	NSString	*tunnelTypeImagePath;
 	AMServer	*currentServer;
-	NSInteger	outgoingTunnel;
+	NSInteger	sessionTunnelType;
 	BOOL		connected;
 	BOOL		connectionInProgress;
 	NSString	*connectionLink;
@@ -47,14 +50,21 @@
 @property(readwrite)			BOOL		useDynamicProxy;
 @property(readwrite)			BOOL		connected;
 @property(readwrite)			BOOL		connectionInProgress;
-@property(readwrite)			NSInteger	outgoingTunnel;
+@property(readwrite)			NSInteger	sessionTunnelType;
 
 
+#pragma mark Control methods
 - (void) openTunnel;
 - (void) closeTunnel;
+
+#pragma mark Observers and delegates
 - (void) checkShStatus:(NSNotification *) notification;
 - (void) listernerForSSHTunnelDown:(NSNotification *)notification;
+
+#pragma mark Helper methods
 - (NSMutableArray *) parsePortsSequence:(NSString*)seq;
-- (NSMutableString *) prepareSSHCommand:(NSMutableArray *)remotePorts localPorts:(NSMutableArray *)localPorts;
+- (NSMutableString *) prepareSSHCommandWithRemotePorts:(NSMutableArray *)remotePorts localPorts:(NSMutableArray *)localPorts;
+- (void)setProxyEnableForThisSession:(BOOL)enabled onPort:(NSString*)port;
+
 
 @end

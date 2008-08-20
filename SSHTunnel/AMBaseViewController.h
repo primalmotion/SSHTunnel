@@ -18,7 +18,8 @@
 
 
 @interface AMBaseViewController : NSObject {
-	IBOutlet AMWindow	*mainApplicationWindow;
+	IBOutlet AMWindow				*mainApplicationWindow;
+	
 	
 }
 @end
