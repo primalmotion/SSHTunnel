@@ -30,9 +30,13 @@
 	if ([keyPath isEqual:@"status"])
 	{
 		if ([self status] == YES)
+		{
 			[self pushOn];
+		}
 		else
+		{	
 			[self pushOff];
+		}
 	}
 	
 }
@@ -40,20 +44,20 @@
 - (void) awakeFromNib
 {	
 	[self addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-	[self bind:@"status" toObject:[sessionController sessionsArrayController]  withKeyPath:@"selection.connected" options:nil];
+	[self bind:@"status" toObject:[sessionController sessionsTreeController]  withKeyPath:@"selection.connected" options:nil];
 }
 	
 - (void)drawRect:(NSRect)rect 
 {
 	if ([self status] == NO)
 	{
-		startingColor = [NSColor darkGrayColor];
-		endingColor = [NSColor grayColor];
+		startingColor = [NSColor colorWithCalibratedRed:0.23 green:0.26 blue:0.29 alpha:1.0];
+		endingColor = [NSColor colorWithCalibratedRed:0.53 green:0.56 blue:0.59 alpha:1.0];	
 	}
 	else
 	{
-		startingColor = [NSColor colorWithDeviceRed:0.3 green:0.3 blue:1.0 alpha:1.0];
-		endingColor = [NSColor colorWithDeviceRed:0.5 green:0.5 blue:1.0 alpha:1.0];
+		startingColor = [NSColor colorWithCalibratedRed:0.31 green:0.75 blue:0.40 alpha:1.0];
+		endingColor = [NSColor colorWithCalibratedRed:0.21 green:0.65 blue:0.30 alpha:1.0];
 	}
 	if (endingColor == nil || [startingColor isEqual:endingColor]) {
 		[startingColor set];
@@ -85,7 +89,7 @@
 	[[onLabel animator] setFrame:newFrame];
 
 	[appController openSession:nil];
-	[NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(display) userInfo:nil repeats:NO];
+	//[NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(display) userInfo:nil repeats:NO];
 }
 
 - (void) pushOff
@@ -105,7 +109,7 @@
 	[[onLabel animator] setFrame:newFrame];
 	
 	[appController closeSession:nil];
-	[NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(display) userInfo:nil repeats:NO];
+	//[NSTimer scheduledTimerWithTimeInterval:0.35 target:self selector:@selector(display) userInfo:nil repeats:NO];
 }
 
 

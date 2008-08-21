@@ -41,10 +41,28 @@
 												 name:AMErrorLoadingSavedState 
 											   object:nil];
 	
-	NSDictionary *initialValues = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"YES", @"YES", @"NO", @"NO", @"0", @"0", @"Airport", nil] 
-															  forKeys:[NSArray arrayWithObjects:@"checkForNewVersion", @"useGraphicalEffects",@"forceSSHVersion2", @"useKeychainIntegration", @"selectedTransitionType", @"selectedTransitionSubtype", @"networkServicesForProxies", nil]];
+	NSDictionary *initialValues = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"YES", 
+																	   @"YES", 
+																	   @"NO", 
+																	   @"NO", 
+																	   @"0", 
+																	   @"0", 
+																	   @"AirPort", 
+																	   @"YES", 
+																	   @"YES", nil] 
+															  forKeys:[NSArray arrayWithObjects:@"checkForNewVersion", 
+																	   @"useGraphicalEffects",
+																	   @"forceSSHVersion2", 
+																	   @"useKeychainIntegration", 
+																	   @"selectedTransitionType", 
+																	   @"selectedTransitionSubtype", 
+																	   @"networkServicesForProxies", 
+																	   @"displayIconInDock", 
+																	   @"displayIconInStatusBar", nil]];
 
 	[[NSUserDefaults standardUserDefaults] registerDefaults:initialValues];
+
+	
 	
 	return self;
 }
@@ -61,13 +79,16 @@
 	[self setAnimationsTypes];
 
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"checkForNewVersion"] == YES)
-	{
 		[self checkNewVersionOnServerFromUser:NO];
-	}
+	
+	[self performAutostart];
+	[self prepareStatusBarMenu];
 }
 
 
+
 #pragma mark Helper methods
+
 - (void) setAnimationsTypes 
 {
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"useGraphicalEffects"])
@@ -118,17 +139,17 @@
 {
 	[fileManager createDirectoryAtPath:[saveFolder stringByExpandingTildeInPath] attributes:nil];
 	
-	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
-				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/services.sst"] 
-				  handler:nil];
-	
-	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"servers" ofType:@"sst"] 
-				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/servers.sst"]
-				  handler:nil];
-	
-	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
-				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/sessions.sst"] 
-				  handler:nil];
+//	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
+//				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/services.sst"] 
+//				  handler:nil];
+//	
+//	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"servers" ofType:@"sst"] 
+//				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/servers.sst"]
+//				  handler:nil];
+//	
+//	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
+//				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/sessions.sst"] 
+//				  handler:nil];
 }
 
 - (void) checkNewVersionOnServerFromUser:(BOOL)userRequest
@@ -159,6 +180,61 @@
 	else if (userRequest)
 		NSBeginAlertSheet(@"Version Checker", @"OK", nil, nil, preferencesWindow, nil, nil, nil, nil, @"You copy of SSHTunnel is actually up-to-date");
 }
+
+- (BOOL) stopAllOtherRunningGlobalProxy
+{
+	for (AMSession *o in [sessionController sessions])
+	{
+		if (([o connected] || [o connectionInProgress] ) && ([o sessionTunnelType] == AMSessionGlobalProxy))
+		{
+			int r = NSRunAlertPanel(@"Global Proxy", @"The global proxy session is in execution. Only one global proxy can ran. Would you like to stop it ?", @"OK", @"Cancel", nil);
+		
+			if (r == NSAlertAlternateReturn)
+				return NO;
+			else
+				[o closeTunnel];
+		}
+	}
+	return YES;
+}
+
+- (void) performAutostart
+{
+	for (AMSession *s in [sessionController sessions])
+		for (AMSession *o in [s childrens])
+		{
+			if ([o autostart] == YES)
+				[o openTunnel];
+		}	
+}
+
+- (void) prepareStatusBarMenu
+{
+	for (AMSession *ss  in  [sessionController sessions])
+	{
+		for (AMSession *s in [ss childrens])
+		{
+			if ([s sessionTunnelType] == AMSessionOutgoingTunnel)
+			{
+				NSMenuItem *i = [[NSMenuItem alloc] initWithTitle:[s sessionName] action:nil keyEquivalent:@""];
+				[i setState:NSOffState];
+				[i setOffStateImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]]];
+				[i setOnStateImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusGreen" ofType:@"tif"]]];		
+				[i setTitle:[s sessionName]];
+				[i setAction:@selector(displaySessionView:)];
+				[taskBarMenu addItem:i];
+				
+			}
+		}
+	}
+	NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
+	statusBarItem = [[statusBar statusItemWithLength: NSVariableStatusItemLength] retain];
+	
+	[statusBarItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"taskbarIcon" ofType:@"tiff"]]];
+	[statusBarItem setEnabled:YES];
+	[statusBarItem setMenu:taskBarMenu];
+}
+
 
 
 #pragma mark Binding observer and Delegates
@@ -203,7 +279,15 @@
 {
 	AMSession	*currentSession = [sessionController getSelectedSession];
 	if (([currentSession connected] == NO) && ([currentSession connectionInProgress] == NO))
-		[currentSession openTunnel];
+	{
+		if ([currentSession sessionTunnelType] == AMSessionGlobalProxy)
+		{	
+			if ([self stopAllOtherRunningGlobalProxy] == YES)
+				[currentSession openTunnel];
+		}
+		else
+			[currentSession openTunnel];
+	}
 }
 
 - (IBAction) closeSession:(id)sender
@@ -237,20 +321,22 @@
 
 - (IBAction) openAllSession:(id)sender
 {
-	for (AMSession *o in [sessionController sessions])
-	{
-		if ([o connected] == NO)
-			[o openTunnel];
-	}
+	for (AMSession *s in [sessionController sessions])
+		for (AMSession *o in [s childrens])
+		{
+			if ([o connected] == NO)
+				[o openTunnel];
+		}
 }
 
 - (IBAction) closeAllSession:(id)sender
 {
-	for (AMSession *o in [sessionController sessions])
-	{
-		NSLog(@"Session %@ closed.", [o sessionName]);
-		[o closeTunnel];
-	}
+	for (AMSession *s in [sessionController sessions])
+		for (AMSession *o in [s childrens])
+		{
+			NSLog(@"Session %@ closed.", [o sessionName]);
+			[o closeTunnel];
+		}
 }
 
 - (IBAction) openSessionInSafari:(id)sender
@@ -315,8 +401,8 @@
 {
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
 	{
-		[[mainApplicationWindow contentView] setWantsLayer:YES];
-		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
+		//[[mainApplicationWindow contentView] setWantsLayer:YES];
+		//[[mainApplicationWindow contentView] setAnimations:currentAnimation];
 		
 		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
 		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serviceView];
@@ -334,6 +420,8 @@
 }
 
 
+
+
 #pragma mark Messaging display methods
 
 - (void) performInfoMessage:(NSNotification*)notif
@@ -347,7 +435,7 @@
 		[timer invalidate];
 	
 	NSRect rect = [errorPanel frame];
-	rect.origin.y = 0;
+	rect.origin.y = - 25;
 	[errorMessage setStringValue:theMessage];
 	[[errorPanel animator] setFrame:rect];
 	

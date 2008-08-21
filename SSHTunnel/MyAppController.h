@@ -15,6 +15,7 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
+#import <Security/Security.h>
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <QuartzCore/CAAnimation.h>
@@ -40,12 +41,12 @@
 	IBOutlet NSView						*aboutView;
 	IBOutlet NSView						*registerView;
 	IBOutlet NSView						*serviceView;
+	IBOutlet NSMenu						*taskBarMenu;
 	IBOutlet NSWindow					*preferencesWindow;
 	IBOutlet AMSessionViewController	*sessionController;
 	IBOutlet AMServerViewController		*serverController;
 	IBOutlet AMServiceViewController	*serviceController;
 	IBOutlet NSUserDefaultsController	*preferencesController;
-	
 	
 	NSTimer							 *timer;
 	NSView							 *backViewReminder;
@@ -53,6 +54,7 @@
 	CATransition					 *transition;
 	NSDictionary					 *currentAnimation;
 	NSString						 *saveFolder;
+	NSStatusItem					 *statusBarItem;
 	
 	
 }
@@ -81,6 +83,9 @@
 - (void) setAnimationsTypes;
 - (void) prepareApplicationSupports: (NSFileManager *) fileManager;
 - (void) checkNewVersionOnServerFromUser:(BOOL)userRequest;
+- (BOOL) stopAllOtherRunningGlobalProxy;
+- (void) performAutostart;
+- (void) prepareStatusBarMenu;
 
 #pragma mark Messaging methods
 - (void) performInfoMessage:(NSNotification*)notif;

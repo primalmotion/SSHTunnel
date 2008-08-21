@@ -21,24 +21,41 @@
 #import "AMServer.h";
 #import "AMService.h";
 
+static NSInteger AMSessionOutgoingTunnel	= 0;
+static NSInteger AMSessionIncomingTunnel	= 1;
+static NSInteger AMSessionGlobalProxy		= 2;
+static NSInteger AMSessionCategory			= 3;
+
+
 @interface AMSession : NSObject <NSCoding> {
 	NSString	*sessionName;
 	NSString	*remoteHost;
 	AMService	*portsMap;	
 	NSString	*statusImagePath;
+	NSImage		*statusImage;
 	NSString	*tunnelTypeImagePath;
 	AMServer	*currentServer;
 	NSInteger	sessionTunnelType;
 	BOOL		connected;
 	BOOL		connectionInProgress;
 	NSString	*connectionLink;
-	NSString	*dynamicProxyPort;
+	NSString	*globalProxyPort;
 	BOOL		useDynamicProxy;
+	BOOL		autostart;
+	
+	NSMutableArray	*childrens;
+	BOOL			isLeaf;
+	BOOL			isGroup;
 	
 	NSString	*outputContent;
 	NSTask		*sshTask;
 	NSPipe		*stdOut;
 }
+@property(readwrite, assign)	NSMutableArray	*childrens;
+@property(readwrite)			BOOL			isLeaf;
+@property(readwrite)			BOOL			isGroup;
+@property(readwrite, assign)	NSImage			*statusImage;
+@property(readwrite)			BOOL			autostart;
 @property(readwrite, assign)	AMServer	*currentServer;
 @property(readwrite, assign)	AMService	*portsMap;
 @property(readwrite, assign)	NSString	*sessionName;
@@ -46,11 +63,11 @@
 @property(readwrite, assign)	NSString	*statusImagePath;
 @property(readwrite, assign)	NSString	*tunnelTypeImagePath;
 @property(readwrite, assign)	NSString	*connectionLink;
-@property(readwrite, assign)	NSString	*dynamicProxyPort;
+@property(readwrite, assign)	NSString	*globalProxyPort;
+@property(readwrite)			NSInteger	sessionTunnelType;
 @property(readwrite)			BOOL		useDynamicProxy;
 @property(readwrite)			BOOL		connected;
 @property(readwrite)			BOOL		connectionInProgress;
-@property(readwrite)			NSInteger	sessionTunnelType;
 
 
 #pragma mark Control methods

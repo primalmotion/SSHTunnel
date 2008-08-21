@@ -19,29 +19,47 @@
 #import "AMBaseViewController.h"
 #import "AMSession.h"
 
+
+static NSString *AMGroupOutgoingName = @"Outgoing";
+static NSString *AMGroupIncomingName = @"Incoming";
+static NSString *AMGroupProxyName = @"Proxies";
+
+
 @interface AMSessionViewController :AMBaseViewController {
 	
-	IBOutlet NSArrayController		*sessionsArrayController;
+	IBOutlet NSTreeController		*sessionsTreeController;
+	IBOutlet NSOutlineView			*sessionsOutlineView;
 	IBOutlet NSBox					*tunnelConfigBox;
 	IBOutlet NSView					*outputTunnelConfigView;
 	IBOutlet NSView					*inputTunnelConfigView;
 	IBOutlet NSView					*proxyConfigView;
+	IBOutlet NSSplitView			*splitView;
+	IBOutlet NSView					*groupInfoView;
+	IBOutlet NSView					*editSessionView;
 	
 	NSMutableArray					*sessions;
 	NSString						*sessionSavePath;
 	NSTimer							*pingDelayer;
 }
 @property(readwrite, assign)	NSMutableArray		*sessions;
-@property(readwrite, assign)	NSArrayController	*sessionsArrayController;
+@property(readwrite, assign)	NSTreeController	*sessionsTreeController;
 
+#pragma mark -
 #pragma mark Observers and delegates
 - (void) createObservers;
 
+#pragma mark -
 #pragma mark Saving processes
 - (void) performSaveProcess:(NSTimer *)theTimer;
 - (void) saveState;
 
+#pragma mark -
 #pragma mark Helper methods
 - (AMSession*) getSelectedSession;
 
+#pragma mark -
+#pragma mark Interface actions
+- (IBAction) addNewOutgoingSession:(id)sender;
+- (IBAction) addNewIncomingSession:(id)sender;
+- (IBAction) addNewProxySession:(id)sender;
 @end

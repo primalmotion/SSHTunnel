@@ -19,13 +19,14 @@
 @implementation AMSessionViewController
 
 @synthesize	sessions;
-@synthesize sessionsArrayController;
+@synthesize sessionsTreeController;
 
+#pragma mark -
 #pragma mark Initializations
+
 - (id) init
 {
 	self = [super init];
-	
 	
 	NSFileManager *f = [NSFileManager defaultManager];
 	sessionSavePath	=  @"~/Library/Application Support/SSHTunnel/sessions.sst";
@@ -35,7 +36,38 @@
 		if ([f fileExistsAtPath:[sessionSavePath stringByExpandingTildeInPath]] == YES)
 			[self setSessions:[NSKeyedUnarchiver unarchiveObjectWithFile:[sessionSavePath stringByExpandingTildeInPath]]];
 		else
+		{
+			NSLog(@"No sessions.sst file found. Regenerating the root tree.");
+			
 			[self setSessions:[[NSMutableArray alloc] init]];
+			
+			AMSession *outgoing = [[AMSession alloc] init];
+			[outgoing setSessionName:AMGroupOutgoingName];
+			[outgoing setIsLeaf:NO];
+			[outgoing setIsGroup:YES];
+			[outgoing setSessionTunnelType:AMSessionCategory];
+			[outgoing setStatusImagePath:@""];
+			[outgoing setChildrens:[NSMutableArray array]];
+			[[self sessions] addObject:outgoing];
+			
+			AMSession *incoming = [[AMSession alloc] init];
+			[incoming setSessionName:AMGroupIncomingName];
+			[incoming setIsLeaf:NO];
+			[incoming setIsGroup:YES];
+			[incoming setStatusImagePath:@""];
+			[incoming setSessionTunnelType:AMSessionCategory];
+			[incoming setChildrens:[NSMutableArray array]];
+			[[self sessions] addObject:incoming];
+			
+			AMSession *proxies = [[AMSession alloc] init];
+			[proxies setSessionName:AMGroupProxyName];
+			[proxies setIsLeaf:NO];
+			[proxies setIsGroup:YES];
+			[proxies setStatusImagePath:@""];
+			[proxies setSessionTunnelType:AMSessionCategory];
+			[proxies setChildrens:[NSMutableArray array]];
+			[[self sessions] addObject:proxies];
+		}
 	}
 	@catch (NSException *e) 
 	{
@@ -43,7 +75,7 @@
 		if (rep == NSAlertDefaultReturn)
 			[[NSNotificationCenter defaultCenter] postNotificationName:AMErrorLoadingSavedState object:nil];
 		else
-			exit(0);
+			exit(-1);
 	}
 	
 	f = nil;
@@ -54,118 +86,246 @@
 - (void) awakeFromNib
 {
 	
-	NSInteger tunnelType = 0;
-	if ([[sessionsArrayController arrangedObjects] count] > 0)
-		tunnelType = [[[sessionsArrayController selectedObjects] objectAtIndex:0] sessionTunnelType];
+	NSInteger tunnelType = AMSessionOutgoingTunnel;
+	if ([[sessionsTreeController arrangedObjects] count] > 0)
+		tunnelType = [[[sessionsTreeController selectedObjects] objectAtIndex:0] sessionTunnelType];
 	
-	if (tunnelType == 0)
+	if (tunnelType == AMSessionOutgoingTunnel)
 	{
 		[tunnelConfigBox setContentView:outputTunnelConfigView];
 	}
-	else if (tunnelType == 1)
+	else if (tunnelType == AMSessionIncomingTunnel)
 	{
 		[tunnelConfigBox setContentView:inputTunnelConfigView];
-		if ([[[[sessionsArrayController selectedObjects] objectAtIndex:0] remoteHost] isEqual:@""] == YES)
-			[[[sessionsArrayController selectedObjects] objectAtIndex:0] setRemoteHost:@"127.0.0.1"];
+		if ([[[[sessionsTreeController selectedObjects] objectAtIndex:0] remoteHost] isEqual:@""] == YES)
+			[[[sessionsTreeController selectedObjects] objectAtIndex:0] setRemoteHost:@"127.0.0.1"];
 	}
-	else if (tunnelType == 2)
+	else if (tunnelType == AMSessionGlobalProxy)
 	{
 		[tunnelConfigBox setContentView:proxyConfigView];
 	}
 	
 	[self createObservers];
+	
+	//expand all items in outlineview
+	NSUInteger i;
+	for (i = 0; i < [sessionsOutlineView numberOfRows]; i++)
+		[sessionsOutlineView expandItem:[sessionsOutlineView itemAtRow:i]];
+	
+	//resize the splitview
+	NSRect frame = [[[splitView subviews] objectAtIndex:0] frame];
+	frame.size.width = 190;
+	[[[splitView subviews] objectAtIndex:0] setFrame:frame];
+	[splitView addSubview:groupInfoView];
+	
 }
+
+
+
+#pragma mark -
+#pragma mark Observers and delegates
 
 - (void) createObservers
 {
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.currentServer" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.currentServer" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.localPort" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.localPort" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.sessionName" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.sessionName" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.remoteHost" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.remoteHost" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.remotePort" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
-
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.statusImagePath" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
-
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.tunnelTypeImagePath" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
-
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.outgoingTunnel" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.remotePort" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.useDynamicProxy" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.statusImagePath" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
-	[sessionsArrayController addObserver:self 
-							  forKeyPath:@"selection.dynamicProxyPort" 
-								 options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
-								 context:nil];
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.tunnelTypeImagePath" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.outgoingTunnel" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.useDynamicProxy" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 	
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.dynamicProxyPort" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
+	
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.childrens" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
+	
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.autostart" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 }
 
-
-
-#pragma mark Observers and delegates
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-	if ([keyPath isEqual:@"selection.outgoingTunnel"])
+	if ([keyPath isEqual:@"selection.sessionName"])
 	{
 		NSInteger tunnelType = [[[object selectedObjects] objectAtIndex:0] sessionTunnelType];
-		
-		if (tunnelType == 0)
+		if (tunnelType == AMSessionCategory)
 		{
-			[tunnelConfigBox setContentView:outputTunnelConfigView];
+			[splitView replaceSubview:editSessionView with:groupInfoView];
 		}
-		else if (tunnelType == 1)
+		else
 		{
-			[tunnelConfigBox setContentView:inputTunnelConfigView];
-			if ([[[[sessionsArrayController selectedObjects] objectAtIndex:0] remoteHost] length] == 0)
+			[splitView replaceSubview:groupInfoView with:editSessionView];
+
+			if (tunnelType == AMSessionOutgoingTunnel)
 			{
-				[[[object selectedObjects] objectAtIndex:0] setRemoteHost:@"127.0.0.1"];
-				NSLog(@"remote host empty: filling with : %@", [[[object selectedObjects] objectAtIndex:0] remoteHost]);
+				[tunnelConfigBox setContentView:outputTunnelConfigView];
+			}
+			else if (tunnelType == AMSessionIncomingTunnel)
+			{
+				[tunnelConfigBox setContentView:inputTunnelConfigView];
+				if ([[[[sessionsTreeController selectedObjects] objectAtIndex:0] remoteHost] length] == 0)
+				{
+					[[[object selectedObjects] objectAtIndex:0] setRemoteHost:@"127.0.0.1"];
+					NSLog(@"remote host empty: filling with : %@", [[[object selectedObjects] objectAtIndex:0] remoteHost]);
+				}
+			}
+			else if (tunnelType == AMSessionGlobalProxy)
+			{
+				[tunnelConfigBox setContentView:proxyConfigView];
 			}
 		}
-		else if (tunnelType == 2)
-		{
-			[tunnelConfigBox setContentView:proxyConfigView];
-		}
+		[self saveState];
 	}
-	
-	[self saveState];
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item
+{
+	return ([outlineView parentForItem:item] == nil);
 }
 
 
 
+#pragma mark -
+#pragma mark Interface actions
+
+- (IBAction) addNewOutgoingSession:(id)sender
+{
+	AMSession *newSession = [[AMSession alloc] init];
+	[newSession setIsLeaf:YES];
+	[newSession setIsGroup:NO];
+	[newSession setSessionTunnelType:AMSessionOutgoingTunnel];
+	[newSession setChildrens:[NSMutableArray array]];
+	
+	NSUInteger *path = malloc(sizeof(NSUInteger) * 2);
+	NSUInteger i = 0;
+	NSUInteger j = -1;
+	for (i = 0; i < [sessionsOutlineView numberOfRows]; i++)
+	{
+		if ([[[sessionsOutlineView itemAtRow:i] representedObject] isGroup])
+		{
+			j++;
+			if ([[[[sessionsOutlineView itemAtRow:i] representedObject] sessionName] isEqualToString:AMGroupOutgoingName])
+			{
+				path[0] = j;
+				break;
+			}
+		}
+	}
+	path[1] = 0;
+		
+	[sessionsTreeController insertObject:newSession atArrangedObjectIndexPath:[NSIndexPath indexPathWithIndexes:path length:2]];
+	free(path);
+}
+
+- (IBAction) addNewIncomingSession:(id)sender
+{
+	AMSession *newSession = [[AMSession alloc] init];
+	[newSession setIsLeaf:YES];
+	[newSession setIsGroup:NO]; 
+	[newSession setSessionTunnelType:AMSessionIncomingTunnel];
+	[newSession setChildrens:[NSMutableArray array]];
+	
+	NSUInteger *path = malloc(sizeof(NSUInteger) * 2);
+	
+	NSUInteger i = 0;
+	NSUInteger j = -1;
+	for (i = 0; i < [sessionsOutlineView numberOfRows]; i++)
+	{
+		if ([[[sessionsOutlineView itemAtRow:i] representedObject] isGroup])
+		{
+			j++;
+			if ([[[[sessionsOutlineView itemAtRow:i] representedObject] sessionName] isEqualToString:AMGroupIncomingName])
+			{
+				path[0] = j;
+				break;
+			}
+		}
+	}
+	path[1] = 0;	
+	
+	[sessionsTreeController insertObject:newSession atArrangedObjectIndexPath:[NSIndexPath indexPathWithIndexes:path length:2]];
+	free(path);
+}
+
+- (IBAction) addNewProxySession:(id)sender
+{
+	AMSession *newSession = [[AMSession alloc] init];
+	[newSession setIsLeaf:YES];
+	[newSession setIsGroup:NO];
+	[newSession setSessionTunnelType:AMSessionGlobalProxy];
+	[newSession setChildrens:[NSMutableArray array]];
+	
+	NSUInteger *path = malloc(sizeof(NSUInteger) * 2);
+	NSUInteger i = 0;
+	NSUInteger j = -1;
+	for (i = 0; i < [sessionsOutlineView numberOfRows]; i++)
+	{
+		if ([[[sessionsOutlineView itemAtRow:i] representedObject] isGroup])
+		{
+			j++;
+			if ([[[[sessionsOutlineView itemAtRow:i] representedObject] sessionName] isEqualToString:AMGroupProxyName])
+			{
+				path[0] = j;
+				break;
+			}
+		}
+	}
+	path[1] = 0;
+	
+	[sessionsTreeController insertObject:newSession atArrangedObjectIndexPath:[NSIndexPath indexPathWithIndexes:path length:2]];
+	free(path);	
+}
+
+
+
+#pragma mark -
 #pragma mark Saving processes
+
 - (void) saveState
 {
 	if (pingDelayer != nil)
@@ -184,12 +344,13 @@
 
 
 
+#pragma mark -
 #pragma mark Helper methods
 
 - (AMSession*) getSelectedSession
 {
-	if ([[sessionsArrayController selectedObjects] count] > 0)
-		 return (AMSession*)[[sessionsArrayController selectedObjects] objectAtIndex:0];
+	if ([[sessionsTreeController selectedObjects] count] > 0)
+		 return (AMSession*)[[sessionsTreeController selectedObjects] objectAtIndex:0];
 	else
 		 return nil;
 }

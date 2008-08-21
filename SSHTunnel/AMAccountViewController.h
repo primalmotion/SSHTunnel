@@ -29,6 +29,7 @@
 	NSMutableString					*confirmPassword;
 	BOOL							isCreatingAccount;
 	
+
 	IBOutlet NSButton				*createButton;
 	IBOutlet AMPopUpButton			*serverPicker;
 	IBOutlet AMServerViewController *serverController;

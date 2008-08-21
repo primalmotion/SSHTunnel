@@ -28,9 +28,13 @@
 @synthesize sessionTunnelType;
 @synthesize tunnelTypeImagePath;
 @synthesize connectionLink;
-@synthesize dynamicProxyPort;
+@synthesize globalProxyPort;
 @synthesize useDynamicProxy;
-
+@synthesize childrens;
+@synthesize	isLeaf;
+@synthesize isGroup;
+@synthesize statusImage;
+@synthesize autostart;
 
 #pragma mark Initilizations
 
@@ -41,10 +45,13 @@
 	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
-	[self setSessionTunnelType:0];
-	[self setDynamicProxyPort:@"0"];
+	[self setSessionTunnelType:AMSessionOutgoingTunnel];
+	[self setGlobalProxyPort:@"7777"];
 	[self setUseDynamicProxy:NO];
-
+	[self setChildrens:nil];
+	[self setIsLeaf:YES];
+	[self setIsGroup:NO];
+	[self setAutostart:NO];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
@@ -60,15 +67,21 @@
 	remoteHost			= [[coder decodeObjectForKey:@"MVremoteHost"] retain];
 	statusImagePath		= [[coder decodeObjectForKey:@"MVStatusImagePath"] retain];
 	currentServer		= [[coder decodeObjectForKey:@"MVcurrentServer"] retain];
-	dynamicProxyPort	= [[coder decodeObjectForKey:@"MVdynamicProxyPort"] retain];
-	sessionTunnelType		= [coder decodeIntForKey:@"MVoutgoingTunnel"];
+	globalProxyPort		= [[coder decodeObjectForKey:@"MVdynamicProxyPort"] retain];
+	sessionTunnelType	= [coder decodeIntForKey:@"MVoutgoingTunnel"];
 	useDynamicProxy		= [coder decodeBoolForKey:@"MVuseDynamicProxy"];
+	childrens			= [coder decodeObjectForKey:@"MVChildrens"];
+	isLeaf				= [coder decodeBoolForKey:@"MVIsLeaf"];
+	autostart			= [coder decodeBoolForKey:@"MVAutostart"];
+	isGroup				= [coder decodeBoolForKey:@"MVIsGroup"];
 	
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
 	
-	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
-	
+	if (![self isGroup])
+		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+	else
+		[self setStatusImagePath:@""];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
 
@@ -83,8 +96,12 @@
 	[coder encodeObject:statusImagePath forKey:@"MVStatusImagePath"];
 	[coder encodeObject:currentServer forKey:@"MVcurrentServer"];
 	[coder encodeInt:sessionTunnelType forKey:@"MVoutgoingTunnel"];
-	[coder encodeObject:dynamicProxyPort forKey:@"MVdynamicProxyPort"];
+	[coder encodeObject:globalProxyPort forKey:@"MVdynamicProxyPort"];
 	[coder encodeBool:useDynamicProxy forKey:@"MVuseDynamicProxy"];
+	[coder encodeObject:childrens forKey:@"MVChildrens"];
+	[coder encodeBool:isLeaf forKey:@"MVIsLeaf"];
+	[coder encodeBool:autostart forKey:@"MVAutostart"];
+	[coder encodeBool:isGroup forKey:@"MVIsGroup"];
 }
 
 - (void) dealloc
@@ -109,16 +126,17 @@
 
 #pragma mark Overloaded accesors
 
-- (NSString*) tunnelTypeImagePath
+- (NSString *) tunnelTypeImagePath
 {
-	if ([self sessionTunnelType] == 0)
+	if ([self sessionTunnelType] == AMSessionOutgoingTunnel)
 		return [[NSBundle mainBundle] pathForResource:@"outTunnel" ofType:@"tif"];
-	else if ([self sessionTunnelType] == 1) 
+	else if ([self sessionTunnelType] == AMSessionIncomingTunnel) 
 		return [[NSBundle mainBundle] pathForResource:@"inTunnel" ofType:@"tif"];
 	else 
 		return [[NSBundle mainBundle] pathForResource:@"inTunnel" ofType:@"tif"];
 
 }
+
 
 - (void) setSessionTunnelType:(NSInteger)newValue
 {
@@ -200,7 +218,7 @@
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"forceSSHVersion2"])
 		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -2 "];
 	
-	if ([self sessionTunnelType] == 0)
+	if ([self sessionTunnelType] == AMSessionOutgoingTunnel)
 	{
 		int i;
 		for(i = 0; i < [remotePorts count]; i++)
@@ -213,7 +231,7 @@
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[remotePorts objectAtIndex:i]];
 		}
 	}
-	else if ([self sessionTunnelType] == 1)
+	else if ([self sessionTunnelType] == AMSessionIncomingTunnel)
 	{
 		int i;
 		for(i = 0; i < [remotePorts count]; i++)
@@ -227,19 +245,16 @@
 		}
 	}
 	
-	if (([self useDynamicProxy] == YES) || ([self sessionTunnelType] == 2))
+	if (([self useDynamicProxy] == YES) || ([self sessionTunnelType] == AMSessionGlobalProxy))
 	{
 		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -D "];
-		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[self dynamicProxyPort]];
-	}
-	
-	if ([self sessionTunnelType] == 2)
-	{
-		[self setProxyEnableForThisSession:YES onPort:dynamicProxyPort];
+		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[self globalProxyPort]];
 	}
 	
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" "];
+	NSLog(@"toto1 -- %@", currentServer);
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer username]];
+	NSLog(@"toto2");
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"@"];
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer host]];
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -p "];
@@ -312,7 +327,7 @@
 
 - (void) closeTunnel
 {
-	if ([self sessionTunnelType] == 2)
+	if ([self sessionTunnelType] == AMSessionGlobalProxy)
 		[self setProxyEnableForThisSession:NO onPort:nil];
 	
 	NSLog(@"Session %@ is now closed.", [self sessionName]);
@@ -409,13 +424,17 @@
 																object:[@"Sucessfully connects session "
 																		stringByAppendingString:[self sessionName]]];
 		
-			if ([self sessionTunnelType] == 0)
+			if ([self sessionTunnelType] == AMSessionOutgoingTunnel)
 				[self setConnectionLink:[@"127.0.0.1:" stringByAppendingString:[portsMap serviceLocalPorts]]];
-			else
+			else if ([self sessionTunnelType] == AMSessionIncomingTunnel)
 				[self setConnectionLink:[[[self currentServer] host] stringByAppendingString:[@":" stringByAppendingString:[portsMap serviceRemotePorts]]]];
 			
-			[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject: NSStringPboardType] owner: nil];
-			[[NSPasteboard generalPasteboard] setString:[self connectionLink] forType:NSStringPboardType];
+			if ([self sessionTunnelType] == AMSessionGlobalProxy)
+				[self setProxyEnableForThisSession:YES onPort:globalProxyPort];
+
+			
+			//[[NSPasteboard generalPasteboard] declareTypes:[NSArray arrayWithObject: NSStringPboardType] owner: nil];
+			//[[NSPasteboard generalPasteboard] setString:[self connectionLink] forType:NSStringPboardType];
 		}
 		else
 			[[stdOut fileHandleForReading] readInBackgroundAndNotify];
