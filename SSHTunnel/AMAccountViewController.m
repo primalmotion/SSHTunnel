@@ -23,6 +23,9 @@
 @synthesize confirmPassword;
 @synthesize isCreatingAccount;
 
+
+#pragma mark -
+#pragma mark Initializations
 - (id) init
 {
 	self = [super init];
@@ -32,7 +35,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Observers and delegates
 
 - (void) checkShStatus:(NSNotification *) aNotification
@@ -99,7 +102,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Helper methods
 
 - (BOOL) validateCurrentUserInformations
@@ -158,7 +161,7 @@
 }
 	
 
-
+#pragma mark -
 #pragma mark Interface actions
 
 - (IBAction) createAccount:(id)sender
@@ -183,7 +186,7 @@
 		[sshTask setStandardOutput:stdOut];
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self 
-												 selector:@selector(checkShStatus:)
+												 selector:@selector(handleProcessusExecution:)
 													 name:NSFileHandleReadCompletionNotification
 												   object:[[sshTask standardOutput] fileHandleForReading]];
 		

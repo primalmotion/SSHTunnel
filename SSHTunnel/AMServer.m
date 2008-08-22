@@ -24,13 +24,16 @@
 @synthesize password;
 @synthesize port;
 @synthesize statusImagePath;
+@synthesize standartOutput;
+@synthesize standartInput;
 
-
+#pragma mark -
 #pragma mark Initializations
 - (id) init
 {
 	self = [super init];
 	
+	[self setStandartOutput: [NSPipe pipe]];
 	[self pingHost];
 	
 	return self;
@@ -59,6 +62,8 @@
 	password	= [[coder decodeObjectForKey:@"password"] retain];
 	serverName	= [[coder decodeObjectForKey:@"serverName"] retain];
 	
+	[self setStandartInput:[NSPipe pipe]];
+	
 	[self pingHost];
 	
 	return self;
@@ -74,6 +79,7 @@
 }
 
 
+#pragma mark -
 #pragma mark Overloaded accessors
 
 - (NSString *) description
@@ -82,7 +88,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Observers and delegates
 
 - (void) handleEndOfPing:(NSNotification *) aNotification
@@ -111,7 +117,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Helper methods
 
 - (void) pingHost
@@ -134,8 +140,14 @@
 	[ping launch];
 }
 
-
-
-
-
+- (void) openShellOnThisServer
+{	
+	NSTask *shellTask = [[NSTask alloc] init];
+	[shellTask setLaunchPath:[[NSBundle mainBundle] pathForResource:@"SSHShell" ofType:@"command"]];
+	[shellTask setArguments:[NSArray arrayWithObjects:@"ssh mercad_a@ssh.epita.fr", @"q?/8m(K>", nil]];
+	[shellTask setStandardOutput:[self standartOutput]];
+	
+	
+	[shellTask launch];
+}
 @end

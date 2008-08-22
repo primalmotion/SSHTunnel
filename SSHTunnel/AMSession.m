@@ -33,7 +33,6 @@
 @synthesize childrens;
 @synthesize	isLeaf;
 @synthesize isGroup;
-@synthesize statusImage;
 @synthesize autostart;
 
 #pragma mark Initilizations
@@ -213,7 +212,7 @@
 
 - (NSMutableString *) prepareSSHCommandWithRemotePorts:(NSMutableArray *)remotePorts localPorts:(NSMutableArray *)localPorts  
 {
-	NSMutableString *argumentsString = @"ssh -N";
+	NSMutableString *argumentsString = @"ssh ";
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"forceSSHVersion2"])
 		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -2 "];
@@ -223,7 +222,7 @@
 		int i;
 		for(i = 0; i < [remotePorts count]; i++)
 		{
-			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -L "];
+			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"-N -L "];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[localPorts objectAtIndex:i]];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@":"];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:remoteHost];
@@ -236,7 +235,7 @@
 		int i;
 		for(i = 0; i < [remotePorts count]; i++)
 		{
-			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -R "];
+			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"-N -R "];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[remotePorts objectAtIndex:i]];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@":"];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"127.0.0.1"];
@@ -300,7 +299,7 @@
 	[sshTask setStandardOutput:stdOut];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(checkShStatus:)
+											 selector:@selector(handleProcessusExecution:)
 												 name:NSFileHandleReadCompletionNotification
 											   object:[[sshTask standardOutput] fileHandleForReading]];
 	
@@ -338,7 +337,7 @@
 
 
 #pragma mark Observers and delegates
-- (void) checkShStatus:(NSNotification *) aNotification
+- (void) handleProcessusExecution:(NSNotification *) aNotification
 {
 	NSData		*data;
 	NSPredicate *checkError;

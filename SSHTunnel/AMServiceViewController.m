@@ -4,6 +4,7 @@
 
 @synthesize services;
 
+#pragma mark -
 #pragma mark Initilisations
 - (id) init
 {
@@ -69,7 +70,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Obeservers and delegates
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -78,7 +79,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Saveing processes
 - (void) saveState
 {

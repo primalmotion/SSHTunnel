@@ -23,29 +23,29 @@
 #import "AMPopUpButton.h"
 #import "AMServerViewController.h"
 
-@interface AMAccountViewController : AMBaseViewController {
-	NSMutableString					*login;
-	NSMutableString					*password;
-	NSMutableString					*confirmPassword;
+@interface AMAccountViewController : AMBaseViewController 
+{
 	BOOL							isCreatingAccount;
-	
-
-	IBOutlet NSButton				*createButton;
 	IBOutlet AMPopUpButton			*serverPicker;
 	IBOutlet AMServerViewController *serverController;
-	
-	NSTask			*sshTask;
-	NSPipe			*stdOut;
+	IBOutlet NSButton				*createButton;
+	NSMutableString					*confirmPassword;
+	NSMutableString					*login;
+	NSMutableString					*password;
+	NSPipe							*stdOut;
+	NSTask							*sshTask;
 }
-
+@property(readwrite)			BOOL				isCreatingAccount;
+@property(readwrite, assign)	NSMutableString		*confirmPassword;
 @property(readwrite, assign)	NSMutableString		*login;
 @property(readwrite, assign)	NSMutableString		*password;
-@property(readwrite, assign)	NSMutableString		*confirmPassword;
-@property(readwrite)			BOOL				isCreatingAccount;
 
+
+#pragma mark -
 #pragma mark Helper methods
 - (BOOL) validateCurrentUserInformations;
 
+#pragma mark -
 #pragma mark Interface actions
 - (IBAction) createAccount:(id)sender;
 

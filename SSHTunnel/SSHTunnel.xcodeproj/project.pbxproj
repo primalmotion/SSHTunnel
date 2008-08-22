@@ -19,6 +19,7 @@
 		02376B4F0E23C4AD0058B22A /* createAbornetAccount.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02376B4E0E23C4AD0058B22A /* createAbornetAccount.sh */; };
 		023B9C4B0DF9AEF700C07FD9 /* RemoveKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 023B9C4A0DF9AEF700C07FD9 /* RemoveKeyCommand.sh */; };
 		02452E9C0DF6D1CD00119375 /* SSHCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02452E9B0DF6D1CD00119375 /* SSHCommand.sh */; };
+		024B09930E5EF0FB00F9ECCF /* messages.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B09920E5EF0FB00F9ECCF /* messages.m */; };
 		0251B3470E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg in Resources */ = {isa = PBXBuildFile; fileRef = 0251B3460E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg */; };
 		025F9BC40DF98A4700813277 /* keyed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 025F9BC30DF98A4700813277 /* keyed.tiff */; };
 		02697F1E0DF9210B00D9C22C /* PutKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */; };
@@ -61,6 +62,7 @@
 		02ECFAEF0E5C18E80003A4E7 /* services.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02ECFAEC0E5C18E80003A4E7 /* services.sst */; };
 		02ECFAF00E5C18E80003A4E7 /* sessions.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02ECFAED0E5C18E80003A4E7 /* sessions.sst */; };
 		02ECFAF10E5C18E80003A4E7 /* servers.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02ECFAEE0E5C18E80003A4E7 /* servers.sst */; };
+		02F375720E5F0D5B00F23038 /* SSHShell.command in Resources */ = {isa = PBXBuildFile; fileRef = 02F375710E5F0D5B00F23038 /* SSHShell.command */; };
 		02F488260E5AE97F00FB6844 /* tmbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F488250E5AE97F00FB6844 /* tmbutton.png */; };
 		02F488C20E5AF79A00FB6844 /* prefs.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02F488C10E5AF79A00FB6844 /* prefs.icns */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -86,6 +88,8 @@
 		02376B4E0E23C4AD0058B22A /* createAbornetAccount.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = createAbornetAccount.sh; sourceTree = "<group>"; };
 		023B9C4A0DF9AEF700C07FD9 /* RemoveKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = RemoveKeyCommand.sh; sourceTree = "<group>"; };
 		02452E9B0DF6D1CD00119375 /* SSHCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = SSHCommand.sh; sourceTree = "<group>"; };
+		024B09910E5EF0FB00F9ECCF /* messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messages.h; sourceTree = "<group>"; };
+		024B09920E5EF0FB00F9ECCF /* messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = messages.m; sourceTree = "<group>"; };
 		0251B3460E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = SSHTunnelDMG.dmgpkg; sourceTree = "<group>"; };
 		025F9BC30DF98A4700813277 /* keyed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = keyed.tiff; sourceTree = "<group>"; };
 		02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = PutKeyCommand.sh; sourceTree = "<group>"; };
@@ -139,7 +143,7 @@
 		02ECFAEC0E5C18E80003A4E7 /* services.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = services.sst; sourceTree = "<group>"; };
 		02ECFAED0E5C18E80003A4E7 /* sessions.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = sessions.sst; sourceTree = "<group>"; };
 		02ECFAEE0E5C18E80003A4E7 /* servers.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = servers.sst; sourceTree = "<group>"; };
-		02ECFC310E5C3A6B0003A4E7 /* messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messages.h; sourceTree = "<group>"; };
+		02F375710E5F0D5B00F23038 /* SSHShell.command */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SSHShell.command; sourceTree = "<group>"; };
 		02F488250E5AE97F00FB6844 /* tmbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tmbutton.png; sourceTree = "<group>"; };
 		02F488C10E5AF79A00FB6844 /* prefs.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = prefs.icns; sourceTree = "<group>"; };
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -422,7 +426,8 @@
 			children = (
 				32CA4F630368D1EE00C91783 /* SSHTunnel_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				02ECFC310E5C3A6B0003A4E7 /* messages.h */,
+				024B09910E5EF0FB00F9ECCF /* messages.h */,
+				024B09920E5EF0FB00F9ECCF /* messages.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -461,6 +466,7 @@
 				02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */,
 				0219E3FD0DF7591D00E64A18 /* delButton.png */,
 				0219E3FE0DF7591D00E64A18 /* addButton.png */,
+				02F375710E5F0D5B00F23038 /* SSHShell.command */,
 				02452E9B0DF6D1CD00119375 /* SSHCommand.sh */,
 				0221D4B10DF54930002AB57B /* app.icns.disabled */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -567,6 +573,7 @@
 				02ECFAF00E5C18E80003A4E7 /* sessions.sst in Resources */,
 				02ECFAF10E5C18E80003A4E7 /* servers.sst in Resources */,
 				02B110AD0E5E1A9A00715AE4 /* taskbarIcon.tiff in Resources */,
+				02F375720E5F0D5B00F23038 /* SSHShell.command in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -592,6 +599,7 @@
 				02C620030E5A19D8005B6DC7 /* AMButtonMenu.m in Sources */,
 				02116C280E5A262B000D52B3 /* AMSwitchButton.m in Sources */,
 				02B10F680E5DE0E200715AE4 /* AMTreeController.m in Sources */,
+				024B09930E5EF0FB00F9ECCF /* messages.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

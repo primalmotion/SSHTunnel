@@ -8,7 +8,7 @@
 @synthesize serviceDescription;
 @synthesize inputService;
 
-
+#pragma mark -
 #pragma mark Initializations
 
 - (id) init
@@ -63,6 +63,7 @@
 }
 
 
+#pragma mark -
 #pragma mark Overloaded accessors
 
 - (NSString *) description

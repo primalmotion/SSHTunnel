@@ -15,11 +15,11 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import "MyAppController.h"
-#include <unistd.h>
 
 @implementation MyAppController
 @synthesize hostName;
 
+#pragma mark -
 #pragma mark Initialisation methods
 - (id) init
 {
@@ -86,7 +86,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Helper methods
 
 - (void) setAnimationsTypes 
@@ -236,7 +236,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Binding observer and Delegates
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -258,7 +258,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Interface builder actions
 
 - (IBAction) resetApplicationSupportFolder:(id)sender
@@ -421,7 +421,7 @@
 
 
 
-
+#pragma mark -
 #pragma mark Messaging display methods
 
 - (void) performInfoMessage:(NSNotification*)notif
@@ -450,7 +450,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Application status managers
 
 - (void) applicationWillTerminate: (NSNotification *) notification

@@ -16,27 +16,36 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AMServer : NSObject <NSCoding> {
-	NSString	*host;
-	NSString	*port;
-	NSString	*username;
+@interface AMServer : NSObject <NSCoding> 
+{
 	NSString	*password;
+	NSString	*port;
 	NSString	*serverName;
 	NSString	*statusImagePath;
-	
-	NSTask		*ping;
+	NSString	*username;
+	NSString	*host;
+	NSPipe		*standartOutput;
+	NSPipe		*standartInput;
 	NSPipe		*stdOut;
+	NSTask		*ping;
 }
-@property(readwrite, assign) NSString	*serverName;
 @property(readwrite, assign) NSString	*host;
-@property(readwrite, assign) NSString *port;
-@property(readwrite, assign) NSString	*username;
 @property(readwrite, assign) NSString	*password;
+@property(readwrite, assign) NSString	*port;
+@property(readwrite, assign) NSString	*serverName;
 @property(readwrite, assign) NSString	*statusImagePath;
+@property(readwrite, assign) NSString	*username;
+@property(readwrite, assign) NSPipe		*standartOutput;
+@property(readwrite, assign) NSPipe		*standartInput;
 
+
+#pragma mark -
 #pragma mark Helper methods
 - (void) pingHost;
 
+#pragma mark -
 #pragma mark Observers and delegates
 - (void) handleEndOfPing:(NSNotification *) aNotification;
+- (void) openShellOnThisServer;
+
 @end

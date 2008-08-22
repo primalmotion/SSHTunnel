@@ -1,22 +1,35 @@
-/*
- *  messages.h
- *  SSHTunnel
- *
- *  Created by Antoine Mercadal on 20/08/08.
- *  Copyright 2008 Capgemini. All rights reserved.
- *
- */
+//Copyright (C) 2008  Antoine Mercadal
+//
+//This program is free software; you can redistribute it and/or
+//modify it under the terms of the GNU General Public License
+//as published by the Free Software Foundation; either version 2
+//of the License, or (at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program; if not, write to the Free Software
+//Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Cocoa/Cocoa.h>
 
+//personal notification
+APPKIT_EXTERN	NSString *AMErrorLoadingSavedState;
+APPKIT_EXTERN	NSString *AMNewGeneralMessage;
 
-static	NSString *AMErrorLoadingSavedState		= @"AMErrorLoadingSavedState";
-static	NSString *AMNewGeneralMessage			= @"AMNewGeneralMessage";
+// name of the groups in outlineview
+APPKIT_EXTERN	NSString *AMGroupOutgoingName;
+APPKIT_EXTERN	NSString *AMGroupIncomingName;
+APPKIT_EXTERN	NSString *AMGroupProxyName;
 
-
-//static	NSString *AMErrorLoadingSavedState = @"AMErrorLoadingSavedState";
-//static	NSString *AMErrorLoadingSavedState = @"AMErrorLoadingSavedState";
-//static	NSString *AMErrorLoadingSavedState = @"AMErrorLoadingSavedState";
-
-
-//NSString *AMErrorLoadingSavedState = @"AMErrorLoadingSavedState";
+//session types
+enum
+{
+	AMSessionOutgoingTunnel	= 0,
+	AMSessionIncomingTunnel	= 1,
+	AMSessionGlobalProxy	= 2,
+	AMSessionCategory		= 3
+};

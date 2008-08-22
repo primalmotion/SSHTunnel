@@ -21,67 +21,63 @@
 #import "AMServer.h";
 #import "AMService.h";
 
-static NSInteger AMSessionOutgoingTunnel	= 0;
-static NSInteger AMSessionIncomingTunnel	= 1;
-static NSInteger AMSessionGlobalProxy		= 2;
-static NSInteger AMSessionCategory			= 3;
 
-
-@interface AMSession : NSObject <NSCoding> {
-	NSString	*sessionName;
-	NSString	*remoteHost;
-	AMService	*portsMap;	
-	NSString	*statusImagePath;
-	NSImage		*statusImage;
-	NSString	*tunnelTypeImagePath;
-	AMServer	*currentServer;
-	NSInteger	sessionTunnelType;
-	BOOL		connected;
-	BOOL		connectionInProgress;
-	NSString	*connectionLink;
-	NSString	*globalProxyPort;
-	BOOL		useDynamicProxy;
-	BOOL		autostart;
-	
-	NSMutableArray	*childrens;
-	BOOL			isLeaf;
+@interface AMSession : NSObject <NSCoding> 
+{
+	AMServer 		*currentServer;
+	AMService		*portsMap;	
+	BOOL			autostart;
+	BOOL			connected;
+	BOOL			connectionInProgress;
 	BOOL			isGroup;
-	
-	NSString	*outputContent;
-	NSTask		*sshTask;
-	NSPipe		*stdOut;
+	BOOL			isLeaf;
+	BOOL			useDynamicProxy;
+	NSInteger		sessionTunnelType;
+	NSMutableArray 	*childrens;
+	NSPipe 			*stdOut;
+	NSString 		*connectionLink;
+	NSString 		*globalProxyPort;
+	NSString 		*outputContent;
+	NSString 		*remoteHost;
+	NSString 		*sessionName;
+	NSString 		*statusImagePath;
+	NSString 		*tunnelTypeImagePath;
+	NSTask			*sshTask;
+
 }
-@property(readwrite, assign)	NSMutableArray	*childrens;
-@property(readwrite)			BOOL			isLeaf;
-@property(readwrite)			BOOL			isGroup;
-@property(readwrite, assign)	NSImage			*statusImage;
-@property(readwrite)			BOOL			autostart;
-@property(readwrite, assign)	AMServer	*currentServer;
-@property(readwrite, assign)	AMService	*portsMap;
-@property(readwrite, assign)	NSString	*sessionName;
-@property(readwrite, assign)	NSString	*remoteHost;
-@property(readwrite, assign)	NSString	*statusImagePath;
-@property(readwrite, assign)	NSString	*tunnelTypeImagePath;
-@property(readwrite, assign)	NSString	*connectionLink;
-@property(readwrite, assign)	NSString	*globalProxyPort;
-@property(readwrite)			NSInteger	sessionTunnelType;
-@property(readwrite)			BOOL		useDynamicProxy;
-@property(readwrite)			BOOL		connected;
-@property(readwrite)			BOOL		connectionInProgress;
+@property(readwrite)			BOOL				autostart;
+@property(readwrite)			BOOL				isGroup;
+@property(readwrite)			BOOL				isLeaf;
+@property(readwrite)			BOOL				connected;
+@property(readwrite)			BOOL				connectionInProgress;
+@property(readwrite)			BOOL				useDynamicProxy;
+@property(readwrite)			NSInteger			sessionTunnelType;
+@property(readwrite, assign)	AMServer 			*currentServer;
+@property(readwrite, assign)	AMService 			*portsMap;
+@property(readwrite, assign)	NSMutableArray		*childrens;
+@property(readwrite, assign)	NSString 			*connectionLink;
+@property(readwrite, assign)	NSString 			*globalProxyPort;
+@property(readwrite, assign)	NSString 			*remoteHost;
+@property(readwrite, assign)	NSString 			*sessionName;
+@property(readwrite, assign)	NSString 			*statusImagePath;
+@property(readwrite, assign)	NSString 			*tunnelTypeImagePath;
 
 
+#pragma mark -
 #pragma mark Control methods
-- (void) openTunnel;
 - (void) closeTunnel;
+- (void) openTunnel;
 
+#pragma mark -
 #pragma mark Observers and delegates
-- (void) checkShStatus:(NSNotification *) notification;
+- (void) handleProcessusExecution:(NSNotification *) notification;
 - (void) listernerForSSHTunnelDown:(NSNotification *)notification;
 
+#pragma mark -
 #pragma mark Helper methods
 - (NSMutableArray *) parsePortsSequence:(NSString*)seq;
 - (NSMutableString *) prepareSSHCommandWithRemotePorts:(NSMutableArray *)remotePorts localPorts:(NSMutableArray *)localPorts;
-- (void)setProxyEnableForThisSession:(BOOL)enabled onPort:(NSString*)port;
+- (void) setProxyEnableForThisSession:(BOOL)enabled onPort:(NSString*)port;
 
 
 @end

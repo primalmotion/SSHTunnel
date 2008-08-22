@@ -22,7 +22,7 @@
 @synthesize servers;
 @synthesize serversArrayController;
 
-
+#pragma mark -
 #pragma mark Initializations 
 
 - (id) init
@@ -89,7 +89,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Observers and delegates
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -98,7 +98,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Saving processes
 
 - (void) saveState
@@ -119,7 +119,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Helpers methods
 
 - (AMServer*) getSelectedServer
@@ -128,7 +128,7 @@
 }
 
 
-
+#pragma mark -
 #pragma mark Interface actions
 
 - (IBAction) refreshPings:(id)sender
@@ -137,4 +137,9 @@
 		[s pingHost];
 }
 
+- (IBAction) openShellOnCurrentServer:(id)sender
+{
+	[[[serversArrayController selectedObjects] objectAtIndex:0] openShellOnThisServer];
+}
+	 
 @end

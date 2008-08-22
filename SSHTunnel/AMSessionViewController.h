@@ -18,28 +18,27 @@
 
 #import "AMBaseViewController.h"
 #import "AMSession.h"
+#import "messages.h"
 
 
-static NSString *AMGroupOutgoingName = @"Outgoing";
-static NSString *AMGroupIncomingName = @"Incoming";
-static NSString *AMGroupProxyName = @"Proxies";
 
 
-@interface AMSessionViewController :AMBaseViewController {
-	
-	IBOutlet NSTreeController		*sessionsTreeController;
-	IBOutlet NSOutlineView			*sessionsOutlineView;
+@interface AMSessionViewController :AMBaseViewController 
+{	
 	IBOutlet NSBox					*tunnelConfigBox;
-	IBOutlet NSView					*outputTunnelConfigView;
-	IBOutlet NSView					*inputTunnelConfigView;
-	IBOutlet NSView					*proxyConfigView;
+	IBOutlet NSOutlineView			*sessionsOutlineView;
 	IBOutlet NSSplitView			*splitView;
-	IBOutlet NSView					*groupInfoView;
+	IBOutlet NSTreeController		*sessionsTreeController;
 	IBOutlet NSView					*editSessionView;
-	
+	IBOutlet NSView					*groupInfoView;
+	IBOutlet NSView					*inputTunnelConfigView;
+	IBOutlet NSView					*outputTunnelConfigView;
+	IBOutlet NSView					*proxyConfigView;
 	NSMutableArray					*sessions;
 	NSString						*sessionSavePath;
 	NSTimer							*pingDelayer;
+
+
 }
 @property(readwrite, assign)	NSMutableArray		*sessions;
 @property(readwrite, assign)	NSTreeController	*sessionsTreeController;
@@ -62,4 +61,5 @@ static NSString *AMGroupProxyName = @"Proxies";
 - (IBAction) addNewOutgoingSession:(id)sender;
 - (IBAction) addNewIncomingSession:(id)sender;
 - (IBAction) addNewProxySession:(id)sender;
+
 @end

@@ -21,30 +21,32 @@
 #import "AMBaseViewController.h"
 #import "AMServer.h"
 
-@interface AMServerViewController : AMBaseViewController {
-
+@interface AMServerViewController : AMBaseViewController 
+{
 	IBOutlet NSArrayController		*serversArrayController;
-	
 	NSMutableArray					*servers;
 	NSString						*serverSavePath;
 	NSTimer							*pingDelayer;
-	
-	
 }
-@property(readwrite, assign)	NSMutableArray		*servers;
 @property(readwrite, assign)	NSArrayController	*serversArrayController;
+@property(readwrite, assign)	NSMutableArray		*servers;
 
+#pragma mark -
 #pragma mark Observers and delegates
 - (void) createObservers;
 
+#pragma mark -
 #pragma mark Saving processes
 - (void) performSaveProcess:(NSTimer *)theTimer;
 - (void) saveState;
 
+#pragma mark -
 #pragma mark Helper methods
 - (AMServer*) getSelectedServer;
 
+#pragma mark -
 #pragma mark Interface actions
 - (IBAction) refreshPings:(id)sender;
+- (IBAction) openShellOnCurrentServer:(id)sender;
 
 @end

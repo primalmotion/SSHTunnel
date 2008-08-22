@@ -14,31 +14,14 @@
 //along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#import <Cocoa/Cocoa.h>
-
 #import "messages.h"
 
-#import "AMService.h"
 
+//personal notification
+NSString *AMErrorLoadingSavedState		= @"AMErrorLoadingSavedState";
+NSString *AMNewGeneralMessage			= @"AMNewGeneralMessage";
 
-@interface AMServiceViewController : NSObject
-{
-	IBOutlet NSArrayController		*serviceArrayController;
-	NSMutableArray					*services;
-	NSString						*serviceSavePath;
-	NSTimer							*pingDelayer;
-
-}
-
-@property(readwrite, assign) NSMutableArray *services;
-
-#pragma mark -
-#pragma mark Obeservers and delegates
-- (void) createObservers;
-
-#pragma mark -
-#pragma mark Saving processus
-- (void) saveState;
-- (void) performSaveProcess:(NSTimer *)theTimer;
-
-@end
+// name of the groups in outlineview
+NSString *AMGroupOutgoingName			= @"Outgoing";
+NSString *AMGroupIncomingName			= @"Incoming";
+NSString *AMGroupProxyName				= @"Proxies";
