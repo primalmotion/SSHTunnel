@@ -257,13 +257,13 @@
 			name = AMWindow;
 			sourceTree = "<group>";
 		};
-		02A7CCED0E0B1C6000E98DE4 /* AMAuth */ = {
+		02A7CCED0E0B1C6000E98DE4 /* AMServer */ = {
 			isa = PBXGroup;
 			children = (
 				0282BB410E09BA680006BA62 /* AMServer.h */,
 				0282BB420E09BA680006BA62 /* AMServer.m */,
 			);
-			name = AMAuth;
+			name = AMServer;
 			sourceTree = "<group>";
 		};
 		02B118CE0E30C7CC003886A7 /* ServiceController */ = {
@@ -297,7 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				02C5CB600DF8A481000BCE90 /* AMSession */,
-				02A7CCED0E0B1C6000E98DE4 /* AMAuth */,
+				02A7CCED0E0B1C6000E98DE4 /* AMServer */,
 				02B118D90E30C8F4003886A7 /* AMService */,
 			);
 			name = Model;
