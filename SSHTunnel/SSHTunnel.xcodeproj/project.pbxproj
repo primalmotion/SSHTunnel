@@ -10,7 +10,6 @@
 		02116C280E5A262B000D52B3 /* AMSwitchButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 02116C270E5A262B000D52B3 /* AMSwitchButton.m */; };
 		0219E3FF0DF7591D00E64A18 /* delButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 0219E3FD0DF7591D00E64A18 /* delButton.png */; };
 		0219E4000DF7591D00E64A18 /* addButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 0219E3FE0DF7591D00E64A18 /* addButton.png */; };
-		022081F90E267D64004F2B5A /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 022081F80E267D64004F2B5A /* COPYING.txt */; };
 		022082A90E268E69004F2B5A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 022082A70E268E69004F2B5A /* Localizable.strings */; };
 		0221D4B20DF54930002AB57B /* app.icns.disabled in Resources */ = {isa = PBXBuildFile; fileRef = 0221D4B10DF54930002AB57B /* app.icns.disabled */; };
 		0236404F0E24FAAA007271F1 /* AMServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0236404E0E24FAAA007271F1 /* AMServerViewController.m */; };
@@ -20,7 +19,6 @@
 		023B9C4B0DF9AEF700C07FD9 /* RemoveKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 023B9C4A0DF9AEF700C07FD9 /* RemoveKeyCommand.sh */; };
 		02452E9C0DF6D1CD00119375 /* SSHCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02452E9B0DF6D1CD00119375 /* SSHCommand.sh */; };
 		024B09930E5EF0FB00F9ECCF /* messages.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B09920E5EF0FB00F9ECCF /* messages.m */; };
-		0251B3470E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg in Resources */ = {isa = PBXBuildFile; fileRef = 0251B3460E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg */; };
 		025F9BC40DF98A4700813277 /* keyed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 025F9BC30DF98A4700813277 /* keyed.tiff */; };
 		02697F1E0DF9210B00D9C22C /* PutKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */; };
 		02697FFB0DF93D9800D9C22C /* Keychain.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02697FFA0DF93D9800D9C22C /* Keychain.icns */; };
@@ -39,8 +37,12 @@
 		029BE6D40E2803610099093A /* AMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BE6D20E2803610099093A /* AMBaseViewController.m */; };
 		029BE79F0E280D6B0099093A /* AMPopUpButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 029BE79E0E280D6B0099093A /* AMPopUpButton.m */; };
 		029BE7DC0E28143E0099093A /* serversAccounts.plist in Resources */ = {isa = PBXBuildFile; fileRef = 029BE7DB0E28143E0099093A /* serversAccounts.plist */; };
-		02A7CCE20E0B1BC200E98DE4 /* SOURCES in Resources */ = {isa = PBXBuildFile; fileRef = 02A7CCE10E0B1BC200E98DE4 /* SOURCES */; };
-		02A7CD1E0E0B1F6200E98DE4 /* screenshot 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 02A7CD1D0E0B1F6200E98DE4 /* screenshot 2.png */; };
+		029C395C0E5F989D009B7688 /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C395B0E5F989D009B7688 /* COPYING.txt */; };
+		029C395F0E5F98D6009B7688 /* AUTHORS.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C395D0E5F98D6009B7688 /* AUTHORS.txt */; };
+		029C39600E5F98D6009B7688 /* CHANGELOG.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C395E0E5F98D6009B7688 /* CHANGELOG.txt */; };
+		029C396C0E5F996F009B7688 /* Bundle in Resources */ = {isa = PBXBuildFile; fileRef = 029C39690E5F996F009B7688 /* Bundle */; };
+		029C39A60E5F9B92009B7688 /* SSHTunnelWorkaround in Resources */ = {isa = PBXBuildFile; fileRef = 029C399A0E5F9B92009B7688 /* SSHTunnelWorkaround */; };
+		029C39C00E5FA74D009B7688 /* FeaturedSummary.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C39BF0E5FA74D009B7688 /* FeaturedSummary.txt */; };
 		02AF86EA0E5C9AA200DD6F70 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 022082820E268CE6004F2B5A /* MainMenu.xib */; };
 		02B10F680E5DE0E200715AE4 /* AMTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B10F670E5DE0E200715AE4 /* AMTreeController.m */; };
 		02B110AD0E5E1A9A00715AE4 /* taskbarIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 02B110AC0E5E1A9A00715AE4 /* taskbarIcon.tiff */; };
@@ -55,9 +57,6 @@
 		02BC8ED90E0AB9330005759C /* destroy.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02BC8ED80E0AB9330005759C /* destroy.icns */; };
 		02BC8EDD0E0AB9A30005759C /* stopAll.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02BC8EDC0E0AB9A30005759C /* stopAll.icns */; };
 		02C620030E5A19D8005B6DC7 /* AMButtonMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C620020E5A19D8005B6DC7 /* AMButtonMenu.m */; };
-		02C6B0060E37F00000416533 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 02C6B0030E37F00000416533 /* data */; };
-		02C6B0070E37F00000416533 /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = 02C6B0040E37F00000416533 /* Icon */; };
-		02C6B0080E37F00000416533 /* Icon in Resources */ = {isa = PBXBuildFile; fileRef = 02C6B0050E37F00000416533 /* Icon */; };
 		02CC7A430E5CD236007AE08D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CC7A420E5CD236007AE08D /* Security.framework */; };
 		02ECFAEF0E5C18E80003A4E7 /* services.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02ECFAEC0E5C18E80003A4E7 /* services.sst */; };
 		02ECFAF00E5C18E80003A4E7 /* sessions.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02ECFAED0E5C18E80003A4E7 /* sessions.sst */; };
@@ -75,7 +74,6 @@
 		02116C270E5A262B000D52B3 /* AMSwitchButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSwitchButton.m; sourceTree = "<group>"; };
 		0219E3FD0DF7591D00E64A18 /* delButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delButton.png; sourceTree = "<group>"; };
 		0219E3FE0DF7591D00E64A18 /* addButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addButton.png; sourceTree = "<group>"; };
-		022081F80E267D64004F2B5A /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
 		022082820E268CE6004F2B5A /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		022082A80E268E69004F2B5A /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0221D4B10DF54930002AB57B /* app.icns.disabled */ = {isa = PBXFileReference; lastKnownFileType = file; path = app.icns.disabled; sourceTree = "<group>"; };
@@ -90,7 +88,6 @@
 		02452E9B0DF6D1CD00119375 /* SSHCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = SSHCommand.sh; sourceTree = "<group>"; };
 		024B09910E5EF0FB00F9ECCF /* messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messages.h; sourceTree = "<group>"; };
 		024B09920E5EF0FB00F9ECCF /* messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = messages.m; sourceTree = "<group>"; };
-		0251B3460E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg */ = {isa = PBXFileReference; lastKnownFileType = file; path = SSHTunnelDMG.dmgpkg; sourceTree = "<group>"; };
 		025F9BC30DF98A4700813277 /* keyed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = keyed.tiff; sourceTree = "<group>"; };
 		02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = PutKeyCommand.sh; sourceTree = "<group>"; };
 		02697FFA0DF93D9800D9C22C /* Keychain.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Keychain.icns; sourceTree = "<group>"; };
@@ -116,8 +113,12 @@
 		029BE79D0E280D6B0099093A /* AMPopUpButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMPopUpButton.h; sourceTree = "<group>"; };
 		029BE79E0E280D6B0099093A /* AMPopUpButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMPopUpButton.m; sourceTree = "<group>"; };
 		029BE7DB0E28143E0099093A /* serversAccounts.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = serversAccounts.plist; sourceTree = "<group>"; };
-		02A7CCE10E0B1BC200E98DE4 /* SOURCES */ = {isa = PBXFileReference; lastKnownFileType = text; path = SOURCES; sourceTree = "<group>"; };
-		02A7CD1D0E0B1F6200E98DE4 /* screenshot 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screenshot 2.png"; sourceTree = "<group>"; };
+		029C395B0E5F989D009B7688 /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
+		029C395D0E5F98D6009B7688 /* AUTHORS.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS.txt; sourceTree = "<group>"; };
+		029C395E0E5F98D6009B7688 /* CHANGELOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.txt; sourceTree = "<group>"; };
+		029C39690E5F996F009B7688 /* Bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Bundle; sourceTree = "<group>"; };
+		029C399A0E5F9B92009B7688 /* SSHTunnelWorkaround */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SSHTunnelWorkaround; sourceTree = "<group>"; };
+		029C39BF0E5FA74D009B7688 /* FeaturedSummary.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FeaturedSummary.txt; sourceTree = "<group>"; };
 		02B10F660E5DE0E200715AE4 /* AMTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMTreeController.h; sourceTree = "<group>"; };
 		02B10F670E5DE0E200715AE4 /* AMTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMTreeController.m; sourceTree = "<group>"; };
 		02B110AC0E5E1A9A00715AE4 /* taskbarIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = taskbarIcon.tiff; sourceTree = "<group>"; };
@@ -132,13 +133,8 @@
 		02BC8ED20E0AB7F60005759C /* Blank.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Blank.icns; sourceTree = "<group>"; };
 		02BC8ED80E0AB9330005759C /* destroy.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = destroy.icns; sourceTree = "<group>"; };
 		02BC8EDC0E0AB9A30005759C /* stopAll.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = stopAll.icns; sourceTree = "<group>"; };
-		02C5CB4C0DF8A45E000BCE90 /* screenshot 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "screenshot 1.png"; sourceTree = "<group>"; };
-		02C5CB5D0DF8A45E000BCE90 /* ReadMe.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ReadMe.pdf; sourceTree = "<group>"; };
 		02C620010E5A19D8005B6DC7 /* AMButtonMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMButtonMenu.h; sourceTree = "<group>"; };
 		02C620020E5A19D8005B6DC7 /* AMButtonMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMButtonMenu.m; sourceTree = "<group>"; };
-		02C6B0030E37F00000416533 /* data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = data; sourceTree = "<group>"; };
-		02C6B0040E37F00000416533 /* Icon */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Icon; sourceTree = "<group>"; };
-		02C6B0050E37F00000416533 /* Icon */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Icon"; sourceTree = "<group>"; };
 		02CC7A420E5CD236007AE08D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		02ECFAEC0E5C18E80003A4E7 /* services.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = services.sst; sourceTree = "<group>"; };
 		02ECFAED0E5C18E80003A4E7 /* sessions.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = sessions.sst; sourceTree = "<group>"; };
@@ -240,14 +236,6 @@
 			name = AccountView;
 			sourceTree = "<group>";
 		};
-		0251B3450E0F9E900045A2EE /* DMG */ = {
-			isa = PBXGroup;
-			children = (
-				0251B3460E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg */,
-			);
-			name = DMG;
-			sourceTree = "<group>";
-		};
 		029BE6980E27FFBB0099093A /* AMWindow */ = {
 			isa = PBXGroup;
 			children = (
@@ -314,36 +302,6 @@
 			name = View;
 			sourceTree = "<group>";
 		};
-		02C5CB4A0DF8A45E000BCE90 /* Divers */ = {
-			isa = PBXGroup;
-			children = (
-				02C5CB4D0DF8A45E000BCE90 /* ReadMe */,
-				02C6B0020E37F00000416533 /* SSHTunnelIcon2.lineform */,
-				0251B3450E0F9E900045A2EE /* DMG */,
-				02C5CB4B0DF8A45E000BCE90 /* pictures */,
-				022081F80E267D64004F2B5A /* COPYING.txt */,
-			);
-			path = Divers;
-			sourceTree = "<group>";
-		};
-		02C5CB4B0DF8A45E000BCE90 /* pictures */ = {
-			isa = PBXGroup;
-			children = (
-				02A7CD1D0E0B1F6200E98DE4 /* screenshot 2.png */,
-				02C5CB4C0DF8A45E000BCE90 /* screenshot 1.png */,
-			);
-			path = pictures;
-			sourceTree = "<group>";
-		};
-		02C5CB4D0DF8A45E000BCE90 /* ReadMe */ = {
-			isa = PBXGroup;
-			children = (
-				02C5CB5D0DF8A45E000BCE90 /* ReadMe.pdf */,
-				02A7CCE10E0B1BC200E98DE4 /* SOURCES */,
-			);
-			path = ReadMe;
-			sourceTree = "<group>";
-		};
 		02C5CB5F0DF8A472000BCE90 /* MyAppController */ = {
 			isa = PBXGroup;
 			children = (
@@ -360,16 +318,6 @@
 				0274BB300DF43A9F00C09AEE /* AMSession.m */,
 			);
 			name = AMSession;
-			sourceTree = "<group>";
-		};
-		02C6B0020E37F00000416533 /* SSHTunnelIcon2.lineform */ = {
-			isa = PBXGroup;
-			children = (
-				02C6B0030E37F00000416533 /* data */,
-				02C6B0040E37F00000416533 /* Icon */,
-				02C6B0050E37F00000416533 /* Icon */,
-			);
-			path = SSHTunnelIcon2.lineform;
 			sourceTree = "<group>";
 		};
 		080E96DDFE201D6D7F000001 /* Classes */ = {
@@ -411,7 +359,12 @@
 		29B97314FDCFA39411CA2CEA /* SSHTunnel */ = {
 			isa = PBXGroup;
 			children = (
-				02C5CB4A0DF8A45E000BCE90 /* Divers */,
+				029C39BF0E5FA74D009B7688 /* FeaturedSummary.txt */,
+				029C395D0E5F98D6009B7688 /* AUTHORS.txt */,
+				029C395E0E5F98D6009B7688 /* CHANGELOG.txt */,
+				029C395B0E5F989D009B7688 /* COPYING.txt */,
+				029C399A0E5F9B92009B7688 /* SSHTunnelWorkaround */,
+				029C39690E5F996F009B7688 /* Bundle */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -496,6 +449,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				02886A400E5F7B4800E218C5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -546,13 +500,9 @@
 				02BC8ED90E0AB9330005759C /* destroy.icns in Resources */,
 				02BC8EDD0E0AB9A30005759C /* stopAll.icns in Resources */,
 				029818000E0B129E00D0DBE7 /* SplitterHandle.tiff in Resources */,
-				02A7CCE20E0B1BC200E98DE4 /* SOURCES in Resources */,
-				02A7CD1E0E0B1F6200E98DE4 /* screenshot 2.png in Resources */,
-				0251B3470E0F9E980045A2EE /* SSHTunnelDMG.dmgpkg in Resources */,
 				02376B4F0E23C4AD0058B22A /* createAbornetAccount.sh in Resources */,
 				029A9AC30E24B6C20060C11F /* register.icns in Resources */,
 				02B27FBF0E265ECE00245740 /* auth_server_icon.png in Resources */,
-				022081F90E267D64004F2B5A /* COPYING.txt in Resources */,
 				02AF86EA0E5C9AA200DD6F70 /* MainMenu.xib in Resources */,
 				022082A90E268E69004F2B5A /* Localizable.strings in Resources */,
 				029BE7DC0E28143E0099093A /* serversAccounts.plist in Resources */,
@@ -564,9 +514,6 @@
 				02B11CB20E311062003886A7 /* inTunnel.tif in Resources */,
 				02B11CB30E311062003886A7 /* outTunnel.tif in Resources */,
 				027C6FEE0E37EFC300979554 /* app.icns in Resources */,
-				02C6B0060E37F00000416533 /* data in Resources */,
-				02C6B0070E37F00000416533 /* Icon in Resources */,
-				02C6B0080E37F00000416533 /* Icon in Resources */,
 				02F488260E5AE97F00FB6844 /* tmbutton.png in Resources */,
 				02F488C20E5AF79A00FB6844 /* prefs.icns in Resources */,
 				02ECFAEF0E5C18E80003A4E7 /* services.sst in Resources */,
@@ -574,10 +521,32 @@
 				02ECFAF10E5C18E80003A4E7 /* servers.sst in Resources */,
 				02B110AD0E5E1A9A00715AE4 /* taskbarIcon.tiff in Resources */,
 				02F375720E5F0D5B00F23038 /* SSHShell.command in Resources */,
+				029C395C0E5F989D009B7688 /* COPYING.txt in Resources */,
+				029C395F0E5F98D6009B7688 /* AUTHORS.txt in Resources */,
+				029C39600E5F98D6009B7688 /* CHANGELOG.txt in Resources */,
+				029C396C0E5F996F009B7688 /* Bundle in Resources */,
+				029C39A60E5F9B92009B7688 /* SSHTunnelWorkaround in Resources */,
+				029C39C00E5FA74D009B7688 /* FeaturedSummary.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		02886A400E5F7B4800E218C5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" == \"Packaged\" -o \"$CONFIGURATION\" == \"Featured\" ]\nthen\n\tNAME=$PRODUCT_NAME\n\tPLISTPATH=`echo $CONFIGURATION_BUILD_DIR/$INFOPLIST_PATH | sed s/.plist//`\n\tVERSION=`defaults read $PLISTPATH CFBundleVersion`\n\tVOLNAME=${NAME}_V${VERSION}\n\n\trm ${CONFIGURATION_BUILD_DIR}/../Bundle/${VOLNAME}.dmg\n\n\tcp -r ${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_NAME}.app ${CONFIGURATION_BUILD_DIR}/Package/\n\t\n\tcp -r `pwd`/{AUTHORS.txt,COPYING.txt,CHANGELOG.txt} ${CONFIGURATION_BUILD_DIR}/Package/\n\n\thdiutil create -fs HFS+ -srcfolder $CONFIGURATION_BUILD_DIR/Package -volname \"$VOLNAME\" \"$VOLNAME\"\n\tmv `pwd`/${VOLNAME}.dmg ${CONFIGURATION_BUILD_DIR}/../Bundle\n\n\tif [ \"$CONFIGURATION\" == \"Featured\" ]\n\tthen\n\t\tSUMMARY\n\tfi\nfi\n\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D11072C0486CEB800E47090 /* Sources */ = {
@@ -625,6 +594,60 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0201B1200E5F3B9900148A1C /* Packaged */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Packaged;
+		};
+		0201B1210E5F3B9900148A1C /* Packaged */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = SSHTunnel;
+			};
+			name = Packaged;
+		};
+		029C39C10E5FA773009B7688 /* Featured */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_OBJC_GC = required;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Featured;
+		};
+		029C39C20E5FA773009B7688 /* Featured */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = SSHTunnel;
+			};
+			name = Featured;
+		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -694,6 +717,8 @@
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
 				C01FCF4C08A954540054247B /* Release */,
+				0201B1210E5F3B9900148A1C /* Packaged */,
+				029C39C20E5FA773009B7688 /* Featured */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -703,6 +728,8 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+				0201B1200E5F3B9900148A1C /* Packaged */,
+				029C39C10E5FA773009B7688 /* Featured */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
