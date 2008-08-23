@@ -17,12 +17,10 @@
 		02376AE10E23C0790058B22A /* AMAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02376ADF0E23C0790058B22A /* AMAccountViewController.m */; };
 		02376B4F0E23C4AD0058B22A /* createAbornetAccount.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02376B4E0E23C4AD0058B22A /* createAbornetAccount.sh */; };
 		023B9C4B0DF9AEF700C07FD9 /* RemoveKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 023B9C4A0DF9AEF700C07FD9 /* RemoveKeyCommand.sh */; };
+		024491740E608A8F00D92725 /* sessions.sst in Resources */ = {isa = PBXBuildFile; fileRef = 024491730E608A8F00D92725 /* sessions.sst */; };
 		02452E9C0DF6D1CD00119375 /* SSHCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02452E9B0DF6D1CD00119375 /* SSHCommand.sh */; };
 		024B09930E5EF0FB00F9ECCF /* messages.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B09920E5EF0FB00F9ECCF /* messages.m */; };
 		02534A8F0E605306006310FA /* AMNetworkServicesChooser.m in Sources */ = {isa = PBXBuildFile; fileRef = 02534A8E0E605306006310FA /* AMNetworkServicesChooser.m */; };
-		02534B670E6064E3006310FA /* services.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02534B640E6064E3006310FA /* services.sst */; };
-		02534B680E6064E3006310FA /* servers.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02534B650E6064E3006310FA /* servers.sst */; };
-		02534B740E606564006310FA /* sessions.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02534B730E606564006310FA /* sessions.sst */; };
 		025F9BC40DF98A4700813277 /* keyed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 025F9BC30DF98A4700813277 /* keyed.tiff */; };
 		02697F1E0DF9210B00D9C22C /* PutKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */; };
 		02697FFB0DF93D9800D9C22C /* Keychain.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02697FFA0DF93D9800D9C22C /* Keychain.icns */; };
@@ -53,6 +51,7 @@
 		02B11C970E3103B7003886A7 /* radar.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02B11C960E3103B7003886A7 /* radar.icns */; };
 		02B11CB20E311062003886A7 /* inTunnel.tif in Resources */ = {isa = PBXBuildFile; fileRef = 02B11CB00E311062003886A7 /* inTunnel.tif */; };
 		02B11CB30E311062003886A7 /* outTunnel.tif in Resources */ = {isa = PBXBuildFile; fileRef = 02B11CB10E311062003886A7 /* outTunnel.tif */; };
+		02B214C10E6073F8007014CB /* services.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02B214BE0E6073F8007014CB /* services.sst */; };
 		02B27FBF0E265ECE00245740 /* auth_server_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B27FBE0E265ECE00245740 /* auth_server_icon.png */; };
 		02BAA5FC0DF591D70084F84B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BAA5FB0DF591D70084F84B /* QuartzCore.framework */; };
 		02BC8ED30E0AB7F60005759C /* Blank.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02BC8ED20E0AB7F60005759C /* Blank.icns */; };
@@ -84,14 +83,12 @@
 		02376AE00E23C0790058B22A /* AMAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMAccountViewController.h; sourceTree = "<group>"; };
 		02376B4E0E23C4AD0058B22A /* createAbornetAccount.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = createAbornetAccount.sh; sourceTree = "<group>"; };
 		023B9C4A0DF9AEF700C07FD9 /* RemoveKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = RemoveKeyCommand.sh; sourceTree = "<group>"; };
+		024491730E608A8F00D92725 /* sessions.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = sessions.sst; sourceTree = "<group>"; };
 		02452E9B0DF6D1CD00119375 /* SSHCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = SSHCommand.sh; sourceTree = "<group>"; };
 		024B09910E5EF0FB00F9ECCF /* messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messages.h; sourceTree = "<group>"; };
 		024B09920E5EF0FB00F9ECCF /* messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = messages.m; sourceTree = "<group>"; };
 		02534A8D0E605306006310FA /* AMNetworkServicesChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMNetworkServicesChooser.h; sourceTree = "<group>"; };
 		02534A8E0E605306006310FA /* AMNetworkServicesChooser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMNetworkServicesChooser.m; sourceTree = "<group>"; };
-		02534B640E6064E3006310FA /* services.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = services.sst; sourceTree = "<group>"; };
-		02534B650E6064E3006310FA /* servers.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = servers.sst; sourceTree = "<group>"; };
-		02534B730E606564006310FA /* sessions.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = sessions.sst; sourceTree = "<group>"; };
 		025F9BC30DF98A4700813277 /* keyed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = keyed.tiff; sourceTree = "<group>"; };
 		02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = PutKeyCommand.sh; sourceTree = "<group>"; };
 		02697FFA0DF93D9800D9C22C /* Keychain.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Keychain.icns; sourceTree = "<group>"; };
@@ -130,6 +127,7 @@
 		02B11C960E3103B7003886A7 /* radar.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = radar.icns; sourceTree = "<group>"; };
 		02B11CB00E311062003886A7 /* inTunnel.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = inTunnel.tif; sourceTree = "<group>"; };
 		02B11CB10E311062003886A7 /* outTunnel.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = outTunnel.tif; sourceTree = "<group>"; };
+		02B214BE0E6073F8007014CB /* services.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = services.sst; sourceTree = "<group>"; };
 		02B27FBE0E265ECE00245740 /* auth_server_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auth_server_icon.png; sourceTree = "<group>"; };
 		02BAA5FB0DF591D70084F84B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		02BC8ED20E0AB7F60005759C /* Blank.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Blank.icns; sourceTree = "<group>"; };
@@ -395,9 +393,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				02534B730E606564006310FA /* sessions.sst */,
-				02534B640E6064E3006310FA /* services.sst */,
-				02534B650E6064E3006310FA /* servers.sst */,
+				024491730E608A8F00D92725 /* sessions.sst */,
+				02B214BE0E6073F8007014CB /* services.sst */,
 				02B110AC0E5E1A9A00715AE4 /* taskbarIcon.tiff */,
 				02F488C10E5AF79A00FB6844 /* prefs.icns */,
 				02F488250E5AE97F00FB6844 /* tmbutton.png */,
@@ -529,9 +526,8 @@
 				029C395F0E5F98D6009B7688 /* AUTHORS.txt in Resources */,
 				029C39600E5F98D6009B7688 /* CHANGELOG.txt in Resources */,
 				029C39A60E5F9B92009B7688 /* SSHTunnelWorkaround in Resources */,
-				02534B670E6064E3006310FA /* services.sst in Resources */,
-				02534B680E6064E3006310FA /* servers.sst in Resources */,
-				02534B740E606564006310FA /* sessions.sst in Resources */,
+				02B214C10E6073F8007014CB /* services.sst in Resources */,
+				024491740E608A8F00D92725 /* sessions.sst in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -29,10 +29,13 @@
 {
 	self = [super init];
 	
+	return self;
+}
+
+- (void) awakeFromNib
+{
 	NSFileManager *f = [NSFileManager defaultManager];
-	
-	serverSavePath			=  @"~/Library/Application Support/SSHTunnel/servers.sst";
-	
+	serverSavePath	=  [[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] stringByAppendingString:@"/servers.sst"];
 	@try
 	{
 		if ([f fileExistsAtPath:[serverSavePath stringByExpandingTildeInPath]] == YES)
@@ -48,15 +51,8 @@
 		else
 			exit(0);
 	}
-
-	
 	f= nil;
 	
-	return self;
-}
-
-- (void) awakeFromNib
-{
 	[self createObservers];
 }
 
@@ -141,5 +137,6 @@
 {
 	[[[serversArrayController selectedObjects] objectAtIndex:0] openShellOnThisServer];
 }
+
 	 
 @end

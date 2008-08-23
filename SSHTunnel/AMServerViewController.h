@@ -28,6 +28,7 @@
 	NSString						*serverSavePath;
 	NSTimer							*pingDelayer;
 }
+
 @property(readwrite, assign)	NSArrayController	*serversArrayController;
 @property(readwrite, assign)	NSMutableArray		*servers;
 

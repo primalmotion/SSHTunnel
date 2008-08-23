@@ -261,9 +261,7 @@
 	}
 	
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" "];
-	NSLog(@"toto1 -- %@", currentServer );
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer username]];
-	NSLog(@"toto2");
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"@"];
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer host]];
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -p "];
@@ -287,15 +285,61 @@
 	NSMutableArray		*localPorts;
 	NSMutableString		*argumentsString;
 	
+	
+	if ([self currentServer] == nil)
+	{
+		[self setConnected:NO];
+		[self setConnectionInProgress:NO];
+		[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage  
+															object:@"There is no server set for this session."];
+		return;
+	}
+	
+	if ([self sessionTunnelType] == AMSessionOutgoingTunnel)
+	{
+		if (([self remoteHost] == nil) ||
+			([self portsMap] == nil))
+		{
+			[self setConnected:NO];
+			[self setConnectionInProgress:NO];
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage   
+																object:@"There is no service or remote host set for this session"];
+			return;
+		}
+	}
+	else if ([self sessionTunnelType] == AMSessionIncomingTunnel)
+	{
+		if (([self portsMap] == nil) ||
+			(([self useDynamicProxy] == YES) && ([self globalProxyPort] == nil)))
+		{
+			[self setConnected:NO];
+			[self setConnectionInProgress:NO];
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage 
+																object:@"There is no services or dynamic port set for this session."];
+			return;
+		}
+	}
+	else if ([self sessionTunnelType] == AMSessionGlobalProxy)
+	{
+		if (([self networkService] == nil) ||
+			([self globalProxyPort] == nil))
+		{
+			[self setConnected:NO];
+			[self setConnectionInProgress:NO];
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage 
+																object:@"There is no dynamic port set for this session."];
+			
+			return;
+		}
+	}
+	
+	
 	stdOut			= [NSPipe pipe];
 	sshTask			= [[NSTask alloc] init];
 	helperPath		= [[NSBundle mainBundle] pathForResource:@"SSHCommand" ofType:@"sh"];
 	
 	remotePorts		= [self parsePortsSequence:[portsMap serviceRemotePorts]];
 	localPorts		= [self parsePortsSequence:[portsMap serviceLocalPorts]];
-	
-	// OK SO NO I'VE TO MAKE SOMETHING IN THE SSH SCRIPT TO HANDLE THE POSSIBLE
-	// DELUGE OF PORTS PASSING TROUGHT ARGUMENTS... Let's have a break..
 	
 	argumentsString = [self prepareSSHCommandWithRemotePorts:remotePorts localPorts:localPorts];
 	
@@ -340,7 +384,8 @@
 		[self setProxyEnableForThisSession:NO onPort:nil];
 	
 	NSLog(@"Session %@ is now closed.", [self sessionName]);
-	[sshTask terminate];
+	if ([sshTask isRunning])
+		[sshTask terminate];
 	sshTask = nil;
 }
 
@@ -376,7 +421,7 @@
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
-			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage 
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage 
 																object:[@"Unknown error for session " 
 																		stringByAppendingString:[self sessionName]]];
 			NSRunAlertPanel(@"Error while connecting", @"Unknown error as occured while connecting." , @"Ok", nil, nil);
@@ -389,7 +434,7 @@
 			[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
-			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage
 																object:[@"Wrong server password for session "
 																		stringByAppendingString:[self sessionName]]];
 			NSRunAlertPanel(@"Error while connecting", @"The password or username set for the server are wrong" , @"Ok", nil, nil);
@@ -403,7 +448,7 @@
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
-			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage
 																object:[@"Connexion has been refused by server for session "
 																		stringByAppendingString:[self sessionName]]];
 			NSRunAlertPanel(@"Error while connecting", @"Connection has been rejected by the server." , @"Ok", nil, nil);
@@ -417,7 +462,7 @@
 			[self setConnectionInProgress:NO];
 			[self setConnectionLink:@""];
 			[sshTask terminate];
-			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
+			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage
 																object:[@"Wrong server port for session " 
 																		stringByAppendingString:[self sessionName]]];
 			NSRunAlertPanel(@"Error while connecting", @"The port is already in used on server." , @"Ok", nil, nil);

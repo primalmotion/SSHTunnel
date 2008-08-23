@@ -18,8 +18,9 @@
 
 
 //personal notification
-NSString *AMErrorLoadingSavedState		= @"AMErrorLoadingSavedState";
-NSString *AMNewGeneralMessage			= @"AMNewGeneralMessage";
+NSString *AMErrorLoadingSavedState			= @"AMErrorLoadingSavedState";
+NSString *AMNewGeneralMessage				= @"AMNewGeneralMessage";
+NSString *AMNewErrorMessage					= @"AMNewErrorMessage";
 
 // name of the groups in outlineview
 NSString *AMGroupOutgoingName			= @"Outgoing";

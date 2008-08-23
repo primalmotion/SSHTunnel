@@ -61,5 +61,4 @@
 - (IBAction) addNewOutgoingSession:(id)sender;
 - (IBAction) addNewIncomingSession:(id)sender;
 - (IBAction) addNewProxySession:(id)sender;
-
 @end

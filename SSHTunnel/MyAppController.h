@@ -53,7 +53,6 @@
 	NSString						 *hostName;
 	CATransition					 *transition;
 	NSDictionary					 *currentAnimation;
-	NSString						 *saveFolder;
 	NSStatusItem					 *statusBarItem;
 	
 	
@@ -77,15 +76,21 @@
 - (IBAction) displayServiceView:(id)sender;
 - (IBAction) openMainWindow:(id)sender;
 - (IBAction) closeMainWindow:(id)sender;
+- (IBAction) applyCurrentServerToAllSessions:(id)sender;
 
 #pragma mark Helper methods
+- (void) prepareApplicationSupports: (NSFileManager *) fileManager; 
+- (void) resetAndRestart;
 - (void) executeKillAllSSH:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) setAnimationsTypes;
-- (void) prepareApplicationSupports: (NSFileManager *) fileManager;
 - (void) checkNewVersionOnServerFromUser:(BOOL)userRequest;
 - (BOOL) stopAllOtherRunningGlobalProxy;
 - (void) performAutostart;
 - (void) prepareStatusBarMenu;
+
+#pragma mark -
+#pragma mark Observer and Delegates
+- (void) createObservers;
 
 #pragma mark Messaging methods
 - (void) performInfoMessage:(NSNotification*)notif;

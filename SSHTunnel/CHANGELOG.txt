@@ -15,7 +15,11 @@
   * (feature) Adding a status bar icon with the most common control command ;
   * (feature) You can activate or not the status bar menu ;
   * (feature) It is possible to force SSHTunnel to use only SSH protocol version 2 ;
-  * (Solving) A lot of silly bugs ;
+  * (feature) Ability to apply a server to all sessions ;
+  * (Solving) Sometimes when application quit, sessions still remain alive ;
+  * (Solving) When reset factory preset, the new datas was not every time loaded ;
+  * (Solving) Adding tests that avoid sessions to start without all the needed informations ;
+  * (Solving) A lot of silly other bugs ;
 
 === What's up in v1.4? ===
 

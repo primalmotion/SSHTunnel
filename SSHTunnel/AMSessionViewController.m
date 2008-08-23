@@ -28,9 +28,15 @@
 {
 	self = [super init];
 	
-	NSFileManager *f = [NSFileManager defaultManager];
-	sessionSavePath	=  @"~/Library/Application Support/SSHTunnel/sessions.sst";
 	
+	
+	return self;
+}
+
+- (void) awakeFromNib
+{
+	NSFileManager *f = [NSFileManager defaultManager];
+	sessionSavePath	=  [[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] stringByAppendingString:@"/sessions.sst"];
 	@try
 	{
 		if ([f fileExistsAtPath:[sessionSavePath stringByExpandingTildeInPath]] == YES)
@@ -77,14 +83,7 @@
 		else
 			exit(-1);
 	}
-	
 	f = nil;
-	
-	return self;
-}
-
-- (void) awakeFromNib
-{
 	
 	NSInteger tunnelType = AMSessionOutgoingTunnel;
 	if ([[sessionsTreeController arrangedObjects] count] > 0)

@@ -9,10 +9,13 @@
 - (id) init
 {
 	self = [super init];
-	
-	
+	return self;
+}
+
+- (void) awakeFromNib
+{
 	NSFileManager *f = [NSFileManager defaultManager];
-	serviceSavePath	=  @"~/Library/Application Support/SSHTunnel/services.sst";
+	serviceSavePath	= [[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] stringByAppendingString:@"/services.sst"];
 	
 	if ([f fileExistsAtPath:[serviceSavePath stringByExpandingTildeInPath]] == YES)
 	{
@@ -36,11 +39,7 @@
 		[self setServices:tmp];
 	}
 	f = nil;
-	return self;
-}
-
-- (void) awakeFromNib
-{
+	
 	[self createObservers];
 }
 

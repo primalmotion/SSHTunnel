@@ -21,25 +21,10 @@
 
 #pragma mark -
 #pragma mark Initialisation methods
+
 - (id) init
 {
 	self = [super init];
-	
-	NSFileManager *f = [NSFileManager defaultManager];
-	saveFolder	=  @"~/Library/Application Support/SSHTunnel/";
-	
-	if ([f fileExistsAtPath:[saveFolder stringByExpandingTildeInPath]] == NO)
-		[self prepareApplicationSupports:f];
-
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(performInfoMessage:) 
-												 name:AMNewGeneralMessage
-											   object:nil];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											  selector:@selector(resetApplicationSupportFolder:) 
-												 name:AMErrorLoadingSavedState 
-											   object:nil];
 	
 	NSDictionary *initialValues = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"YES", 
 																	   @"YES", 
@@ -48,7 +33,8 @@
 																	   @"0", 
 																	   @"0", 
 																	   @"YES", 
-																	   @"YES", nil] 
+																	   @"YES",
+																	   [@"~/Library/Application Support/SSHTunnel" stringByExpandingTildeInPath], nil] 
 															  forKeys:[NSArray arrayWithObjects:@"checkForNewVersion", 
 																	   @"useGraphicalEffects",
 																	   @"forceSSHVersion2", 
@@ -56,11 +42,17 @@
 																	   @"selectedTransitionType", 
 																	   @"selectedTransitionSubtype", 
 																	   @"displayIconInDock", 
-																	   @"displayIconInStatusBar", nil]];
-
-	[[NSUserDefaults standardUserDefaults] registerDefaults:initialValues];
-
+																	   @"displayIconInStatusBar",
+																	   @"applicationSupportFolder",
+																	   nil]];
 	
+	[[NSUserDefaults standardUserDefaults] registerDefaults:initialValues];
+	NSFileManager *f = [NSFileManager defaultManager];
+	
+	if ([f fileExistsAtPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"]] == NO)
+		[self prepareApplicationSupports:f];
+	
+	[self createObservers];
 	
 	return self;
 }
@@ -88,6 +80,31 @@
 
 #pragma mark -
 #pragma mark Helper methods
+
+- (void) prepareApplicationSupports: (NSFileManager *) fileManager  
+{
+	
+	[fileManager createDirectoryAtPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] attributes:nil];
+	
+	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
+				   toPath:[[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"]stringByAppendingString:@"/services.sst"] 
+				  handler:nil];
+	
+	//[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"servers" ofType:@"sst"] 
+//				   toPath:[[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] stringByAppendingString:@"/servers.sst"]
+//				  handler:nil];
+	
+	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
+				   toPath:[[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] stringByAppendingString:@"/sessions.sst"] 
+				  handler:nil];
+}
+
+- (void) resetAndRestart
+{
+	NSFileManager *f = [NSFileManager defaultManager];
+	[f removeFileAtPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] handler:nil];
+	exit(0);
+}
 
 - (void) setAnimationsTypes 
 {
@@ -133,23 +150,6 @@
 		[t setArguments:[NSArray arrayWithObject:@"ssh"]];
 		[t launch];
 	}
-}
-
-- (void) prepareApplicationSupports: (NSFileManager *) fileManager  
-{
-	[fileManager createDirectoryAtPath:[saveFolder stringByExpandingTildeInPath] attributes:nil];
-	
-	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
-				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/services.sst"] 
-				  handler:nil];
-	
-	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"servers" ofType:@"sst"] 
-				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/servers.sst"]
-				  handler:nil];
-	
-	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
-				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/sessions.sst"] 
-				  handler:nil];
 }
 
 - (void) checkNewVersionOnServerFromUser:(BOOL)userRequest
@@ -241,7 +241,29 @@
 
 
 #pragma mark -
-#pragma mark Binding observer and Delegates
+#pragma mark Observer and Delegates
+
+- (void) createObservers 
+{
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(performInfoMessage:) 
+												 name:AMNewGeneralMessage
+											   object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(performInfoMessage:) 
+												 name:AMNewErrorMessage
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(resetAndRestart) 
+												 name:AMErrorLoadingSavedState 
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(applyCurrentServerToAllSessions:) 
+												 name:AMErrorLoadingSavedState 
+											   object:nil];
+}
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
@@ -267,15 +289,11 @@
 
 - (IBAction) resetApplicationSupportFolder:(id)sender
 {
-	NSFileManager *f = [NSFileManager defaultManager];
-	
 	int rep = NSRunAlertPanel(@"Reset factory presets", @"Are you really sure you want to reset the factory presets ? Note you have to relaunch application.", @"Yes", @"No", nil);
 	
 	if (rep == NSAlertDefaultReturn)
 	{
-		[f removeFileAtPath:saveFolder handler:nil];
-		[self prepareApplicationSupports:f];
-		[[NSApplication sharedApplication] stop:nil];
+		[self resetAndRestart];
 	}
 }
 
@@ -423,6 +441,20 @@
 	[mainApplicationWindow orderOut:nil];
 }
 
+- (IBAction) applyCurrentServerToAllSessions:(id)sender
+{
+	int rep = NSRunAlertPanel(@"Apply current server to all sessions", @"You are going to set the server as the selected one to every sessions. Are you sure ?", @"Yes", @"no", nil);
+	
+	if (rep == NSAlertDefaultReturn)
+	{
+		NSLog(@"Applying current server to all sessions");
+		for (AMSession *s in [sessionController sessions])
+			for (AMSession *o in [s childrens])
+			{
+				[o setCurrentServer:[serverController getSelectedServer]];
+			}
+	}
+}
 
 
 #pragma mark -
@@ -430,6 +462,11 @@
 
 - (void) performInfoMessage:(NSNotification*)notif
 {
+	if ([[notif name] isEqualToString:AMNewErrorMessage])
+		[errorMessage setTextColor:[NSColor redColor]];
+	else if  ([[notif name] isEqualToString:AMNewGeneralMessage])
+		[errorMessage setTextColor:[NSColor whiteColor]];
+		 
 	[self errorPanelDisplaywithMessage: (NSString*)[notif object]];
 }
 
@@ -459,8 +496,7 @@
 
 - (void) applicationWillTerminate: (NSNotification *) notification
 {
-	for (int i = 0; i < [[sessionController sessions] count]; i++)
-		[[[sessionController sessions] objectAtIndex:i] closeTunnel];
+	[self closeAllSession:nil];
 
 	[serverController performSaveProcess:nil];
 	[serviceController performSaveProcess:nil];

@@ -19,6 +19,7 @@
 //personal notification
 APPKIT_EXTERN	NSString *AMErrorLoadingSavedState;
 APPKIT_EXTERN	NSString *AMNewGeneralMessage;
+APPKIT_EXTERN	NSString *AMNewErrorMessage;
 
 // name of the groups in outlineview
 APPKIT_EXTERN	NSString *AMGroupOutgoingName;
