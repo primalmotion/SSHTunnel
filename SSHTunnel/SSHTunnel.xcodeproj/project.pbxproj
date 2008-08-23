@@ -45,7 +45,6 @@
 		029C395F0E5F98D6009B7688 /* AUTHORS.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C395D0E5F98D6009B7688 /* AUTHORS.txt */; };
 		029C39600E5F98D6009B7688 /* CHANGELOG.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C395E0E5F98D6009B7688 /* CHANGELOG.txt */; };
 		029C39A60E5F9B92009B7688 /* SSHTunnelWorkaround in Resources */ = {isa = PBXBuildFile; fileRef = 029C399A0E5F9B92009B7688 /* SSHTunnelWorkaround */; };
-		029C39C00E5FA74D009B7688 /* FeaturedSummary.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C39BF0E5FA74D009B7688 /* FeaturedSummary.txt */; };
 		02AF86EA0E5C9AA200DD6F70 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 022082820E268CE6004F2B5A /* MainMenu.xib */; };
 		02B10F680E5DE0E200715AE4 /* AMTreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B10F670E5DE0E200715AE4 /* AMTreeController.m */; };
 		02B110AD0E5E1A9A00715AE4 /* taskbarIcon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 02B110AC0E5E1A9A00715AE4 /* taskbarIcon.tiff */; };
@@ -122,7 +121,6 @@
 		029C395D0E5F98D6009B7688 /* AUTHORS.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS.txt; sourceTree = "<group>"; };
 		029C395E0E5F98D6009B7688 /* CHANGELOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.txt; sourceTree = "<group>"; };
 		029C399A0E5F9B92009B7688 /* SSHTunnelWorkaround */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SSHTunnelWorkaround; sourceTree = "<group>"; };
-		029C39BF0E5FA74D009B7688 /* FeaturedSummary.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FeaturedSummary.txt; sourceTree = "<group>"; };
 		02B10F660E5DE0E200715AE4 /* AMTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMTreeController.h; sourceTree = "<group>"; };
 		02B10F670E5DE0E200715AE4 /* AMTreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMTreeController.m; sourceTree = "<group>"; };
 		02B110AC0E5E1A9A00715AE4 /* taskbarIcon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = taskbarIcon.tiff; sourceTree = "<group>"; };
@@ -370,7 +368,6 @@
 		29B97314FDCFA39411CA2CEA /* SSHTunnel */ = {
 			isa = PBXGroup;
 			children = (
-				029C39BF0E5FA74D009B7688 /* FeaturedSummary.txt */,
 				029C395D0E5F98D6009B7688 /* AUTHORS.txt */,
 				029C395E0E5F98D6009B7688 /* CHANGELOG.txt */,
 				029C395B0E5F989D009B7688 /* COPYING.txt */,
@@ -532,7 +529,6 @@
 				029C395F0E5F98D6009B7688 /* AUTHORS.txt in Resources */,
 				029C39600E5F98D6009B7688 /* CHANGELOG.txt in Resources */,
 				029C39A60E5F9B92009B7688 /* SSHTunnelWorkaround in Resources */,
-				029C39C00E5FA74D009B7688 /* FeaturedSummary.txt in Resources */,
 				02534B670E6064E3006310FA /* services.sst in Resources */,
 				02534B680E6064E3006310FA /* servers.sst in Resources */,
 				02534B740E606564006310FA /* sessions.sst in Resources */,
