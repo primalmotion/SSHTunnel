@@ -38,7 +38,7 @@
 #pragma mark -
 #pragma mark Observers and delegates
 
-- (void) checkShStatus:(NSNotification *) aNotification
+- (void) handleProcessusExecution:(NSNotification *) aNotification
 {
 	NSData		*data;
 	NSString	*outputContent	= @"";

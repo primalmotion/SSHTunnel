@@ -19,6 +19,10 @@
 		023B9C4B0DF9AEF700C07FD9 /* RemoveKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 023B9C4A0DF9AEF700C07FD9 /* RemoveKeyCommand.sh */; };
 		02452E9C0DF6D1CD00119375 /* SSHCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02452E9B0DF6D1CD00119375 /* SSHCommand.sh */; };
 		024B09930E5EF0FB00F9ECCF /* messages.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B09920E5EF0FB00F9ECCF /* messages.m */; };
+		02534A8F0E605306006310FA /* AMNetworkServicesChooser.m in Sources */ = {isa = PBXBuildFile; fileRef = 02534A8E0E605306006310FA /* AMNetworkServicesChooser.m */; };
+		02534B670E6064E3006310FA /* services.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02534B640E6064E3006310FA /* services.sst */; };
+		02534B680E6064E3006310FA /* servers.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02534B650E6064E3006310FA /* servers.sst */; };
+		02534B740E606564006310FA /* sessions.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02534B730E606564006310FA /* sessions.sst */; };
 		025F9BC40DF98A4700813277 /* keyed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 025F9BC30DF98A4700813277 /* keyed.tiff */; };
 		02697F1E0DF9210B00D9C22C /* PutKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */; };
 		02697FFB0DF93D9800D9C22C /* Keychain.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02697FFA0DF93D9800D9C22C /* Keychain.icns */; };
@@ -40,7 +44,6 @@
 		029C395C0E5F989D009B7688 /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C395B0E5F989D009B7688 /* COPYING.txt */; };
 		029C395F0E5F98D6009B7688 /* AUTHORS.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C395D0E5F98D6009B7688 /* AUTHORS.txt */; };
 		029C39600E5F98D6009B7688 /* CHANGELOG.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C395E0E5F98D6009B7688 /* CHANGELOG.txt */; };
-		029C396C0E5F996F009B7688 /* Bundle in Resources */ = {isa = PBXBuildFile; fileRef = 029C39690E5F996F009B7688 /* Bundle */; };
 		029C39A60E5F9B92009B7688 /* SSHTunnelWorkaround in Resources */ = {isa = PBXBuildFile; fileRef = 029C399A0E5F9B92009B7688 /* SSHTunnelWorkaround */; };
 		029C39C00E5FA74D009B7688 /* FeaturedSummary.txt in Resources */ = {isa = PBXBuildFile; fileRef = 029C39BF0E5FA74D009B7688 /* FeaturedSummary.txt */; };
 		02AF86EA0E5C9AA200DD6F70 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 022082820E268CE6004F2B5A /* MainMenu.xib */; };
@@ -58,9 +61,6 @@
 		02BC8EDD0E0AB9A30005759C /* stopAll.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02BC8EDC0E0AB9A30005759C /* stopAll.icns */; };
 		02C620030E5A19D8005B6DC7 /* AMButtonMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C620020E5A19D8005B6DC7 /* AMButtonMenu.m */; };
 		02CC7A430E5CD236007AE08D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CC7A420E5CD236007AE08D /* Security.framework */; };
-		02ECFAEF0E5C18E80003A4E7 /* services.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02ECFAEC0E5C18E80003A4E7 /* services.sst */; };
-		02ECFAF00E5C18E80003A4E7 /* sessions.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02ECFAED0E5C18E80003A4E7 /* sessions.sst */; };
-		02ECFAF10E5C18E80003A4E7 /* servers.sst in Resources */ = {isa = PBXBuildFile; fileRef = 02ECFAEE0E5C18E80003A4E7 /* servers.sst */; };
 		02F375720E5F0D5B00F23038 /* SSHShell.command in Resources */ = {isa = PBXBuildFile; fileRef = 02F375710E5F0D5B00F23038 /* SSHShell.command */; };
 		02F488260E5AE97F00FB6844 /* tmbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F488250E5AE97F00FB6844 /* tmbutton.png */; };
 		02F488C20E5AF79A00FB6844 /* prefs.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02F488C10E5AF79A00FB6844 /* prefs.icns */; };
@@ -88,6 +88,11 @@
 		02452E9B0DF6D1CD00119375 /* SSHCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = SSHCommand.sh; sourceTree = "<group>"; };
 		024B09910E5EF0FB00F9ECCF /* messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messages.h; sourceTree = "<group>"; };
 		024B09920E5EF0FB00F9ECCF /* messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = messages.m; sourceTree = "<group>"; };
+		02534A8D0E605306006310FA /* AMNetworkServicesChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMNetworkServicesChooser.h; sourceTree = "<group>"; };
+		02534A8E0E605306006310FA /* AMNetworkServicesChooser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMNetworkServicesChooser.m; sourceTree = "<group>"; };
+		02534B640E6064E3006310FA /* services.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = services.sst; sourceTree = "<group>"; };
+		02534B650E6064E3006310FA /* servers.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = servers.sst; sourceTree = "<group>"; };
+		02534B730E606564006310FA /* sessions.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = sessions.sst; sourceTree = "<group>"; };
 		025F9BC30DF98A4700813277 /* keyed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = keyed.tiff; sourceTree = "<group>"; };
 		02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = PutKeyCommand.sh; sourceTree = "<group>"; };
 		02697FFA0DF93D9800D9C22C /* Keychain.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Keychain.icns; sourceTree = "<group>"; };
@@ -116,7 +121,6 @@
 		029C395B0E5F989D009B7688 /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
 		029C395D0E5F98D6009B7688 /* AUTHORS.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AUTHORS.txt; sourceTree = "<group>"; };
 		029C395E0E5F98D6009B7688 /* CHANGELOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.txt; sourceTree = "<group>"; };
-		029C39690E5F996F009B7688 /* Bundle */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Bundle; sourceTree = "<group>"; };
 		029C399A0E5F9B92009B7688 /* SSHTunnelWorkaround */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SSHTunnelWorkaround; sourceTree = "<group>"; };
 		029C39BF0E5FA74D009B7688 /* FeaturedSummary.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FeaturedSummary.txt; sourceTree = "<group>"; };
 		02B10F660E5DE0E200715AE4 /* AMTreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMTreeController.h; sourceTree = "<group>"; };
@@ -136,9 +140,6 @@
 		02C620010E5A19D8005B6DC7 /* AMButtonMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMButtonMenu.h; sourceTree = "<group>"; };
 		02C620020E5A19D8005B6DC7 /* AMButtonMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMButtonMenu.m; sourceTree = "<group>"; };
 		02CC7A420E5CD236007AE08D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		02ECFAEC0E5C18E80003A4E7 /* services.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = services.sst; sourceTree = "<group>"; };
-		02ECFAED0E5C18E80003A4E7 /* sessions.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = sessions.sst; sourceTree = "<group>"; };
-		02ECFAEE0E5C18E80003A4E7 /* servers.sst */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = servers.sst; sourceTree = "<group>"; };
 		02F375710E5F0D5B00F23038 /* SSHShell.command */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SSHShell.command; sourceTree = "<group>"; };
 		02F488250E5AE97F00FB6844 /* tmbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tmbutton.png; sourceTree = "<group>"; };
 		02F488C10E5AF79A00FB6844 /* prefs.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = prefs.icns; sourceTree = "<group>"; };
@@ -236,6 +237,15 @@
 			name = AccountView;
 			sourceTree = "<group>";
 		};
+		02534A900E60530B006310FA /* AMNetworkServicesChooser */ = {
+			isa = PBXGroup;
+			children = (
+				02534A8D0E605306006310FA /* AMNetworkServicesChooser.h */,
+				02534A8E0E605306006310FA /* AMNetworkServicesChooser.m */,
+			);
+			name = AMNetworkServicesChooser;
+			sourceTree = "<group>";
+		};
 		029BE6980E27FFBB0099093A /* AMWindow */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +304,7 @@
 		02B11BB30E30ED88003886A7 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				02534A900E60530B006310FA /* AMNetworkServicesChooser */,
 				02116C250E5A2616000D52B3 /* AMSwitchButton */,
 				02116C240E5A25F9000D52B3 /* AMButtonMenu */,
 				022ACF590E284A9E0012D885 /* AMPopUpButton */,
@@ -364,7 +375,6 @@
 				029C395E0E5F98D6009B7688 /* CHANGELOG.txt */,
 				029C395B0E5F989D009B7688 /* COPYING.txt */,
 				029C399A0E5F9B92009B7688 /* SSHTunnelWorkaround */,
-				029C39690E5F996F009B7688 /* Bundle */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -388,10 +398,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				02ECFAEC0E5C18E80003A4E7 /* services.sst */,
+				02534B730E606564006310FA /* sessions.sst */,
+				02534B640E6064E3006310FA /* services.sst */,
+				02534B650E6064E3006310FA /* servers.sst */,
 				02B110AC0E5E1A9A00715AE4 /* taskbarIcon.tiff */,
-				02ECFAED0E5C18E80003A4E7 /* sessions.sst */,
-				02ECFAEE0E5C18E80003A4E7 /* servers.sst */,
 				02F488C10E5AF79A00FB6844 /* prefs.icns */,
 				02F488250E5AE97F00FB6844 /* tmbutton.png */,
 				02B11C670E3101F3003886A7 /* Terminal.icns */,
@@ -516,17 +526,16 @@
 				027C6FEE0E37EFC300979554 /* app.icns in Resources */,
 				02F488260E5AE97F00FB6844 /* tmbutton.png in Resources */,
 				02F488C20E5AF79A00FB6844 /* prefs.icns in Resources */,
-				02ECFAEF0E5C18E80003A4E7 /* services.sst in Resources */,
-				02ECFAF00E5C18E80003A4E7 /* sessions.sst in Resources */,
-				02ECFAF10E5C18E80003A4E7 /* servers.sst in Resources */,
 				02B110AD0E5E1A9A00715AE4 /* taskbarIcon.tiff in Resources */,
 				02F375720E5F0D5B00F23038 /* SSHShell.command in Resources */,
 				029C395C0E5F989D009B7688 /* COPYING.txt in Resources */,
 				029C395F0E5F98D6009B7688 /* AUTHORS.txt in Resources */,
 				029C39600E5F98D6009B7688 /* CHANGELOG.txt in Resources */,
-				029C396C0E5F996F009B7688 /* Bundle in Resources */,
 				029C39A60E5F9B92009B7688 /* SSHTunnelWorkaround in Resources */,
 				029C39C00E5FA74D009B7688 /* FeaturedSummary.txt in Resources */,
+				02534B670E6064E3006310FA /* services.sst in Resources */,
+				02534B680E6064E3006310FA /* servers.sst in Resources */,
+				02534B740E606564006310FA /* sessions.sst in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,7 +553,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$CONFIGURATION\" == \"Packaged\" -o \"$CONFIGURATION\" == \"Featured\" ]\nthen\n\tNAME=$PRODUCT_NAME\n\tPLISTPATH=`echo $CONFIGURATION_BUILD_DIR/$INFOPLIST_PATH | sed s/.plist//`\n\tVERSION=`defaults read $PLISTPATH CFBundleVersion`\n\tVOLNAME=${NAME}_V${VERSION}\n\n\trm ${CONFIGURATION_BUILD_DIR}/../Bundle/${VOLNAME}.dmg\n\n\tcp -r ${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_NAME}.app ${CONFIGURATION_BUILD_DIR}/Package/\n\t\n\tcp -r `pwd`/{AUTHORS.txt,COPYING.txt,CHANGELOG.txt} ${CONFIGURATION_BUILD_DIR}/Package/\n\n\thdiutil create -fs HFS+ -srcfolder $CONFIGURATION_BUILD_DIR/Package -volname \"$VOLNAME\" \"$VOLNAME\"\n\tmv `pwd`/${VOLNAME}.dmg ${CONFIGURATION_BUILD_DIR}/../Bundle\n\n\tif [ \"$CONFIGURATION\" == \"Featured\" ]\n\tthen\n\t\tSUMMARY\n\tfi\nfi\n\n\n";
+			shellScript = "if [ \"$CONFIGURATION\" == \"Packaged\" -o \"$CONFIGURATION\" == \"Featured\" ]\nthen\n\tNAME=$PRODUCT_NAME\n\tPLISTPATH=`echo $CONFIGURATION_BUILD_DIR/$INFOPLIST_PATH | sed s/.plist//`\n\tVERSION=`defaults read $PLISTPATH CFBundleVersion`\n\tVOLNAME=${NAME}_V${VERSION}\n\n\trm ${CONFIGURATION_BUILD_DIR}/../Bundle/${VOLNAME}.dmg\n\n\tcp -r ${CONFIGURATION_BUILD_DIR}/${EXECUTABLE_NAME}.app ${CONFIGURATION_BUILD_DIR}/Package/\n\t\n\tcp -r `pwd`/{AUTHORS.txt,COPYING.txt,CHANGELOG.txt} ${CONFIGURATION_BUILD_DIR}/Package/\n\n\thdiutil create -fs HFS+ -srcfolder $CONFIGURATION_BUILD_DIR/Package -volname \"$VOLNAME\" \"$VOLNAME\"\n\n\t#if [ \"$CONFIGURATION\" == \"Featured\" ]\n\t#then\n\t#\tDATE=`date \"+%Y.%m.%d-%Hh%M\"`\n\t#\tmv ${VOLNAME}.dmg build/Bundle/\n\t#\tmv build/Bundle/${VOLNAME}.dmg build/Bundle/${VOLNAME}.${DATE}.dmg\n\t#\texpect -f SSHTunnelWorkaround/MakeFeaturedReleases/upload.sh \"build/Bundle/${VOLNAME}-${DATE}.dmg\"\n\t#\texit\n\t#fi\n\n\tmv `pwd`/${VOLNAME}.dmg ${CONFIGURATION_BUILD_DIR}/../Bundle/\nfi\n\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -569,6 +578,7 @@
 				02116C280E5A262B000D52B3 /* AMSwitchButton.m in Sources */,
 				02B10F680E5DE0E200715AE4 /* AMTreeController.m in Sources */,
 				024B09930E5EF0FB00F9ECCF /* messages.m in Sources */,
+				02534A8F0E605306006310FA /* AMNetworkServicesChooser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

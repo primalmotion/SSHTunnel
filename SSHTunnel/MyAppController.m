@@ -47,7 +47,6 @@
 																	   @"NO", 
 																	   @"0", 
 																	   @"0", 
-																	   @"AirPort", 
 																	   @"YES", 
 																	   @"YES", nil] 
 															  forKeys:[NSArray arrayWithObjects:@"checkForNewVersion", 
@@ -56,7 +55,6 @@
 																	   @"useKeychainIntegration", 
 																	   @"selectedTransitionType", 
 																	   @"selectedTransitionSubtype", 
-																	   @"networkServicesForProxies", 
 																	   @"displayIconInDock", 
 																	   @"displayIconInStatusBar", nil]];
 
@@ -82,7 +80,9 @@
 		[self checkNewVersionOnServerFromUser:NO];
 	
 	[self performAutostart];
-	[self prepareStatusBarMenu];
+	
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"displayIconInStatusBar"] == YES)
+		[self prepareStatusBarMenu];
 }
 
 
@@ -139,17 +139,17 @@
 {
 	[fileManager createDirectoryAtPath:[saveFolder stringByExpandingTildeInPath] attributes:nil];
 	
-//	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
-//				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/services.sst"] 
-//				  handler:nil];
-//	
-//	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"servers" ofType:@"sst"] 
-//				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/servers.sst"]
-//				  handler:nil];
-//	
-//	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
-//				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/sessions.sst"] 
-//				  handler:nil];
+	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
+				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/services.sst"] 
+				  handler:nil];
+	
+	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"servers" ofType:@"sst"] 
+				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/servers.sst"]
+				  handler:nil];
+	
+	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
+				   toPath:[[saveFolder stringByExpandingTildeInPath] stringByAppendingString:@"/sessions.sst"] 
+				  handler:nil];
 }
 
 - (void) checkNewVersionOnServerFromUser:(BOOL)userRequest
@@ -210,23 +210,27 @@
 
 - (void) prepareStatusBarMenu
 {
+	/*
 	for (AMSession *ss  in  [sessionController sessions])
 	{
 		for (AMSession *s in [ss childrens])
 		{
 			if ([s sessionTunnelType] == AMSessionOutgoingTunnel)
 			{
-				NSMenuItem *i = [[NSMenuItem alloc] initWithTitle:[s sessionName] action:nil keyEquivalent:@""];
-				[i setState:NSOffState];
-				[i setOffStateImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]]];
-				[i setOnStateImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusGreen" ofType:@"tif"]]];		
-				[i setTitle:[s sessionName]];
-				[i setAction:@selector(displaySessionView:)];
-				[taskBarMenu addItem:i];
-				
+				if ([s sessionName] != nil)
+				{
+					NSMenuItem *i = [[NSMenuItem alloc] initWithTitle:[s sessionName] action:nil keyEquivalent:@""];
+					[i setState:NSOffState];
+					[i setOffStateImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]]];
+					[i setOnStateImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"statusGreen" ofType:@"tif"]]];		
+					[i setTitle:[s sessionName]];
+					[i setAction:@selector(displaySessionView:)];
+					[taskBarMenu addItem:i];
+				}
 			}
 		}
 	}
+	 */
 	NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
 	statusBarItem = [[statusBar statusItemWithLength: NSVariableStatusItemLength] retain];
 	

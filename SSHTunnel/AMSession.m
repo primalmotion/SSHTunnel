@@ -34,6 +34,8 @@
 @synthesize	isLeaf;
 @synthesize isGroup;
 @synthesize autostart;
+@synthesize networkService;
+@synthesize autoReconnect;
 
 #pragma mark Initilizations
 
@@ -51,6 +53,8 @@
 	[self setIsLeaf:YES];
 	[self setIsGroup:NO];
 	[self setAutostart:NO];
+	[self setAutoReconnect:NO];
+	autoReconnectTimes = 0;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
@@ -72,10 +76,13 @@
 	childrens			= [coder decodeObjectForKey:@"MVChildrens"];
 	isLeaf				= [coder decodeBoolForKey:@"MVIsLeaf"];
 	autostart			= [coder decodeBoolForKey:@"MVAutostart"];
+	autoReconnect		= [coder decodeBoolForKey:@"MVAutoReconnect"];
 	isGroup				= [coder decodeBoolForKey:@"MVIsGroup"];
+	networkService		= [coder decodeObjectForKey:@"MVNetworkService"];
 	
 	[self setConnected:NO];
 	[self setConnectionInProgress:NO];
+	autoReconnectTimes = 0;
 	
 	if (![self isGroup])
 		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
@@ -100,7 +107,9 @@
 	[coder encodeObject:childrens forKey:@"MVChildrens"];
 	[coder encodeBool:isLeaf forKey:@"MVIsLeaf"];
 	[coder encodeBool:autostart forKey:@"MVAutostart"];
+	[coder encodeBool:autoReconnect forKey:@"MVAutoReconnect"];
 	[coder encodeBool:isGroup forKey:@"MVIsGroup"];
+	[coder encodeObject:networkService forKey:@"MVNetworkService"];
 }
 
 - (void) dealloc
@@ -157,14 +166,15 @@
 {
 	NSTask *activateProxy = [[NSTask alloc] init];
 	[activateProxy setLaunchPath:@"/usr/sbin/networksetup"];
-	
+	NSLog(@"%@", networkService);
 	if (enabled)
 		[activateProxy setArguments:[NSArray arrayWithObjects:@"-setsocksfirewallproxy", 
-									 [[NSUserDefaults standardUserDefaults] stringForKey:@"networkServicesForProxies"], 
+									 [self networkService], 
 									 @"127.0.0.1", port, @"off", nil]];
 	else
 		[activateProxy setArguments:[NSArray arrayWithObjects:@"-setsocksfirewallproxystate",  
-									 [[NSUserDefaults standardUserDefaults] stringForKey:@"networkServicesForProxies"], @"off", nil]];
+									 [self networkService]
+									 , @"off", nil]];
 
 	[activateProxy launch];
 }
@@ -251,7 +261,7 @@
 	}
 	
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" "];
-	NSLog(@"toto1 -- %@", currentServer);
+	NSLog(@"toto1 -- %@", currentServer );
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[currentServer username]];
 	NSLog(@"toto2");
 	argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"@"];

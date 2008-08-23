@@ -186,6 +186,17 @@
 							 forKeyPath:@"selection.autostart" 
 								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
 								context:nil];
+	
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.autoReconnect" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
+	
+	
+	[sessionsTreeController addObserver:self 
+							 forKeyPath:@"selection.networkService" 
+								options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) 
+								context:nil];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

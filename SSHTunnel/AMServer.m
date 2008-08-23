@@ -125,6 +125,9 @@
 	ping			= [[NSTask alloc] init];
 	stdOut			= [NSPipe pipe];
 	
+	if ([self host] == nil)
+		return;
+	
 	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusOrange" ofType:@"tif"]];
 	[ping setLaunchPath:@"/sbin/ping"];
 	[ping setArguments:[NSArray arrayWithObjects:@"-c", @"1", @"-t", @"2", [self host], nil]];

@@ -33,12 +33,6 @@
 	else
 	{
 		NSMutableArray *tmp = [[NSMutableArray alloc] init];
-		[tmp addObject:[[AMService alloc] initWithName:@"Web"	localPorts:@"4280" remotePorts:@"80" description:@"Connexion aux serveurs web" input:YES]];
-		[tmp addObject:[[AMService alloc] initWithName:@"FTP"	localPorts:@"4221" remotePorts:@"21" description:@"Transfert de fichiers" input:YES]];
-		[tmp addObject:[[AMService alloc] initWithName:@"AFP"	localPorts:@"42548" remotePorts:@"458" description:@"Connexion au partage de fichiers d'autres Macs" input:YES]];
-		[tmp addObject:[[AMService alloc] initWithName:@"Samba" localPorts:@"42169" remotePorts:@"169" description:@"Connexion au partage de fichiers d'ordinateurs Windows" input:YES]];
-		[tmp addObject:[[AMService alloc] initWithName:@"SSH"	localPorts:@"4222" remotePorts:@"22" description:@"Connexion aux shells sécurisés" input:YES]];
-		
 		[self setServices:tmp];
 	}
 	f = nil;

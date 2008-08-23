@@ -16,18 +16,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-set PASSWORDFILEPATH 	[exec cat "/Users/Tonio/Desktop/googlecode.pass"]
-set USERNAME 			[lindex $argv 1]
-set PROJECT 			[lindex $argv 2]
-set SUMMARY				[lindex $argv 3]
-set FILE				[lindex $argv 4]
+set PASSWORDFILEPATH 	[exec cat "/Users/Tonio/Documents/Perso/Dev/googlecode.pass"]
+set USERNAME 			"antoine.mercadal"
+set PROJECT 			"cocoa-sshtunnel"
+set SUMMARY				[exec cat FeaturedSummary.txt]
+set FILE				"build/Bundle/${VOLNAME}-${DATE}.dmg"
 
-set timeout 1
-spawn python ./googlecode_upload.py -s $SUMMARY -p $PROJECT -u $USERNAME --config-dir=none $FILE
-match_max 10000
-
+puts $FILE
 set timeout -1
+spawn ./SSHTunnelWorkaround/MakeFeaturedReleases/googlecode_upload.py -s $SUMMARY -p $PROJECT -u $USERNAME --config-dir=none $FILE
+match_max 10000
 expect {
-		"*?assword:*" {	send $PASSWORDFILEPATH; set timeout 4;}
+		"Password:*" {	send "$PASSWORDFILEPATH\r"; };
 }
 expect eof;

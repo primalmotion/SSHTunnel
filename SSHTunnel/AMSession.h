@@ -27,6 +27,8 @@
 	AMServer 		*currentServer;
 	AMService		*portsMap;	
 	BOOL			autostart;
+	BOOL			autoReconnect;
+	NSUInteger		autoReconnectTimes;
 	BOOL			connected;
 	BOOL			connectionInProgress;
 	BOOL			isGroup;
@@ -37,6 +39,7 @@
 	NSPipe 			*stdOut;
 	NSString 		*connectionLink;
 	NSString 		*globalProxyPort;
+	NSString 		*networkService;
 	NSString 		*outputContent;
 	NSString 		*remoteHost;
 	NSString 		*sessionName;
@@ -46,6 +49,7 @@
 
 }
 @property(readwrite)			BOOL				autostart;
+@property(readwrite)			BOOL				autoReconnect;
 @property(readwrite)			BOOL				isGroup;
 @property(readwrite)			BOOL				isLeaf;
 @property(readwrite)			BOOL				connected;
@@ -57,6 +61,7 @@
 @property(readwrite, assign)	NSMutableArray		*childrens;
 @property(readwrite, assign)	NSString 			*connectionLink;
 @property(readwrite, assign)	NSString 			*globalProxyPort;
+@property(readwrite, assign)	NSString 			*networkService;
 @property(readwrite, assign)	NSString 			*remoteHost;
 @property(readwrite, assign)	NSString 			*sessionName;
 @property(readwrite, assign)	NSString 			*statusImagePath;
