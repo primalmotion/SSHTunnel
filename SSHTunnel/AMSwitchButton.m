@@ -113,7 +113,6 @@
 }
 
 
-
 - (IBAction) switchStatus:(id)sender
 {
 	[self setStatus:![self status]];

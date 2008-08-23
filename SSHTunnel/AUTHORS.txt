@@ -1,0 +1,12 @@
+###################################### AUTHORS ######################################
+
+
+Author			: Antoine Mercadal
+Mail/jabber		: <antoine.mercadal@gmail.com>
+Site			: antoinemercadal.fr
+Blog			: antoinemercadal.fr/wordpress
+Role			: project owner, developer
+
+
+
+

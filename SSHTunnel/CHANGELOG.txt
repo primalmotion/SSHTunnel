@@ -1,0 +1,33 @@
+###################################### CHANGELOG ######################################
+
+## What's up in v1.4 ? ##
+(feature) Added a preference pane ;
+(feature) Added the possibility to deactivate the auto update checking ;
+(solving) Solving a bug that avoid the user to download directly the new version ;
+(solving) Removing the french localization to avoid to much worj to translate. It will come back later ;
+(solving) Solving some diverses bugs in the interfaces ;
+
+
+## What's up in v1.3 ? ##
+(feature) Auto-update feature, to be sure your copy of SSHTunnel is up-to-date ;
+
+
+## What's up in v1.2 ? ##
+(feature) Support for localization (English /French) ;
+
+
+## What's up in v1.1 ? ## 
+(feature) KVC/Bindings ;
+(feature) Register directly to free shell ;
+(feature) Server pinging ;
+(feature) Support for incoming tunnel ;
+
+
+## What's up in v1.0 ? ##
+(feature) Multi sessions auto saved ;
+(feature) Wrap SSH command to make tunnel ;
+(feature) SSH command monitoring ;
+(feature) Smooth interface using Core Animation ;
+And what about the next version?
+(feature) Keychain integration ;
+(feature) Declaration of ranges of ports ;

@@ -35,7 +35,12 @@
 
 @property(readwrite) BOOL status;
 
+#pragma mark -
+#pragma mark Interface actions
 - (IBAction) switchStatus:(id)sender;
+
+#pragma mark -
+#pragma mark Helper methods
 - (void) pushOn;
 - (void) pushOff;
 @end
