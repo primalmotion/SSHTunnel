@@ -26,6 +26,7 @@
 {
 	self = [super init];
 	
+	preferencesViewHeight = 470;
 	NSDictionary *initialValues = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"YES", 
 																	   @"YES", 
 																	   @"NO", 
@@ -60,6 +61,8 @@
 - (void) awakeFromNib
 {	
 	[self setHostName:[[NSHost currentHost] name]];
+	NSRect currentSize = [[mainApplicationWindow contentView] frame];
+	[sessionView setFrame:currentSize];
 	[[mainApplicationWindow contentView] addSubview:sessionView];
 	
 	[preferencesController addObserver:self forKeyPath:@"values.selectedTransitionType" options:NSKeyValueObservingOptionNew context:nil];
@@ -178,7 +181,7 @@
 			[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[serverVersion objectForKey:@"DownloadURL"]]];
 	}
 	else if (userRequest)
-		NSBeginAlertSheet(@"Version Checker", @"OK", nil, nil, preferencesWindow, nil, nil, nil, nil, @"You copy of SSHTunnel is actually up-to-date");
+		NSRunAlertPanel(@"Version Checker", @"You copy of SSHTunnel is actually up-to-date",  @"OK", nil, nil);
 }
 
 - (BOOL) stopAllOtherRunningGlobalProxy
@@ -371,66 +374,6 @@
 	[self checkNewVersionOnServerFromUser:YES];
 }
 
-- (IBAction) displaySessionView:(id)sender
-{
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
-	{
-//		[[mainApplicationWindow contentView] setWantsLayer:YES];
-//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
-		
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:sessionView];
-	}
-}
-
-- (IBAction) displayServerView:(id)sender
-{
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
-	{
-//		[[mainApplicationWindow contentView] setWantsLayer:YES];
-//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
-		
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serverView];
-	}
-}
-
-- (IBAction) displayAboutView:(id)sender
-{
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
-	{
-//		[[mainApplicationWindow contentView] setWantsLayer:YES];
-//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
-		
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:aboutView];
-	}
-}
-
-- (IBAction) displayRegisterView:(id)sender
-{
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
-	{
-//		[[mainApplicationWindow contentView] setWantsLayer:YES];
-//		[[mainApplicationWindow contentView] setAnimations:currentAnimation];
-		
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:registerView];
-	}
-}
-
-- (IBAction) displayServiceView:(id)sender
-{
-	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
-	{
-		//[[mainApplicationWindow contentView] setWantsLayer:YES];
-		//[[mainApplicationWindow contentView] setAnimations:currentAnimation];
-		
-		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
-		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serviceView];
-	}
-}
-
 - (IBAction) openMainWindow:(id)sender
 {
 	[mainApplicationWindow makeKeyAndOrderFront:nil];
@@ -457,6 +400,101 @@
 }
 
 
+
+#pragma mark -
+#pragma mark View management
+
+- (IBAction) displaySessionView:(id)sender
+{
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
+	{
+		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
+			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
+		
+		NSRect currentSize = [[mainApplicationWindow contentView] frame];
+		[sessionView setFrame:currentSize];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:sessionView];
+	}
+}
+
+- (IBAction) displayServerView:(id)sender
+{
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
+	{
+		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
+			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
+		
+		NSRect currentSize = [[mainApplicationWindow contentView] frame];
+		[serverView setFrame:currentSize];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serverView];
+	}
+}
+
+- (IBAction) displayAboutView:(id)sender
+{
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
+	{
+		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
+			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
+		
+		NSRect currentSize = [[mainApplicationWindow contentView] frame];
+		[aboutView setFrame:currentSize];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:aboutView];
+	}
+}
+
+- (IBAction) displayRegisterView:(id)sender
+{
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
+	{
+		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
+			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
+		
+		NSRect currentSize = [[mainApplicationWindow contentView] frame];
+		[registerView setFrame:currentSize];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:registerView];
+	}
+}
+
+- (IBAction) displayServiceView:(id)sender
+{
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
+	{
+		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
+			[mainApplicationWindow setFrame:oldWindowFrame display:YES animate:YES];
+			
+		NSRect currentSize = [[mainApplicationWindow contentView] frame];
+		[serviceView setFrame:currentSize];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:serviceView];
+	}
+}
+
+- (IBAction) displayPreferenceView:(id)sender
+{
+	if (![[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
+	{
+		oldWindowFrame = [mainApplicationWindow frame];
+		
+		if (oldWindowFrame.size.height < preferencesViewHeight)
+		{
+			NSRect wframe = oldWindowFrame;
+			wframe.size.height = preferencesViewHeight;
+			[mainApplicationWindow setFrame:wframe display:NO animate:YES];
+		}
+		
+		NSRect currentSize = [[mainApplicationWindow contentView] frame];
+		[preferencesView setFrame:currentSize];
+		NSView *currentView = [[[mainApplicationWindow contentView] subviews] objectAtIndex:0];
+		[[[mainApplicationWindow contentView] animator] replaceSubview:currentView with:preferencesView];
+	}
+}
+
+
 #pragma mark -
 #pragma mark Messaging display methods
 
@@ -476,7 +514,7 @@
 		[timer invalidate];
 	
 	NSRect rect = [errorPanel frame];
-	rect.origin.y = - 25;
+	rect.origin.y = 0;
 	[errorMessage setStringValue:theMessage];
 	[[errorPanel animator] setFrame:rect];
 	

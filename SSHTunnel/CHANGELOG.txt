@@ -2,6 +2,10 @@
 
 == Change Log ===
 
+== What's up in v1.6 ? ==
+  * (feature) Risinzing of the application is possible ;
+  * (feature) Moving the preferences from new window to main window ;
+		  
 == What's up in v1.5 ? ==
 
   * (feature) NSOUtlineView like iTunes to store the sessions and to sort them ;

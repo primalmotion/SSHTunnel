@@ -15,6 +15,7 @@
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #import <Foundation/Foundation.h>
+#import <SecurityFoundation/SFAuthorization.h>
 
 #import "messages.h"
 
@@ -46,6 +47,9 @@
 	NSString 		*statusImagePath;
 	NSString 		*tunnelTypeImagePath;
 	NSTask			*sshTask;
+	
+	SFAuthorization *auth;
+
 
 }
 @property(readwrite)			BOOL				autostart;
@@ -67,6 +71,8 @@
 @property(readwrite, assign)	NSString 			*statusImagePath;
 @property(readwrite, assign)	NSString 			*tunnelTypeImagePath;
 
+
+- (void) prepareAuthorization;
 
 #pragma mark -
 #pragma mark Control methods

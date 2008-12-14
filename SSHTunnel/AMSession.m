@@ -56,9 +56,36 @@
 	[self setAutoReconnect:NO];
 	autoReconnectTimes = 0;
 	
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
 	return self;
+}
+
+- (void) prepareAuthorization
+{	
+	OSStatus myStatus;
+	AuthorizationFlags myFlags = kAuthorizationFlagDefaults;
+	AuthorizationRef myAuthorizationRef;
+	myStatus = AuthorizationCreate(NULL, kAuthorizationEmptyEnvironment,
+								   myFlags, &myAuthorizationRef);    
+	
+	if (myStatus != errAuthorizationSuccess) 
+	{
+		NSLog(@"An administrator password is required...");
+	}
+	else
+	{
+		AuthorizationItem myItems = {kAuthorizationRightExecute, 0, NULL, 0};
+		
+		AuthorizationRights myRights = {1, &myItems};
+		myFlags = kAuthorizationFlagDefaults |                   
+		kAuthorizationFlagInteractionAllowed |
+		kAuthorizationFlagPreAuthorize |
+		kAuthorizationFlagExtendRights;
+		
+		myStatus = AuthorizationCopyRights (myAuthorizationRef, &myRights, NULL, myFlags, NULL );
+	}		
 }
 
 - (id) initWithCoder:(NSCoder *)coder
@@ -90,7 +117,7 @@
 		[self setStatusImagePath:@""];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listernerForSSHTunnelDown:) 
 												 name:@"NSTaskDidTerminateNotification" object:self];
-
+	
 	return self;
 }
 
@@ -285,6 +312,7 @@
 	NSMutableArray		*localPorts;
 	NSMutableString		*argumentsString;
 	
+	//[self prepareAuthorization];
 	
 	if ([self currentServer] == nil)
 	{
@@ -332,8 +360,6 @@
 			return;
 		}
 	}
-	
-	
 	stdOut			= [NSPipe pipe];
 	sshTask			= [[NSTask alloc] init];
 	helperPath		= [[NSBundle mainBundle] pathForResource:@"SSHCommand" ofType:@"sh"];
@@ -365,8 +391,12 @@
 	[[stdOut fileHandleForReading] readInBackgroundAndNotify];
 	[self setConnectionInProgress:YES];
 	
+	[auth permitWithRight:"system.privileges.admin" flags:kAuthorizationFlagDefaults|kAuthorizationFlagInteractionAllowed|
+	 kAuthorizationFlagExtendRights|kAuthorizationFlagPreAuthorize];
+	
 	
 	[sshTask launch];
+
 	NSLog(@"Session %@ is now launched.", [self sessionName]);
 	[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
 														object:[@"Initializing connexion for session "
@@ -409,6 +439,7 @@
 	checkConnected	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTED'"];
 	checkRefused	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTION_REFUSED'"];
 	checkPort		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'Could not request local forwarding'"];
+	
 	
 	if ([data length])
 	{

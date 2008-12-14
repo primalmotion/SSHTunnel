@@ -42,23 +42,26 @@
 	IBOutlet NSView						*registerView;
 	IBOutlet NSView						*serviceView;
 	IBOutlet NSMenu						*taskBarMenu;
-	IBOutlet NSWindow					*preferencesWindow;
+	IBOutlet NSView						*preferencesView;
 	IBOutlet AMSessionViewController	*sessionController;
 	IBOutlet AMServerViewController		*serverController;
 	IBOutlet AMServiceViewController	*serviceController;
 	IBOutlet NSUserDefaultsController	*preferencesController;
 	
-	NSTimer							 *timer;
-	NSView							 *backViewReminder;
-	NSString						 *hostName;
-	CATransition					 *transition;
-	NSDictionary					 *currentAnimation;
-	NSStatusItem					 *statusBarItem;
+	NSTimer							*timer;
+	NSView							*backViewReminder;
+	NSString						*hostName;
+	CATransition					*transition;
+	NSDictionary					*currentAnimation;
+	NSStatusItem					*statusBarItem;
+	NSRect							oldWindowFrame;
+	NSInteger						preferencesViewHeight;
 	
 	
 }
 @property(readwrite, assign) NSString *hostName;
 
+#pragma mark -
 #pragma mark Interface Actions
 - (IBAction) openSessionInSafari:(id)sender;
 - (IBAction) toggleTunnel:(id)sender;
@@ -69,15 +72,20 @@
 - (IBAction) killAllSSH:(id)sender;
 - (IBAction) checkForNewVersion:(id)sender;
 - (IBAction) resetApplicationSupportFolder:(id)sender;
+- (IBAction) openMainWindow:(id)sender;
+- (IBAction) closeMainWindow:(id)sender;
+- (IBAction) applyCurrentServerToAllSessions:(id)sender;
+
+#pragma mark -
+#pragma mark View management
 - (IBAction) displayServerView:(id)sender;
 - (IBAction) displayAboutView:(id)sender;
 - (IBAction) displayRegisterView:(id)sender;
 - (IBAction) displaySessionView:(id)sender;
 - (IBAction) displayServiceView:(id)sender;
-- (IBAction) openMainWindow:(id)sender;
-- (IBAction) closeMainWindow:(id)sender;
-- (IBAction) applyCurrentServerToAllSessions:(id)sender;
+- (IBAction) displayPreferenceView:(id)sender;
 
+#pragma mark -
 #pragma mark Helper methods
 - (void) prepareApplicationSupports: (NSFileManager *) fileManager; 
 - (void) resetAndRestart;
@@ -92,6 +100,7 @@
 #pragma mark Observer and Delegates
 - (void) createObservers;
 
+#pragma mark -
 #pragma mark Messaging methods
 - (void) performInfoMessage:(NSNotification*)notif;
 - (void) errorPanelDisplaywithMessage:(NSString *)message;
