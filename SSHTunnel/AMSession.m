@@ -399,7 +399,7 @@
 
 	NSLog(@"Session %@ is now launched.", [self sessionName]);
 	[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
-														object:[@"Initializing connexion for session "
+														object:[@"Initializing connection for session "
 																stringByAppendingString:[self sessionName]]];
 	
 	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusOrange" ofType:@"tif"]];
@@ -480,7 +480,7 @@
 			[self setConnectionLink:@""];
 			[sshTask terminate];
 			[[NSNotificationCenter defaultCenter] postNotificationName:AMNewErrorMessage
-																object:[@"Connexion has been refused by server for session "
+																object:[@"Connection has been refused by server for session "
 																		stringByAppendingString:[self sessionName]]];
 			NSRunAlertPanel(@"Error while connecting", @"Connection has been rejected by the server." , @"Ok", nil, nil);
 		}		
@@ -542,7 +542,7 @@
 	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:AMNewGeneralMessage
-														object:[@"Connexion close for session "
+														object:[@"Connection close for session "
 																stringByAppendingString:[self sessionName]]];
 }
 
