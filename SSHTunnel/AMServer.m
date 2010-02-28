@@ -147,7 +147,7 @@
 {	
 	NSTask *shellTask = [[NSTask alloc] init];
 	[shellTask setLaunchPath:[[NSBundle mainBundle] pathForResource:@"SSHShell" ofType:@"command"]];
-	[shellTask setArguments:[NSArray arrayWithObjects:@"ssh mercad_a@ssh.epita.fr", @"q?/8m(K>", nil]];
+	[shellTask setArguments:[NSArray arrayWithObjects:[self username], [self password], nil]];
 	[shellTask setStandardOutput:[self standartOutput]];
 	
 	
