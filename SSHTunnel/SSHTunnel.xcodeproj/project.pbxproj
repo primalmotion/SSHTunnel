@@ -106,7 +106,6 @@
 		027C6FED0E37EFC300979554 /* app.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = app.icns; sourceTree = "<group>"; };
 		0282BB410E09BA680006BA62 /* AMServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMServer.h; sourceTree = "<group>"; };
 		0282BB420E09BA680006BA62 /* AMServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMServer.m; sourceTree = "<group>"; };
-		028B42600EBC7827009B0830 /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info copy.plist"; sourceTree = "<group>"; };
 		0291EDF90E2F6A4B00A54752 /* AMService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMService.m; sourceTree = "<group>"; };
 		0291EDFA0E2F6A4B00A54752 /* AMService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMService.h; sourceTree = "<group>"; };
 		029817FF0E0B129E00D0DBE7 /* SplitterHandle.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = SplitterHandle.tiff; sourceTree = "<group>"; };
@@ -251,8 +250,8 @@
 		029BE6980E27FFBB0099093A /* AMWindow */ = {
 			isa = PBXGroup;
 			children = (
-				029BE6950E27FF990099093A /* AMWindow.h */,
 				029BE6960E27FF990099093A /* AMWindow.m */,
+				029BE6950E27FF990099093A /* AMWindow.h */,
 			);
 			name = AMWindow;
 			sourceTree = "<group>";
@@ -435,7 +434,6 @@
 				0221D4B10DF54930002AB57B /* app.icns.disabled */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				029BE7DB0E28143E0099093A /* serversAccounts.plist */,
-				028B42600EBC7827009B0830 /* Info copy.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -609,7 +607,7 @@
 		0201B1200E5F3B9900148A1C /* Packaged */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -640,7 +638,7 @@
 		029C39C10E5FA773009B7688 /* Featured */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -710,7 +708,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CURRENT_PROJECT_VERSION = "beta 1";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = required;
@@ -727,7 +725,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
