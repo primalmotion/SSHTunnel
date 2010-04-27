@@ -32,7 +32,7 @@
 													   format:&format errorDescription:&error];
 	if(!plist)
 	{
-		NSLog(error);
+		NSLog(@"%@",error);
 		[error release];
 	}
 	

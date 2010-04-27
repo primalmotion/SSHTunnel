@@ -86,26 +86,26 @@
 
 - (void) prepareApplicationSupports: (NSFileManager *) fileManager  
 {
+	NSError *error = nil;
+	[fileManager createDirectoryAtPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] 
+           withIntermediateDirectories:YES attributes:nil
+                                 error:&error];
 	
-	[fileManager createDirectoryAtPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] attributes:nil];
-	
-	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
-				   toPath:[[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"]stringByAppendingString:@"/services.sst"] 
-				  handler:nil];
-	
-	//[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"servers" ofType:@"sst"] 
-//				   toPath:[[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] stringByAppendingString:@"/servers.sst"]
-//				  handler:nil];
-	
-	[fileManager copyPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
-				   toPath:[[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] stringByAppendingString:@"/sessions.sst"] 
-				  handler:nil];
+	[fileManager copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"services" ofType:@"sst"] 
+                         toPath:[[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"]stringByAppendingString:@"/services.sst"] 
+                          error:&error];
+    
+	[fileManager copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"sessions" ofType:@"sst"]
+                         toPath:[[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] stringByAppendingString:@"/sessions.sst"] 
+                          error:&error];
 }
 
 - (void) resetAndRestart
 {
+    NSError *error = nil;
 	NSFileManager *f = [NSFileManager defaultManager];
-	[f removeFileAtPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] handler:nil];
+	[f removeItemAtPath:[[NSUserDefaults standardUserDefaults] stringForKey:@"applicationSupportFolder"] 
+                  error:&error];
 	exit(0);
 }
 

@@ -249,7 +249,7 @@
 
 - (NSMutableString *) prepareSSHCommandWithRemotePorts:(NSMutableArray *)remotePorts localPorts:(NSMutableArray *)localPorts  
 {
-	NSMutableString *argumentsString = @"ssh ";
+	NSMutableString *argumentsString = [NSMutableString stringWithString:@"ssh "];
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"forceSSHVersion2"])
 		argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -2 "];
@@ -390,9 +390,11 @@
 	
 	[[stdOut fileHandleForReading] readInBackgroundAndNotify];
 	[self setConnectionInProgress:YES];
-	
-	[auth permitWithRight:"system.privileges.admin" flags:kAuthorizationFlagDefaults|kAuthorizationFlagInteractionAllowed|
-	 kAuthorizationFlagExtendRights|kAuthorizationFlagPreAuthorize];
+	NSError *error = nil;
+	[auth obtainWithRight:"system.privileges.admin" 
+                    flags:kAuthorizationFlagDefaults|kAuthorizationFlagInteractionAllowed|
+	 kAuthorizationFlagExtendRights|kAuthorizationFlagPreAuthorize
+                    error:&error];
 	
 	
 	[sshTask launch];
