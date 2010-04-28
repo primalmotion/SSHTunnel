@@ -74,7 +74,9 @@
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"checkForNewVersion"] == YES)
 		[self checkNewVersionOnServerFromUser:NO];
 	
-	[self performAutostart];
+    // This should be performed after other ui elements have had time to finish
+    // what they are doing.  Therefore, it is called after a small delay
+    [self performSelector:@selector(performAutostart) withObject:nil afterDelay:0.1];
 	
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"displayIconInStatusBar"] == YES)
 		[self prepareStatusBarMenu];
