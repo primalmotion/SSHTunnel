@@ -408,6 +408,10 @@
 
 - (IBAction) displaySessionView:(id)sender
 {
+    if (![mainApplicationWindow isKeyWindow]) {
+        [self openMainWindow:nil];
+    }
+    
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:sessionView])
 	{
 		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
@@ -422,6 +426,10 @@
 
 - (IBAction) displayServerView:(id)sender
 {
+    if (![mainApplicationWindow isKeyWindow]) {
+        [self openMainWindow:nil];
+    }
+    
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serverView])
 	{
 		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
@@ -436,6 +444,10 @@
 
 - (IBAction) displayAboutView:(id)sender
 {
+    if (![mainApplicationWindow isKeyWindow]) {
+        [self openMainWindow:nil];
+    }
+    
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:aboutView])
 	{
 		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
@@ -450,6 +462,10 @@
 
 - (IBAction) displayRegisterView:(id)sender
 {
+    if (![mainApplicationWindow isKeyWindow]) {
+        [self openMainWindow:nil];
+    }
+    
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:registerView])
 	{
 		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
@@ -464,6 +480,10 @@
 
 - (IBAction) displayServiceView:(id)sender
 {
+    if (![mainApplicationWindow isKeyWindow]) {
+        [self openMainWindow:nil];
+    }
+    
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:serviceView])
 	{
 		if ([[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
@@ -478,6 +498,10 @@
 
 - (IBAction) displayPreferenceView:(id)sender
 {
+    if (![mainApplicationWindow isKeyWindow]) {
+        [self openMainWindow:nil];
+    }
+    
 	if (![[[mainApplicationWindow contentView] subviews] containsObject:preferencesView])
 	{
 		oldWindowFrame = [mainApplicationWindow frame];
@@ -549,4 +573,14 @@
 	return YES;
 }
 
+#pragma mark -
+#pragma mark Main Menu Validation Methods
+-(BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    if ([menuItem action] == @selector(closeMainWindow:)) {
+        return [mainApplicationWindow isKeyWindow];
+    }
+    
+    return YES;
+}
 @end
