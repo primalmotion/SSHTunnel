@@ -203,7 +203,8 @@
 									 [self networkService]
 									 , @"off", nil]];
 
-	[activateProxy launch];
+	//[activateProxy launch];
+    [activateProxy performSelector:@selector(launch) withObject:nil afterDelay:0.1];
 }
 
 - (NSMutableArray *) parsePortsSequence:(NSString*)seq
@@ -432,6 +433,7 @@
 	NSPredicate *checkConnected;
 	NSPredicate *checkRefused;
 	NSPredicate *checkPort;
+    NSPredicate *checkLoggedIn;
 	
 	data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
 	
@@ -441,6 +443,7 @@
 	checkConnected	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTED'"];
 	checkRefused	= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'CONNECTION_REFUSED'"];
 	checkPort		= [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'Could not request local forwarding'"];
+    checkLoggedIn   = [NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] 'Last login:'"]; // This is for if there is a pub/priv key set up
 	
 	
 	if ([data length])
@@ -500,7 +503,7 @@
 																		stringByAppendingString:[self sessionName]]];
 			NSRunAlertPanel(@"Error while connecting", @"The port is already in used on server." , @"Ok", nil, nil);
 		}
-		else if ([checkConnected evaluateWithObject:outputContent] == YES)
+		else if ([checkConnected evaluateWithObject:outputContent] == YES || [checkLoggedIn evaluateWithObject:outputContent] == YES)
 		{
 			[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification  object:[stdOut fileHandleForReading]];
 			
