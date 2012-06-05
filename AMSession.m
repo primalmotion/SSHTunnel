@@ -260,7 +260,7 @@
 		int i;
 		for(i = 0; i < [remotePorts count]; i++)
 		{
-			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"-N -L "];
+			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -N -L "];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[localPorts objectAtIndex:i]];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@":"];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:remoteHost];
@@ -273,7 +273,7 @@
 		int i;
 		for(i = 0; i < [remotePorts count]; i++)
 		{
-			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"-N -R "];
+			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@" -N -R "];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:[remotePorts objectAtIndex:i]];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@":"];
 			argumentsString = (NSMutableString *)[argumentsString stringByAppendingString:@"127.0.0.1"];
