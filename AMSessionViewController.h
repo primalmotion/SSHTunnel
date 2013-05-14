@@ -28,20 +28,20 @@
 	IBOutlet NSBox					*tunnelConfigBox;
 	IBOutlet NSOutlineView			*sessionsOutlineView;
 	IBOutlet NSSplitView			*splitView;
-	IBOutlet NSTreeController		*sessionsTreeController;
+	IBOutlet NSTreeController		*__strong sessionsTreeController;
 	IBOutlet NSView					*editSessionView;
 	IBOutlet NSView					*groupInfoView;
 	IBOutlet NSView					*inputTunnelConfigView;
 	IBOutlet NSView					*outputTunnelConfigView;
 	IBOutlet NSView					*proxyConfigView;
-	NSMutableArray					*sessions;
+	NSMutableArray					*__strong sessions;
 	NSString						*sessionSavePath;
 	NSTimer							*pingDelayer;
 
 
 }
-@property(readwrite, assign)	NSMutableArray		*sessions;
-@property(readwrite, assign)	NSTreeController	*sessionsTreeController;
+@property(readwrite, strong)	NSMutableArray		*sessions;
+@property(readwrite, strong)	NSTreeController	*sessionsTreeController;
 
 #pragma mark -
 #pragma mark Observers and delegates

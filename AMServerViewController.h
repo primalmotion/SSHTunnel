@@ -23,14 +23,14 @@
 
 @interface AMServerViewController : AMBaseViewController 
 {
-	IBOutlet NSArrayController		*serversArrayController;
-	NSMutableArray					*servers;
+	IBOutlet NSArrayController		*__strong serversArrayController;
+	NSMutableArray					*__strong servers;
 	NSString						*serverSavePath;
 	NSTimer							*pingDelayer;
 }
 
-@property(readwrite, assign)	NSArrayController	*serversArrayController;
-@property(readwrite, assign)	NSMutableArray		*servers;
+@property(readwrite, strong)	NSArrayController	*serversArrayController;
+@property(readwrite, strong)	NSMutableArray		*servers;
 
 #pragma mark -
 #pragma mark Observers and delegates

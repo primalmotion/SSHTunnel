@@ -24,13 +24,13 @@
 @interface AMServiceViewController : NSObject
 {
 	IBOutlet NSArrayController		*serviceArrayController;
-	NSMutableArray					*services;
+	NSMutableArray					*__strong services;
 	NSString						*serviceSavePath;
 	NSTimer							*pingDelayer;
 
 }
 
-@property(readwrite, assign) NSMutableArray *services;
+@property(readwrite, strong) NSMutableArray *services;
 
 #pragma mark -
 #pragma mark Obeservers and delegates

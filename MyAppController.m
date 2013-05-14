@@ -237,7 +237,7 @@
 	}
 	 */
 	NSStatusBar *statusBar = [NSStatusBar systemStatusBar];
-	statusBarItem = [[statusBar statusItemWithLength: NSVariableStatusItemLength] retain];
+	statusBarItem = [statusBar statusItemWithLength: NSVariableStatusItemLength];
 	
 	[statusBarItem setImage:[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"taskbarIcon" ofType:@"tiff"]]];
 	[statusBarItem setEnabled:YES];

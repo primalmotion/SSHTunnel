@@ -29,16 +29,16 @@
 	IBOutlet AMPopUpButton			*serverPicker;
 	IBOutlet AMServerViewController *serverController;
 	IBOutlet NSButton				*createButton;
-	NSMutableString					*confirmPassword;
-	NSMutableString					*login;
-	NSMutableString					*password;
+	NSMutableString					*__strong confirmPassword;
+	NSMutableString					*__strong login;
+	NSMutableString					*__strong password;
 	NSPipe							*stdOut;
 	NSTask							*sshTask;
 }
 @property(readwrite)			BOOL				isCreatingAccount;
-@property(readwrite, assign)	NSMutableString		*confirmPassword;
-@property(readwrite, assign)	NSMutableString		*login;
-@property(readwrite, assign)	NSMutableString		*password;
+@property(readwrite, strong)	NSMutableString		*confirmPassword;
+@property(readwrite, strong)	NSMutableString		*login;
+@property(readwrite, strong)	NSMutableString		*password;
 
 
 #pragma mark -

@@ -49,18 +49,17 @@
 	statusImagePath = nil;
 	stdOut = nil;
 	
-	[super dealloc];
 }
 
 - (id) initWithCoder:(NSCoder *)coder
 {
 	self = [super init];
 	
-	host		= [[coder decodeObjectForKey:@"host"] retain];
-	port		= [[coder decodeObjectForKey:@"port"] retain];
-	username	= [[coder decodeObjectForKey:@"username"] retain];
-	password	= [[coder decodeObjectForKey:@"password"] retain];
-	serverName	= [[coder decodeObjectForKey:@"serverName"] retain];
+	host		= [coder decodeObjectForKey:@"host"];
+	port		= [coder decodeObjectForKey:@"port"];
+	username	= [coder decodeObjectForKey:@"username"];
+	password	= [coder decodeObjectForKey:@"password"];
+	serverName	= [coder decodeObjectForKey:@"serverName"];
 	
 	[self setStandartInput:[NSPipe pipe]];
 	

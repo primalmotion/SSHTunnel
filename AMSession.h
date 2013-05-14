@@ -19,8 +19,8 @@
 
 #import "messages.h"
 
-#import "AMServer.h";
-#import "AMService.h";
+#import "AMServer.h"
+#import "AMService.h"
 
 
 @interface AMSession : NSObject <NSCoding> 
@@ -36,16 +36,16 @@
 	BOOL			isLeaf;
 	BOOL			useDynamicProxy;
 	NSInteger		sessionTunnelType;
-	NSMutableArray 	*childrens;
+	NSMutableArray 	*__strong childrens;
 	NSPipe 			*stdOut;
-	NSString 		*connectionLink;
+	NSString 		*__strong connectionLink;
 	NSString 		*globalProxyPort;
-	NSString 		*networkService;
+	NSString 		*__strong networkService;
 	NSString 		*outputContent;
 	NSString 		*remoteHost;
 	NSString 		*sessionName;
 	NSString 		*statusImagePath;
-	NSString 		*tunnelTypeImagePath;
+	NSString 		*__strong tunnelTypeImagePath;
 	NSTask			*sshTask;
 	
 	SFAuthorization *auth;
@@ -60,16 +60,16 @@
 @property(readwrite)			BOOL				connectionInProgress;
 @property(readwrite)			BOOL				useDynamicProxy;
 @property(readwrite)			NSInteger			sessionTunnelType;
-@property(readwrite, assign)	AMServer 			*currentServer;
-@property(readwrite, assign)	AMService 			*portsMap;
-@property(readwrite, assign)	NSMutableArray		*childrens;
-@property(readwrite, assign)	NSString 			*connectionLink;
-@property(readwrite, assign)	NSString 			*globalProxyPort;
-@property(readwrite, assign)	NSString 			*networkService;
-@property(readwrite, assign)	NSString 			*remoteHost;
-@property(readwrite, assign)	NSString 			*sessionName;
-@property(readwrite, assign)	NSString 			*statusImagePath;
-@property(readwrite, assign)	NSString 			*tunnelTypeImagePath;
+@property(readwrite)	AMServer 			*currentServer;
+@property(readwrite)	AMService 			*portsMap;
+@property(readwrite, strong)	NSMutableArray		*childrens;
+@property(readwrite, strong)	NSString 			*connectionLink;
+@property(readwrite)	NSString 			*globalProxyPort;
+@property(readwrite, strong)	NSString 			*networkService;
+@property(readwrite)	NSString 			*remoteHost;
+@property(readwrite)	NSString 			*sessionName;
+@property(readwrite)	NSString 			*statusImagePath;
+@property(readwrite, strong)	NSString 			*tunnelTypeImagePath;
 
 
 - (void) prepareAuthorization;

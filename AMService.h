@@ -27,10 +27,10 @@
 
 }
 @property(readwrite)			BOOL		inputService;
-@property(readwrite, assign)	NSString	*serviceDescription;
-@property(readwrite, assign)	NSString	*serviceLocalPorts;
-@property(readwrite, assign)	NSString	*serviceName;
-@property(readwrite, assign)	NSString	*serviceRemotePorts;
+@property(readwrite)	NSString	*serviceDescription;
+@property(readwrite)	NSString	*serviceLocalPorts;
+@property(readwrite)	NSString	*serviceName;
+@property(readwrite)	NSString	*serviceRemotePorts;
 
 #pragma mark -
 #pragma mark Initializations

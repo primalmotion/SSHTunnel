@@ -33,7 +33,6 @@
 	if(!plist)
 	{
 		NSLog(@"%@",error);
-		[error release];
 	}
 	
 	NSEnumerator* e = [plist objectEnumerator];

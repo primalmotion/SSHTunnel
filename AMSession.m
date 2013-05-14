@@ -92,12 +92,12 @@
 {
 	self = [super init];
 	
-	sessionName			= [[coder decodeObjectForKey:@"MVsessionName"] retain];
-	portsMap			= [[coder decodeObjectForKey:@"portsMap"] retain];
-	remoteHost			= [[coder decodeObjectForKey:@"MVremoteHost"] retain];
-	statusImagePath		= [[coder decodeObjectForKey:@"MVStatusImagePath"] retain];
-	currentServer		= [[coder decodeObjectForKey:@"MVcurrentServer"] retain];
-	globalProxyPort		= [[coder decodeObjectForKey:@"MVdynamicProxyPort"] retain];
+	sessionName			= [coder decodeObjectForKey:@"MVsessionName"];
+	portsMap			= [coder decodeObjectForKey:@"portsMap"];
+	remoteHost			= [coder decodeObjectForKey:@"MVremoteHost"];
+	statusImagePath		= [coder decodeObjectForKey:@"MVStatusImagePath"];
+	currentServer		= [coder decodeObjectForKey:@"MVcurrentServer"];
+	globalProxyPort		= [coder decodeObjectForKey:@"MVdynamicProxyPort"];
 	sessionTunnelType	= [coder decodeIntForKey:@"MVoutgoingTunnel"];
 	useDynamicProxy		= [coder decodeBoolForKey:@"MVuseDynamicProxy"];
 	childrens			= [coder decodeObjectForKey:@"MVChildrens"];
@@ -153,7 +153,6 @@
 	
 	sshTask = nil;
 	
-	[super dealloc];
 }
 
 
@@ -242,7 +241,7 @@
 		stopPort = [[bounds objectAtIndex:1] intValue];
 		
 		for (i = startPort; i <= stopPort; i++)
-			[ports addObject:[NSString stringWithFormat:@"%d", i]];
+			[ports addObject:[NSString stringWithFormat:@"%ld", (long)i]];
 	}
 	
 	return ports;
