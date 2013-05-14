@@ -64,9 +64,9 @@
 		NSRectFill(rect);
 	}
 	else {
-		NSGradient* aGradient = [[[NSGradient alloc]
+		NSGradient* aGradient = [[NSGradient alloc]
 								  initWithStartingColor:startingColor
-								  endingColor:endingColor] autorelease];
+								  endingColor:endingColor];
 		[aGradient drawInRect:[self bounds] angle:270];
 	}
 }

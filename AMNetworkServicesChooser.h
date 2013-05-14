@@ -11,13 +11,13 @@
 
 @interface AMNetworkServicesChooser : NSPopUpButton
 {
-	NSMutableArray	*content;
+	NSMutableArray	*__strong content;
 	
 	NSTask			*task;
 	NSPipe			*stdOut;
 	
 }
-@property(readwrite, assign)	NSMutableArray *content;
+@property(readwrite, strong)	NSMutableArray *content;
 
 - (void) handleEndOfTask:(NSNotification *) aNotification;
 - (void) getSystemNetworkServices;

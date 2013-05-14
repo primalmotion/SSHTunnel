@@ -50,7 +50,7 @@
 	
 	NSTimer							*timer;
 	NSView							*backViewReminder;
-	NSString						*hostName;
+	NSString						*__strong hostName;
 	CATransition					*transition;
 	NSDictionary					*currentAnimation;
 	NSStatusItem					*statusBarItem;
@@ -59,7 +59,7 @@
 	
 	
 }
-@property(readwrite, assign) NSString *hostName;
+@property(readwrite, strong) NSString *hostName;
 
 #pragma mark -
 #pragma mark Interface Actions

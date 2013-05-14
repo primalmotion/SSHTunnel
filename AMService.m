@@ -39,17 +39,16 @@
 	serviceLocalPorts = nil;
 	serviceDescription = nil;
 	
-	[super dealloc];
 }
 
 - (id) initWithCoder:(NSCoder *)coder
 {
 	self = [super init];
 	
-	serviceName			= [[coder decodeObjectForKey:@"serviceName"] retain];
-	serviceLocalPorts	= [[coder decodeObjectForKey:@"serviceLocalPorts"] retain];
-	serviceRemotePorts	= [[coder decodeObjectForKey:@"serviceRemotePorts"] retain];
-	serviceDescription	= [[coder decodeObjectForKey:@"serviceDescription"] retain];
+	serviceName			= [coder decodeObjectForKey:@"serviceName"];
+	serviceLocalPorts	= [coder decodeObjectForKey:@"serviceLocalPorts"];
+	serviceRemotePorts	= [coder decodeObjectForKey:@"serviceRemotePorts"];
+	serviceDescription	= [coder decodeObjectForKey:@"serviceDescription"];
 	
 	return self;
 }

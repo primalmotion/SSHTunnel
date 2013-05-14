@@ -16,8 +16,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "MyAppController.h";
-#import "AMSessionViewController.h";
+#import "MyAppController.h"
+#import "AMSessionViewController.h"
 
 @interface AMSwitchButton : NSView 
 {
