@@ -52,24 +52,24 @@
 
 
 }
-@property(readwrite)			BOOL				autostart;
-@property(readwrite)			BOOL				autoReconnect;
-@property(readwrite)			BOOL				isGroup;
-@property(readwrite)			BOOL				isLeaf;
-@property(readwrite)			BOOL				connected;
-@property(readwrite)			BOOL				connectionInProgress;
-@property(readwrite)			BOOL				useDynamicProxy;
-@property(readwrite)			NSInteger			sessionTunnelType;
-@property(readwrite)	AMServer 			*currentServer;
-@property(readwrite)	AMService 			*portsMap;
-@property(readwrite, strong)	NSMutableArray		*childrens;
-@property(readwrite, strong)	NSString 			*connectionLink;
-@property(readwrite)	NSString 			*globalProxyPort;
-@property(readwrite, strong)	NSString 			*networkService;
-@property(readwrite)	NSString 			*remoteHost;
-@property(readwrite)	NSString 			*sessionName;
-@property(readwrite)	NSString 			*statusImagePath;
-@property(readwrite, strong)	NSString 			*tunnelTypeImagePath;
+@property(readwrite) BOOL autostart;
+@property(readwrite) BOOL autoReconnect;
+@property(readwrite) BOOL isGroup;
+@property(readwrite) BOOL isLeaf;
+@property(readwrite) BOOL connected;
+@property(readwrite) BOOL connectionInProgress;
+@property(readwrite) BOOL useDynamicProxy;
+@property(nonatomic, readwrite) NSInteger sessionTunnelType;
+@property(readwrite) AMServer *currentServer;
+@property(readwrite) AMService *portsMap;
+@property(readwrite, strong) NSMutableArray *childrens;
+@property(readwrite, strong) NSString *connectionLink;
+@property(readwrite) NSString *globalProxyPort;
+@property(readwrite, strong) NSString *networkService;
+@property(readwrite) NSString *remoteHost;
+@property(readwrite) NSString *sessionName;
+@property(readwrite) NSString *statusImagePath;
+@property(nonatomic, readwrite, strong)	NSString *tunnelTypeImagePath;
 
 
 - (void) prepareAuthorization;
