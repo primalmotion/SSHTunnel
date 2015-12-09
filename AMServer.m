@@ -16,6 +16,8 @@
 
 #import "AMServer.h"
 
+#import "AMResourcesHelper.h"
+
 @implementation AMServer
 
 @synthesize serverName;
@@ -103,9 +105,9 @@
 	
 	
 	if ([checkSuccess evaluateWithObject:outputContent] == YES)
-		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusGreen" ofType:@"tif"]];
+		[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusGreen"]];
 	else
-		[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusRed" ofType:@"tif"]];
+		[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusRed"]];
 	
 	[[NSNotificationCenter defaultCenter]  removeObserver:self name:NSFileHandleReadCompletionNotification object:[stdOut fileHandleForReading]];
 	[ping terminate];
@@ -127,7 +129,7 @@
 	if ([self host] == nil)
 		return;
 	
-	[self setStatusImagePath:[[NSBundle mainBundle] pathForResource:@"statusOrange" ofType:@"tif"]];
+	[self setStatusImagePath:[AMResourcesHelper pathForImageNamed:@"statusOrange"]];
 	[ping setLaunchPath:@"/sbin/ping"];
 	[ping setArguments:[NSArray arrayWithObjects:@"-c", @"1", @"-t", @"2", [self host], nil]];
 	[ping setStandardOutput:stdOut];
