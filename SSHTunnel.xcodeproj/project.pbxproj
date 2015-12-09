@@ -637,6 +637,7 @@
 				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.antoinemercadal.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = SSHTunnel;
 				SDKROOT = macosx;
@@ -671,6 +672,7 @@
 				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.antoinemercadal.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = SSHTunnel;
 				SDKROOT = macosx;
@@ -696,6 +698,7 @@
 				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.antoinemercadal.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = SSHTunnel;
 				SDKROOT = macosx;
@@ -719,6 +722,7 @@
 				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "fr.antoinemercadal.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = SSHTunnel;
 				SDKROOT = macosx;
