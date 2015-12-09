@@ -26,9 +26,6 @@
 		02697F1E0DF9210B00D9C22C /* PutKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */; };
 		02697FFB0DF93D9800D9C22C /* Keychain.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02697FFA0DF93D9800D9C22C /* Keychain.icns */; };
 		026982010DF965BE00D9C22C /* GenerateKeyCommand.sh in Resources */ = {isa = PBXBuildFile; fileRef = 026982000DF965BE00D9C22C /* GenerateKeyCommand.sh */; };
-		026E47C00E2CD8B80013746C /* statusGreen.tif in Resources */ = {isa = PBXBuildFile; fileRef = 026E47BD0E2CD8B80013746C /* statusGreen.tif */; };
-		026E47C10E2CD8B80013746C /* statusRed.tif in Resources */ = {isa = PBXBuildFile; fileRef = 026E47BE0E2CD8B80013746C /* statusRed.tif */; };
-		026E47C20E2CD8B80013746C /* statusOrange.tif in Resources */ = {isa = PBXBuildFile; fileRef = 026E47BF0E2CD8B80013746C /* statusOrange.tif */; };
 		0274BAAC0DF424F800C09AEE /* MyAppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0274BAAB0DF424F800C09AEE /* MyAppController.m */; };
 		0274BB310DF43A9F00C09AEE /* AMSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 0274BB300DF43A9F00C09AEE /* AMSession.m */; };
 		027C6FEE0E37EFC300979554 /* app.icns in Resources */ = {isa = PBXBuildFile; fileRef = 027C6FED0E37EFC300979554 /* app.icns */; };
@@ -67,6 +64,16 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		DDB56A161C188A60002301B5 /* statusGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A0D1C188A60002301B5 /* statusGreen.png */; };
+		DDB56A171C188A60002301B5 /* statusGreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A0E1C188A60002301B5 /* statusGreen@2x.png */; };
+		DDB56A181C188A60002301B5 /* statusGreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A0F1C188A60002301B5 /* statusGreen@3x.png */; };
+		DDB56A191C188A60002301B5 /* statusOrange.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A101C188A60002301B5 /* statusOrange.png */; };
+		DDB56A1A1C188A60002301B5 /* statusOrange@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A111C188A60002301B5 /* statusOrange@2x.png */; };
+		DDB56A1B1C188A60002301B5 /* statusOrange@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A121C188A60002301B5 /* statusOrange@3x.png */; };
+		DDB56A1C1C188A60002301B5 /* statusRed.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A131C188A60002301B5 /* statusRed.png */; };
+		DDB56A1D1C188A60002301B5 /* statusRed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A141C188A60002301B5 /* statusRed@2x.png */; };
+		DDB56A1E1C188A60002301B5 /* statusRed@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DDB56A151C188A60002301B5 /* statusRed@3x.png */; };
+		DDB56A221C188A86002301B5 /* AMResourcesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB56A211C188A86002301B5 /* AMResourcesHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,9 +103,6 @@
 		02697F1D0DF9210B00D9C22C /* PutKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = PutKeyCommand.sh; sourceTree = "<group>"; };
 		02697FFA0DF93D9800D9C22C /* Keychain.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Keychain.icns; sourceTree = "<group>"; };
 		026982000DF965BE00D9C22C /* GenerateKeyCommand.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = GenerateKeyCommand.sh; sourceTree = "<group>"; };
-		026E47BD0E2CD8B80013746C /* statusGreen.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusGreen.tif; sourceTree = "<group>"; };
-		026E47BE0E2CD8B80013746C /* statusRed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusRed.tif; sourceTree = "<group>"; };
-		026E47BF0E2CD8B80013746C /* statusOrange.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = statusOrange.tif; sourceTree = "<group>"; };
 		0274BAAA0DF424F800C09AEE /* MyAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAppController.h; sourceTree = "<group>"; };
 		0274BAAB0DF424F800C09AEE /* MyAppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAppController.m; sourceTree = "<group>"; wrapsLines = 0; };
 		0274BB2F0DF43A9F00C09AEE /* AMSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMSession.h; sourceTree = "<group>"; };
@@ -152,6 +156,17 @@
 		32CA4F630368D1EE00C91783 /* SSHTunnel_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSHTunnel_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* SSHTunnel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SSHTunnel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDB56A0D1C188A60002301B5 /* statusGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = statusGreen.png; path = Resources/exported/statusGreen.png; sourceTree = "<group>"; };
+		DDB56A0E1C188A60002301B5 /* statusGreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusGreen@2x.png"; path = "Resources/exported/statusGreen@2x.png"; sourceTree = "<group>"; };
+		DDB56A0F1C188A60002301B5 /* statusGreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusGreen@3x.png"; path = "Resources/exported/statusGreen@3x.png"; sourceTree = "<group>"; };
+		DDB56A101C188A60002301B5 /* statusOrange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = statusOrange.png; path = Resources/exported/statusOrange.png; sourceTree = "<group>"; };
+		DDB56A111C188A60002301B5 /* statusOrange@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusOrange@2x.png"; path = "Resources/exported/statusOrange@2x.png"; sourceTree = "<group>"; };
+		DDB56A121C188A60002301B5 /* statusOrange@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusOrange@3x.png"; path = "Resources/exported/statusOrange@3x.png"; sourceTree = "<group>"; };
+		DDB56A131C188A60002301B5 /* statusRed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = statusRed.png; path = Resources/exported/statusRed.png; sourceTree = "<group>"; };
+		DDB56A141C188A60002301B5 /* statusRed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusRed@2x.png"; path = "Resources/exported/statusRed@2x.png"; sourceTree = "<group>"; };
+		DDB56A151C188A60002301B5 /* statusRed@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusRed@3x.png"; path = "Resources/exported/statusRed@3x.png"; sourceTree = "<group>"; };
+		DDB56A201C188A86002301B5 /* AMResourcesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMResourcesHelper.h; sourceTree = "<group>"; };
+		DDB56A211C188A86002301B5 /* AMResourcesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMResourcesHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,6 +350,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				DDB56A1F1C188A6D002301B5 /* Helper */,
 				02B11BB30E30ED88003886A7 /* View */,
 				02B11BB20E30ED6E003886A7 /* Model */,
 				023643BF0E2560F3007271F1 /* Controllers */,
@@ -398,6 +414,15 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DDB56A0D1C188A60002301B5 /* statusGreen.png */,
+				DDB56A0E1C188A60002301B5 /* statusGreen@2x.png */,
+				DDB56A0F1C188A60002301B5 /* statusGreen@3x.png */,
+				DDB56A101C188A60002301B5 /* statusOrange.png */,
+				DDB56A111C188A60002301B5 /* statusOrange@2x.png */,
+				DDB56A121C188A60002301B5 /* statusOrange@3x.png */,
+				DDB56A131C188A60002301B5 /* statusRed.png */,
+				DDB56A141C188A60002301B5 /* statusRed@2x.png */,
+				DDB56A151C188A60002301B5 /* statusRed@3x.png */,
 				02BF2AA20E60BDB70052730C /* tube.tif */,
 				024491730E608A8F00D92725 /* sessions.sst */,
 				02B214BE0E6073F8007014CB /* services.sst */,
@@ -407,9 +432,6 @@
 				02B11C670E3101F3003886A7 /* Terminal.icns */,
 				02B11CB00E311062003886A7 /* inTunnel.tif */,
 				02B11CB10E311062003886A7 /* outTunnel.tif */,
-				026E47BD0E2CD8B80013746C /* statusGreen.tif */,
-				026E47BE0E2CD8B80013746C /* statusRed.tif */,
-				026E47BF0E2CD8B80013746C /* statusOrange.tif */,
 				022082A70E268E69004F2B5A /* Localizable.strings */,
 				022082820E268CE6004F2B5A /* MainMenu.xib */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -450,6 +472,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DDB56A1F1C188A6D002301B5 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				DDB56A201C188A86002301B5 /* AMResourcesHelper.h */,
+				DDB56A211C188A86002301B5 /* AMResourcesHelper.m */,
+			);
+			name = Helper;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -479,7 +510,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0720;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "SSHTunnel" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -503,14 +534,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				DDB56A181C188A60002301B5 /* statusGreen@3x.png in Resources */,
 				0221D4B20DF54930002AB57B /* app.icns.disabled in Resources */,
 				02452E9C0DF6D1CD00119375 /* SSHCommand.sh in Resources */,
 				0219E3FF0DF7591D00E64A18 /* delButton.png in Resources */,
 				0219E4000DF7591D00E64A18 /* addButton.png in Resources */,
 				02697F1E0DF9210B00D9C22C /* PutKeyCommand.sh in Resources */,
 				02697FFB0DF93D9800D9C22C /* Keychain.icns in Resources */,
+				DDB56A1D1C188A60002301B5 /* statusRed@2x.png in Resources */,
 				026982010DF965BE00D9C22C /* GenerateKeyCommand.sh in Resources */,
 				025F9BC40DF98A4700813277 /* keyed.tiff in Resources */,
+				DDB56A161C188A60002301B5 /* statusGreen.png in Resources */,
 				023B9C4B0DF9AEF700C07FD9 /* RemoveKeyCommand.sh in Resources */,
 				02BC8ED30E0AB7F60005759C /* Blank.icns in Resources */,
 				02BC8ED90E0AB9330005759C /* destroy.icns in Resources */,
@@ -521,20 +555,23 @@
 				02B27FBF0E265ECE00245740 /* auth_server_icon.png in Resources */,
 				02AF86EA0E5C9AA200DD6F70 /* MainMenu.xib in Resources */,
 				022082A90E268E69004F2B5A /* Localizable.strings in Resources */,
+				DDB56A171C188A60002301B5 /* statusGreen@2x.png in Resources */,
+				DDB56A1A1C188A60002301B5 /* statusOrange@2x.png in Resources */,
 				029BE7DC0E28143E0099093A /* serversAccounts.plist in Resources */,
-				026E47C00E2CD8B80013746C /* statusGreen.tif in Resources */,
-				026E47C10E2CD8B80013746C /* statusRed.tif in Resources */,
-				026E47C20E2CD8B80013746C /* statusOrange.tif in Resources */,
 				02B11C680E3101F3003886A7 /* Terminal.icns in Resources */,
 				02B11C970E3103B7003886A7 /* radar.icns in Resources */,
 				02B11CB20E311062003886A7 /* inTunnel.tif in Resources */,
 				02B11CB30E311062003886A7 /* outTunnel.tif in Resources */,
+				DDB56A191C188A60002301B5 /* statusOrange.png in Resources */,
+				DDB56A1E1C188A60002301B5 /* statusRed@3x.png in Resources */,
 				027C6FEE0E37EFC300979554 /* app.icns in Resources */,
 				02F488260E5AE97F00FB6844 /* tmbutton.png in Resources */,
+				DDB56A1C1C188A60002301B5 /* statusRed.png in Resources */,
 				02F488C20E5AF79A00FB6844 /* prefs.icns in Resources */,
 				02B110AD0E5E1A9A00715AE4 /* taskbarIcon.tiff in Resources */,
 				02F375720E5F0D5B00F23038 /* SSHShell.command in Resources */,
 				029C395C0E5F989D009B7688 /* COPYING.txt in Resources */,
+				DDB56A1B1C188A60002301B5 /* statusOrange@3x.png in Resources */,
 				029C395F0E5F98D6009B7688 /* AUTHORS.txt in Resources */,
 				029C39600E5F98D6009B7688 /* CHANGELOG.txt in Resources */,
 				029C39A60E5F9B92009B7688 /* SSHTunnelWorkaround in Resources */,
@@ -570,6 +607,7 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				0274BAAC0DF424F800C09AEE /* MyAppController.m in Sources */,
 				0274BB310DF43A9F00C09AEE /* AMSession.m in Sources */,
+				DDB56A221C188A86002301B5 /* AMResourcesHelper.m in Sources */,
 				0282BB430E09BA680006BA62 /* AMServer.m in Sources */,
 				02376AE10E23C0790058B22A /* AMAccountViewController.m in Sources */,
 				0236404F0E24FAAA007271F1 /* AMServerViewController.m in Sources */,
@@ -612,12 +650,11 @@
 		0201B1200E5F3B9900148A1C /* Packaged */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = "";
+				SDKROOT = macosx;
 			};
 			name = Packaged;
 		};
@@ -625,19 +662,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
 				);
-				GCC_ENABLE_OBJC_GC = "";
+				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.antoinemercadal.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = SSHTunnel;
 				SDKROOT = macosx;
 			};
@@ -646,12 +685,11 @@
 		029C39C10E5FA773009B7688 /* Featured */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = "";
+				SDKROOT = macosx;
 			};
 			name = Featured;
 		};
@@ -659,19 +697,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
 				);
-				GCC_ENABLE_OBJC_GC = "";
+				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.antoinemercadal.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = SSHTunnel;
 				SDKROOT = macosx;
 			};
@@ -681,21 +721,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = NO;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_GC = "";
+				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.antoinemercadal.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = SSHTunnel;
 				SDKROOT = macosx;
 			};
@@ -705,19 +747,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
 				);
-				GCC_ENABLE_OBJC_GC = "";
+				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = SSHTunnel_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_BUNDLE_IDENTIFIER = "fr.antoinemercadal.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = SSHTunnel;
 				SDKROOT = macosx;
 			};
@@ -726,8 +770,8 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CURRENT_PROJECT_VERSION = "beta 1";
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -735,19 +779,18 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = SSHTunnel;
-				SDKROOT = "";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				SDKROOT = "";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};

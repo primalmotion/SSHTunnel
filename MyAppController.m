@@ -174,9 +174,10 @@
 	{
 		int resp = NSRunAlertPanel([NSString stringWithFormat:@"New version %@.%@ is out!", 
 									remoteMajorVersion, remoteMinorVersion],
-								   [serverVersion valueForKey:@"Changes"], 
+                                   @"%@",
 								   @"Download Version", 
-								   @"Ignore", 
+								   @"Ignore",
+                                   [serverVersion valueForKey:@"Changes"],
 								   nil);
 		
 		if (resp == NSAlertDefaultReturn)
