@@ -86,7 +86,7 @@
 	f = nil;
 	
 	NSInteger tunnelType = AMSessionOutgoingTunnel;
-	if ([[sessionsTreeController arrangedObjects] count] > 0)
+	if ([[[sessionsTreeController arrangedObjects] childNodes] count] > 0)
 		tunnelType = [[[sessionsTreeController selectedObjects] objectAtIndex:0] sessionTunnelType];
 	
 	if (tunnelType == AMSessionOutgoingTunnel)
